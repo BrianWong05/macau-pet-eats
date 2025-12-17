@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { X, Loader } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { X, Loader, Upload, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
@@ -39,6 +39,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
+  // Image State
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [formData, setFormData] = useState<Partial<Restaurant>>({
     name: '',
     name_zh: '',
@@ -53,6 +58,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     cuisine_type: '',
     contact_info: '',
     image_url: '',
+    gallery_images: [],
     latitude: 22.1937,
     longitude: 113.5399,
     status: 'approved'
@@ -61,6 +67,17 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   useEffect(() => {
     if (restaurant) {
       setFormData(restaurant)
+      // Initialize previews with existing images if any (from gallery_images)
+      // For now, we only have persisted URLs. We can mix them or valid files.
+      // Ideally, we treat existing URLs separately from new files.
+      setImagePreviews(restaurant.gallery_images || [])
+      // If we want to show the main image as part of the gallery or separate?
+      // "Upload multiple images" usually implies a gallery.
+      // Let's assume we are editing gallery_images.
+      // But we also have image_url (main image).
+      // Let's keep image_url as main, and gallery_images as additional.
+      // OR, user implies replacing single upload with multiple.
+      // Let's support uploading to gallery_images.
     } else {
       setFormData({
         name: '',
@@ -76,12 +93,83 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         cuisine_type: '',
         contact_info: '',
         image_url: '',
+        gallery_images: [],
         latitude: 22.1937,
         longitude: 113.5399,
         status: 'approved'
       })
+      setImagePreviews([])
     }
+    setImageFiles([])
   }, [restaurant, isOpen])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length > 0) {
+      // Validate sizes
+      const validFiles = files.filter(file => {
+        if (file.size > 2 * 1024 * 1024) {
+          toast.error(`Image ${file.name} is too large (max 2MB)`)
+          return false
+        }
+        return true
+      })
+
+      if (validFiles.length === 0) return
+
+      setImageFiles(prev => [...prev, ...validFiles])
+
+      // Generate previews
+      validFiles.forEach(file => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          setImagePreviews(prev => [...prev, reader.result as string])
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+  }
+
+  const removeImage = (index: number) => {
+    // Check if index corresponds to existing URL or new file
+    // Current strategy: merge everything into imagePreviews for display
+    // But we need to separate existing vs new for deletion logic
+    // Simplified: We verify if it is a new file or existing URL based on formData
+    
+    // Actually, simpler approach:
+    // Keep formData.gallery_images as "saved images"
+    // Keep imageFiles as "new images to upload"
+    // imagePreviews can be derived or state?
+    // Let's modify: 
+    // If index < formData.gallery_images.length (if we assume previews order = existing + new)
+    // But we initialized previews with ALL.
+    
+    // Let's reconstruct removal:
+    // If removing an existing image (from formData.gallery_images)
+    // If removing a new image (from imageFiles)
+    
+    // Let's assume imagePreviews maps 1:1 to [ ...formData.gallery_images, ...newFilesPreviews ]
+    const existingCount = (formData.gallery_images || []).length
+    
+    if (index < existingCount) {
+      // Removing existing image
+      const newGallery = [...(formData.gallery_images || [])]
+      newGallery.splice(index, 1)
+      setFormData(prev => ({ ...prev, gallery_images: newGallery }))
+      
+      // Also update previews (which we initialized with existing)
+      setImagePreviews(prev => prev.filter((_, i) => i !== index))
+    } else {
+      // Removing new file
+      const newFileIndex = index - existingCount
+      setImageFiles(prev => prev.filter((_, i) => i !== newFileIndex))
+      setImagePreviews(prev => prev.filter((_, i) => i !== index))
+    }
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -89,18 +177,66 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     setError(null)
 
     try {
+      const uploadedUrls: string[] = []
+
+      // Upload new images
+      if (imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const fileExt = file.name.split('.').pop()
+          const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+          const filePath = `${fileName}`
+
+          const { error: uploadError } = await supabase.storage
+            .from('restaurants')
+            .upload(filePath, file)
+
+          if (uploadError) throw new Error(`Image upload failed: ${uploadError.message}`)
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('restaurants')
+            .getPublicUrl(filePath)
+            
+          uploadedUrls.push(publicUrl)
+        }
+      }
+
+      // Merge with existing images
+      const finalGalleryImages = [
+        ...(formData.gallery_images || []),
+        ...uploadedUrls
+      ]
+      
+      // Ensure image_url (main image) is set too. Use first gallery image if available.
+      let mainImageUrl = formData.image_url
+      if (!mainImageUrl && finalGalleryImages.length > 0) {
+        mainImageUrl = finalGalleryImages[0]
+      }
+      // If user removed main image but has others?
+      // For now, if image_url is empty, take the first one. 
+      // Or we can let user select main image? 
+      // Simplest: Always sync image_url to first image of gallery if gallery exists.
+      if (finalGalleryImages.length > 0) {
+         mainImageUrl = finalGalleryImages[0]
+      }
+
+      const dataToSave = {
+        ...formData,
+        gallery_images: finalGalleryImages,
+        image_url: mainImageUrl || ''
+      }
+
       if (restaurant?.id) {
         // Update
         const { error } = await supabase
           .from('restaurants')
-          .update(formData as never)
+          .update(dataToSave as never)
           .eq('id', restaurant.id)
         if (error) throw error
       } else {
         // Create
         const { error } = await supabase
           .from('restaurants')
-          .insert(formData as never)
+          .insert(dataToSave as never)
         if (error) throw error
       }
       onSave()
@@ -303,14 +439,83 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.imageUrl')}</label>
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.imageUrl')}</h3>
+            
+            {imagePreviews.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {imagePreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={preview}
+                      alt={`Preview ${index}`}
+                      className="w-full h-32 object-cover rounded-xl border border-neutral-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                    >
+                      <X size={14} />
+                    </button>
+                    {index === 0 && (
+                      <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 text-white text-xs rounded-lg backdrop-blur-sm">
+                        Cover
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="
+                    h-32 border-2 border-dashed border-neutral-300
+                    rounded-xl flex flex-col items-center justify-center
+                    cursor-pointer hover:border-primary-400 hover:bg-primary-50
+                    transition-all
+                  "
+                >
+                  <Upload size={20} className="text-neutral-400 mb-2" />
+                  <span className="text-sm text-neutral-500">Add More</span>
+                </div>
+              </div>
+            ) : (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="
+                  border-2 border-dashed border-neutral-300
+                  rounded-xl p-8
+                  text-center cursor-pointer
+                  hover:border-primary-400 hover:bg-primary-50
+                  transition-all
+                "
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="p-3 bg-neutral-100 rounded-full">
+                    <ImageIcon className="w-6 h-6 text-neutral-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-neutral-700">
+                      Click to upload images
+                    </p>
+                    <p className="text-sm text-neutral-500 mt-1">
+                      PNG, JPG up to 2MB
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 text-primary-600">
+                    <Upload size={18} />
+                    <span className="font-medium">Select Files</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <input
-              type="url"
-              value={formData.image_url || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              placeholder={t('admin.modal.placeholders.imageUrl')}
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              className="hidden"
             />
           </div>
 

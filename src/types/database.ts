@@ -40,6 +40,7 @@ export interface Restaurant {
   cuisine_type_zh: string | null
   cuisine_type_pt: string | null
   image_url: string
+  gallery_images: string[]
   contact_info: string
   
   // Timestamps
@@ -47,7 +48,7 @@ export interface Restaurant {
   updated_at: string
   
   // Index signature for dynamic access
-  [key: string]: string | number | null
+  [key: string]: string | number | null | string[]
 }
 
 // Helper function to get localized text from Restaurant
