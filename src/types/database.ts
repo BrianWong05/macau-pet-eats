@@ -18,6 +18,7 @@ export interface Restaurant {
   name: string
   description: string
   address: string
+  status: 'pending' | 'approved' | 'rejected'
   
   // Chinese (中文)
   name_zh: string | null
@@ -63,6 +64,15 @@ export function getLocalizedText(
   return (restaurant[localizedField] as string) || (restaurant[field] as string) || ''
 }
 
+// Profile entity
+export interface Profile {
+  id: string
+  email: string
+  is_admin: boolean
+  created_at: string
+  updated_at: string
+}
+
 // Review entity
 export interface Review {
   id: string
@@ -88,6 +98,11 @@ export interface Database {
         Row: Review
         Insert: Omit<Review, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<Review, 'id' | 'created_at' | 'updated_at'>>
+      }
+      profiles: {
+        Row: Profile
+        Insert: Omit<Profile, 'created_at' | 'updated_at'>
+        Update: Partial<Omit<Profile, 'created_at' | 'updated_at'>>
       }
     }
   }

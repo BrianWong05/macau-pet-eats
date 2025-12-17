@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
+import type { Profile } from '@/types/database'
 
 interface AuthContextType {
   user: User | null
   session: Session | null
+  isAdmin: boolean
   isLoading: boolean
   signInWithGoogle: () => Promise<{ error: AuthError | null }>
   signInWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>
@@ -17,21 +19,50 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const initAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
       setSession(session)
       setUser(session?.user ?? null)
+      
+      if (session?.user) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', session.user.id)
+          .single()
+        
+        setIsAdmin(!!(data as unknown as Profile)?.is_admin)
+      } else {
+        setIsAdmin(false)
+      }
+      
       setIsLoading(false)
-    })
+    }
+    initAuth()
 
     // Listen to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (_event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
+        
+        if (session?.user) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', session.user.id)
+            .single()
+          
+          setIsAdmin(!!(data as unknown as Profile)?.is_admin)
+        } else {
+          setIsAdmin(false)
+        }
+        
         setIsLoading(false)
       }
     )
@@ -74,6 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         session,
+        isAdmin,
         isLoading,
         signInWithGoogle,
         signInWithEmail,

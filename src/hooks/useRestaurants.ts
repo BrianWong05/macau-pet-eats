@@ -30,6 +30,7 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
 
     try {
       let query = supabase.from('restaurants').select('*')
+        .eq('status', 'approved')
 
       // Apply search filter
       if (searchQuery.trim()) {
@@ -46,7 +47,15 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
         query = query.eq('cuisine_type', cuisineFilter)
       }
 
-      const { data, error: fetchError } = await query.order('created_at', { ascending: false })
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timed out')), 30000)
+      )
+
+      const queryPromise = query.order('created_at', { ascending: false })
+      
+      const result = await Promise.race([queryPromise, timeoutPromise]) as any
+      const { data, error: fetchError } = result
 
       if (fetchError) {
         throw fetchError
