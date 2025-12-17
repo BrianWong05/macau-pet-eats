@@ -39,6 +39,18 @@
     },
     "exploreButton": "在地圖上探索"
   },
+  "explore": {
+    "title": "探索餐廳",
+    "subtitle": "在地圖上探索澳門的寵物友善餐廳",
+    "filters": {
+      "all": "全部",
+      "petPolicy": "寵物政策",
+      "cuisine": "菜式"
+    },
+    "results": "找到 {{count}} 間餐廳",
+    "noResults": "沒有符合條件的餐廳",
+    "viewDetails": "查看詳情"
+  },
   "restaurant": {
     "cuisine": "菜式",
     "address": "地址",

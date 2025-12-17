@@ -39,6 +39,18 @@
     },
     "exploreButton": "Explore All on Map"
   },
+  "explore": {
+    "title": "Explore Restaurants",
+    "subtitle": "Discover pet-friendly restaurants in Macau on the map",
+    "filters": {
+      "all": "All",
+      "petPolicy": "Pet Policy",
+      "cuisine": "Cuisine"
+    },
+    "results": "Found {{count}} restaurants",
+    "noResults": "No restaurants match your filters",
+    "viewDetails": "View Details"
+  },
   "restaurant": {
     "cuisine": "Cuisine",
     "address": "Address",
