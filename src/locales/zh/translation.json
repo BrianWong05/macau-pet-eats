@@ -42,7 +42,12 @@
   "restaurant": {
     "cuisine": "菜式",
     "address": "地址",
-    "contact": "聯絡方式"
+    "contact": "聯絡方式",
+    "getDirections": "取得路線",
+    "callNow": "立即致電",
+    "backToList": "返回列表",
+    "location": "位置",
+    "openInMaps": "在 Google 地圖中開啟"
   },
   "petPolicy": {
     "indoors_allowed": "允許室內",

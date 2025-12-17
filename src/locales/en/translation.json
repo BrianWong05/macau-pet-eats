@@ -42,7 +42,12 @@
   "restaurant": {
     "cuisine": "Cuisine",
     "address": "Address",
-    "contact": "Contact"
+    "contact": "Contact",
+    "getDirections": "Get Directions",
+    "callNow": "Call Now",
+    "backToList": "Back to List",
+    "location": "Location",
+    "openInMaps": "Open in Google Maps"
   },
   "petPolicy": {
     "indoors_allowed": "Indoors Allowed",

@@ -42,7 +42,12 @@
   "restaurant": {
     "cuisine": "Cozinha",
     "address": "Morada",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "getDirections": "Obter Direções",
+    "callNow": "Ligar Agora",
+    "backToList": "Voltar à Lista",
+    "location": "Localização",
+    "openInMaps": "Abrir no Google Maps"
   },
   "petPolicy": {
     "indoors_allowed": "Interior Permitido",
