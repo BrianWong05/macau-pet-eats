@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { 
@@ -42,6 +42,15 @@ type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
 export function Submit() {
   const { t } = useTranslation()
+  const [isScrolled, setIsScrolled] = useState(false)
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   
   const [formState, setFormState] = useState<FormState>('idle')
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -166,8 +175,13 @@ export function Submit() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <header className="bg-white border-b border-neutral-200">
-        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+      <header 
+        className={`
+          fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b
+          ${isScrolled ? 'bg-white/90 backdrop-blur-md border-neutral-200 py-3 shadow-sm' : 'bg-white border-neutral-200 py-4'}
+        `}
+      >
+        <div className="max-w-3xl mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               to="/"
@@ -180,7 +194,7 @@ export function Submit() {
               <h1 className="text-lg font-semibold text-neutral-900">
                 {t('submit.title')}
               </h1>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-neutral-500 hidden sm:block">
                 {t('submit.subtitle')}
               </p>
             </div>
@@ -190,7 +204,7 @@ export function Submit() {
       </header>
 
       {/* Form */}
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8 pt-28">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Error Alert */}
           {formState === 'error' && (
