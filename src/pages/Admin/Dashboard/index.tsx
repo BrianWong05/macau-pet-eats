@@ -51,25 +51,25 @@ export function AdminDashboard() {
 
   const statCards = [
     {
-      label: 'Total Restaurants',
+      label: t('admin.dashboard.totalRestaurants'),
       value: stats.totalRestaurants,
       icon: Store,
       color: 'bg-blue-500'
     },
     {
-      label: 'Active Listings',
+      label: t('admin.dashboard.activeListings'),
       value: stats.activeRestaurants,
       icon: CheckCircle,
       color: 'bg-green-500'
     },
     {
-      label: 'Pending Approval',
+      label: t('admin.dashboard.pendingApproval'),
       value: stats.pendingRestaurants,
       icon: Clock,
       color: 'bg-amber-500'
     },
     {
-      label: 'Total Reviews',
+      label: t('admin.dashboard.totalReviews'),
       value: stats.totalReviews,
       icon: Users,
       color: 'bg-purple-500'
