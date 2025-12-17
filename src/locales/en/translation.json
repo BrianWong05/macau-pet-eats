@@ -123,6 +123,8 @@
     "missingSupabase": "Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
   },
   "auth": {
+    "login": "Log In",
+    "logout": "Log Out",
     "loginTitle": "Log In",
     "loginSubtitle": "Sign in to write reviews",
     "signupTitle": "Create Account",

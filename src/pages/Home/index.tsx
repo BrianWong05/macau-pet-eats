@@ -6,9 +6,14 @@ import { RestaurantCard } from '@/components/RestaurantCard'
 import { SkeletonCardGrid } from '@/components/SkeletonCard'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useRestaurants } from '@/hooks/useRestaurants'
+import { useAuth } from '@/contexts/AuthContext'
+import { AuthModal } from '@/components/AuthModal'
+import { User, LogOut } from 'lucide-react'
 
 export function Home() {
   const { t } = useTranslation()
+  const { user, signOut } = useAuth()
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const { featuredRestaurants, isLoading, error } = useRestaurants({ searchQuery })
 
@@ -19,7 +24,29 @@ export function Home() {
   return (
     <div className="min-h-screen">
       {/* Header with Language Switcher */}
-      <header className="absolute top-0 right-0 p-4 z-50">
+      <header className="absolute top-0 right-0 p-4 z-50 flex items-center gap-4">
+        {user ? (
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-medium text-neutral-700 hidden sm:block">
+              {user.email}
+            </span>
+            <button
+              onClick={() => signOut()}
+              className="p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all text-neutral-600 hover:text-red-600"
+              title={t('auth.logout') || 'Logout'}
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all text-neutral-700 font-medium"
+          >
+            <User size={18} />
+            <span>{t('auth.login') || 'Login'}</span>
+          </button>
+        )}
         <LanguageSwitcher />
       </header>
 
@@ -170,6 +197,11 @@ export function Home() {
           </div>
         </div>
       </footer>
+
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
     </div>
   )
 }

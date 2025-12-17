@@ -123,6 +123,8 @@
     "missingSupabase": "缺少 Supabase 環境變數。請在 .env 檔案中設定 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY。"
   },
   "auth": {
+    "login": "登入",
+    "logout": "登出",
     "loginTitle": "登入",
     "loginSubtitle": "登入以撰寫評論",
     "signupTitle": "建立帳號",

@@ -123,6 +123,8 @@
     "missingSupabase": "Variáveis de ambiente Supabase em falta. Por favor defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no ficheiro .env."
   },
   "auth": {
+    "login": "Entrar",
+    "logout": "Sair",
     "loginTitle": "Entrar",
     "loginSubtitle": "Entre para escrever avaliações",
     "signupTitle": "Criar Conta",
