@@ -17,8 +17,8 @@ export function AdminLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const navItems = [
-    { path: '/admin', icon: BarChart, label: 'Dashboard' },
-    { path: '/admin/restaurants', icon: Store, label: 'Restaurants' },
+    { path: '/admin', icon: BarChart, label: t('admin.sidebar.dashboard') },
+    { path: '/admin/restaurants', icon: Store, label: t('admin.sidebar.restaurants') },
   ]
 
   return (

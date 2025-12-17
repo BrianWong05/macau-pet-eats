@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Loader } from 'lucide-react'
 import { toast } from 'sonner'
-// import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
 
@@ -35,14 +35,20 @@ const PET_POLICIES = [
 ]
 
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
-// const { t } = useTranslation()
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   
   const [formData, setFormData] = useState<Partial<Restaurant>>({
     name: '',
+    name_zh: '',
+    name_pt: '',
     address: '',
+    address_zh: '',
+    address_pt: '',
     description: '',
+    description_zh: '',
+    description_pt: '',
     pet_policy: 'patio_only',
     cuisine_type: '',
     contact_info: '',
@@ -58,8 +64,14 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     } else {
       setFormData({
         name: '',
+        name_zh: '',
+        name_pt: '',
         address: '',
+        address_zh: '',
+        address_pt: '',
         description: '',
+        description_zh: '',
+        description_pt: '',
         pet_policy: 'patio_only',
         cuisine_type: '',
         contact_info: '',
@@ -122,85 +134,153 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.nameEn')} *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.nameZh')}</label>
+                <input
+                  type="text"
+                  value={formData.name_zh || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name_zh: e.target.value }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.namePt')}</label>
+                <input
+                  type="text"
+                  value={formData.name_pt || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name_pt: e.target.value }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.cuisineType')} *</label>
+                <select
+                  required
+                  value={formData.cuisine_type || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type: e.target.value }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">{t('admin.modal.placeholders.selectCuisine')}</option>
+                  {CUISINE_TYPES.map(type => (
+                    <option key={type} value={type}>{t(`cuisineTypes.${type.toLowerCase()}`) || type}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.petPolicy')} *</label>
+                <select
+                  required
+                  value={formData.pet_policy || 'patio_only'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, pet_policy: e.target.value as any }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                >
+                  {PET_POLICIES.map(policy => (
+                    <option key={policy} value={policy}>{t(`petPolicy.${policy}`)}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.status')}</label>
+                <select
+                  value={formData.status || 'pending'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="pending">{t('admin.restaurants.status.pending')}</option>
+                  <option value="approved">{t('admin.restaurants.status.approved')}</option>
+                  <option value="rejected">{t('admin.restaurants.status.rejected')}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">Name *</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionEn')} *</label>
+              <textarea
+                required
+                rows={3}
+                value={formData.description || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder={t('admin.modal.placeholders.description')}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionZh')}</label>
+              <textarea
+                rows={3}
+                value={formData.description_zh || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, description_zh: e.target.value }))}
+                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder={t('admin.modal.placeholders.description') + ' (中文)'}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionPt')}</label>
+              <textarea
+                rows={3}
+                value={formData.description_pt || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, description_pt: e.target.value }))}
+                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder={t('admin.modal.placeholders.description') + ' (葡文)'}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressEn')} *</label>
               <input
                 type="text"
                 required
-                value={formData.name || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                value={formData.address || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder={t('admin.modal.placeholders.address')}
               />
             </div>
-            
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">Cuisine Type *</label>
-              <select
-                required
-                value={formData.cuisine_type || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type: e.target.value }))}
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressZh')}</label>
+              <input
+                type="text"
+                value={formData.address_zh || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, address_zh: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              >
-                <option value="">Select Cuisine</option>
-                {CUISINE_TYPES.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
+                placeholder={t('admin.modal.placeholders.address') + ' (中文)'}
+              />
             </div>
-
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">Pet Policy *</label>
-              <select
-                required
-                value={formData.pet_policy || 'patio_only'}
-                onChange={(e) => setFormData(prev => ({ ...prev, pet_policy: e.target.value as any }))}
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressPt')}</label>
+              <input
+                type="text"
+                value={formData.address_pt || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, address_pt: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              >
-                {PET_POLICIES.map(policy => (
-                  <option key={policy} value={policy}>{policy.replace(/_/g, ' ')}</option>
-                ))}
-              </select>
+                placeholder={t('admin.modal.placeholders.address') + ' (葡文)'}
+              />
             </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">Status</label>
-              <select
-                value={formData.status || 'pending'}
-                onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
-                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              >
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-neutral-700">Description *</label>
-            <textarea
-              required
-              rows={3}
-              value={formData.description || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-neutral-700">Address *</label>
-            <input
-              type="text"
-              required
-              value={formData.address || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-            />
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">Latitude *</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.latitude')} *</label>
               <input
                 type="number"
                 step="any"
@@ -211,7 +291,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">Longitude *</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.longitude')} *</label>
               <input
                 type="number"
                 step="any"
@@ -224,13 +304,13 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-neutral-700">Image URL</label>
+            <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.imageUrl')}</label>
             <input
               type="url"
               value={formData.image_url || ''}
               onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              placeholder="https://..."
+              placeholder={t('admin.modal.placeholders.imageUrl')}
             />
           </div>
 
@@ -246,7 +326,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               onClick={onClose}
               className="px-6 py-2 text-neutral-600 font-medium hover:bg-neutral-50 rounded-xl transition-colors"
             >
-              Cancel
+              {t('admin.modal.buttons.cancel')}
             </button>
             <button
               type="submit"
@@ -254,7 +334,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               className="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 text-white font-medium rounded-xl transition-colors flex items-center gap-2"
             >
               {loading && <Loader size={18} className="animate-spin" />}
-              {restaurant ? 'Save Changes' : 'Create Restaurant'}
+              {restaurant ? t('admin.modal.buttons.save') : t('admin.modal.buttons.create')}
             </button>
           </div>
         </form>

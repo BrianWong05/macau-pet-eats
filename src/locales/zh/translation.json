@@ -159,5 +159,95 @@
     "uploadPhoto": "上傳照片",
     "removePhoto": "移除照片",
     "photoHint": "可選：添加用餐照片"
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "儀表板",
+      "restaurants": "餐廳管理",
+      "signOut": "登出"
+    },
+    "dashboard": {
+      "title": "概覽",
+      "totalRestaurants": "餐廳總數",
+      "activeListings": "已上架",
+      "pendingApproval": "待審核",
+      "totalReviews": "評論總數"
+    },
+    "restaurants": {
+      "title": "餐廳列表",
+      "subtitle": "管理餐廳與審核",
+      "addRestaurant": "新增餐廳",
+      "searchPlaceholder": "搜尋餐廳...",
+      "filters": {
+        "all": "全部",
+        "pending": "待審核",
+        "approved": "已批准"
+      },
+      "table": {
+        "headers": {
+          "restaurant": "餐廳",
+          "status": "狀態",
+          "petPolicy": "寵物政策",
+          "submitted": "提交時間",
+          "actions": "操作"
+        },
+        "noRestaurants": "找不到餐廳"
+      },
+      "status": {
+        "pending": "待審核",
+        "approved": "已批准",
+        "rejected": "已拒絕"
+      },
+      "actions": {
+        "approve": "批准",
+        "reject": "拒絕",
+        "edit": "編輯",
+        "delete": "刪除",
+        "confirmDelete": "確定要刪除此餐廳嗎？",
+        "deleteSuccess": "餐廳刪除成功",
+        "approveSuccess": "已批准餐廳",
+        "rejectSuccess": "已拒絕餐廳"
+      }
+    },
+    "modal": {
+      "addTitle": "新增餐廳",
+      "editTitle": "編輯餐廳",
+      "labels": {
+        "name": "名稱",
+        "nameEn": "名稱 (英文)",
+        "nameZh": "名稱 (中文)",
+        "namePt": "名稱 (葡文)",
+        "cuisineType": "菜式類型",
+        "petPolicy": "寵物政策",
+        "status": "狀態",
+        "description": "描述",
+        "descriptionEn": "描述 (英文)",
+        "descriptionZh": "描述 (中文)",
+        "descriptionPt": "描述 (葡文)",
+        "address": "地址",
+        "addressEn": "地址 (英文)",
+        "addressZh": "地址 (中文)",
+        "addressPt": "地址 (葡文)",
+        "latitude": "緯度",
+        "longitude": "經度",
+        "imageUrl": "圖片網址"
+      },
+      "placeholders": {
+        "selectCuisine": "選擇菜式",
+        "description": "描述這間餐廳...",
+        "address": "輸入地址",
+        "imageUrl": "https://..."
+      },
+      "buttons": {
+        "cancel": "取消",
+        "save": "儲存變更",
+        "create": "建立餐廳"
+      },
+      "messages": {
+        "updateSuccess": "餐廳更新成功",
+        "createSuccess": "餐廳建立成功",
+        "error": "發生錯誤"
+      }
+    }
   }
 }

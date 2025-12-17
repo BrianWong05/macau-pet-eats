@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { 
   Trash2, 
   Plus, 
@@ -14,6 +15,7 @@ import type { Restaurant } from '@/types/database'
 import { RestaurantFormModal } from '@/components/RestaurantFormModal'
 
 export function AdminRestaurants() {
+  const { t } = useTranslation()
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -59,11 +61,12 @@ export function AdminRestaurants() {
 
     if (!error) {
       toast.success(`Restaurant ${status} successfully`)
+      toast.success(status === 'approved' ? t('admin.restaurants.actions.approveSuccess') : t('admin.restaurants.actions.rejectSuccess'))
       fetchRestaurants()
     }
   }
 
-  const filteredRestaurants = restaurants.filter(r => 
+  const filteredRestaurants = restaurants.filter(r =>
     r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.name_zh?.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -80,11 +83,13 @@ export function AdminRestaurants() {
       rejected: XCircle
     }
     const Icon = icons[status as keyof typeof icons] || Clock
-    
+
     return (
       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || styles.pending}`}>
         <Icon size={12} />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {status === 'pending' ? t('admin.restaurants.status.pending') :
+         status === 'approved' ? t('admin.restaurants.status.approved') :
+         status === 'rejected' ? t('admin.restaurants.status.rejected') : status}
       </span>
     )
   }
@@ -93,10 +98,10 @@ export function AdminRestaurants() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Restaurants</h1>
-          <p className="text-neutral-500 mt-1">Manage restaurant listings and submissions</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('admin.restaurants.title')}</h1>
+          <p className="text-neutral-500 mt-1">{t('admin.restaurants.subtitle')}</p>
         </div>
-        <button 
+        <button
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
           onClick={() => {
             setEditingRestaurant(null)
@@ -104,7 +109,7 @@ export function AdminRestaurants() {
           }}
         >
           <Plus size={20} />
-          Add Restaurant
+          {t('admin.restaurants.addRestaurant')}
         </button>
       </div>
 
@@ -114,7 +119,7 @@ export function AdminRestaurants() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search restaurants..."
+            placeholder={t('admin.restaurants.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -126,12 +131,12 @@ export function AdminRestaurants() {
               key={status}
               onClick={() => setFilterStatus(status)}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                filterStatus === status 
-                  ? 'bg-neutral-900 text-white' 
+                filterStatus === status
+                  ? 'bg-neutral-900 text-white'
                   : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
               }`}
             >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {t(`admin.restaurants.filters.${status}`)}
             </button>
           ))}
         </div>
@@ -143,11 +148,11 @@ export function AdminRestaurants() {
           <table className="w-full">
             <thead className="bg-neutral-50 border-b border-neutral-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Restaurant</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Pet Policy</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Submitted</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.restaurant')}</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.status')}</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.petPolicy')}</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.submitted')}</th>
+                <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
@@ -162,7 +167,7 @@ export function AdminRestaurants() {
               ) : filteredRestaurants.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-neutral-500">
-                    No restaurants found
+                    {t('admin.restaurants.table.noRestaurants')}
                   </td>
                 </tr>
               ) : (
@@ -170,14 +175,14 @@ export function AdminRestaurants() {
                   <tr key={restaurant.id} className="hover:bg-neutral-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <img 
-                          src={restaurant.image_url || 'https://via.placeholder.com/40'} 
-                          alt="" 
+                        <img
+                          src={restaurant.image_url || 'https://via.placeholder.com/40'}
+                          alt=""
                           className="w-10 h-10 rounded-lg object-cover bg-neutral-100"
                         />
                         <div>
-                          <p className="font-medium text-neutral-900">{restaurant.name}</p>
-                          <p className="text-sm text-neutral-500">{restaurant.cuisine_type}</p>
+                          <p className="font-medium text-neutral-900">{restaurant.name_zh || restaurant.name}</p>
+                          <p className="text-sm text-neutral-500">{t(`cuisineTypes.${restaurant.cuisine_type.toLowerCase()}`) || restaurant.cuisine_type}</p>
                         </div>
                       </div>
                     </td>
@@ -185,7 +190,7 @@ export function AdminRestaurants() {
                       <StatusBadge status={restaurant.status || 'approved'} />
                     </td>
                     <td className="px-6 py-4 text-sm text-neutral-600">
-                      {restaurant.pet_policy.replace(/_/g, ' ')}
+                      {t(`petPolicy.${restaurant.pet_policy}`)}
                     </td>
                     <td className="px-6 py-4 text-sm text-neutral-600">
                       {new Date(restaurant.created_at).toLocaleDateString()}

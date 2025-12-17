@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { 
   Users, 
   Store, 
@@ -8,6 +9,7 @@ import {
 import { supabase } from '@/lib/supabase'
 
 export function AdminDashboard() {
+  const { t } = useTranslation()
   const [stats, setStats] = useState({
     totalRestaurants: 0,
     activeRestaurants: 0,
@@ -86,7 +88,7 @@ export function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-neutral-900 mb-8">Dashboard Overview</h1>
+      <h1 className="text-2xl font-bold text-neutral-900 mb-8">{t('admin.dashboard.title')}</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => (
