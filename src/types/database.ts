@@ -1,3 +1,6 @@
+// Supported languages
+export type Language = 'en' | 'zh' | 'pt'
+
 // Pet Policy enum
 export type PetPolicy = 
   | 'indoors_allowed'
@@ -7,30 +10,88 @@ export type PetPolicy =
   | 'dogs_only'
   | 'cats_only'
 
-// Pet policy display labels
-export const PET_POLICY_LABELS: Record<PetPolicy, string> = {
-  indoors_allowed: 'Indoors Allowed',
-  patio_only: 'Patio Only',
-  small_pets_only: 'Small Pets Only',
-  all_pets_welcome: 'All Pets Welcome',
-  dogs_only: 'Dogs Only',
-  cats_only: 'Cats Only',
+// Pet policy display labels (multilingual)
+export const PET_POLICY_LABELS: Record<PetPolicy, Record<Language, string>> = {
+  indoors_allowed: {
+    en: 'Indoors Allowed',
+    zh: '允許室內',
+    pt: 'Interior Permitido',
+  },
+  patio_only: {
+    en: 'Patio Only',
+    zh: '僅限露台',
+    pt: 'Apenas Terraço',
+  },
+  small_pets_only: {
+    en: 'Small Pets Only',
+    zh: '僅限小型寵物',
+    pt: 'Apenas Animais Pequenos',
+  },
+  all_pets_welcome: {
+    en: 'All Pets Welcome',
+    zh: '歡迎所有寵物',
+    pt: 'Todos os Animais Bem-vindos',
+  },
+  dogs_only: {
+    en: 'Dogs Only',
+    zh: '僅限狗狗',
+    pt: 'Apenas Cães',
+  },
+  cats_only: {
+    en: 'Cats Only',
+    zh: '僅限貓咪',
+    pt: 'Apenas Gatos',
+  },
 }
 
-// Restaurant entity
+// Restaurant entity with multilingual fields
 export interface Restaurant {
   id: string
+  
+  // English (default)
   name: string
   description: string
   address: string
+  
+  // Chinese (中文)
+  name_zh: string | null
+  description_zh: string | null
+  address_zh: string | null
+  
+  // Portuguese (Português)
+  name_pt: string | null
+  description_pt: string | null
+  address_pt: string | null
+  
+  // Location
   latitude: number
   longitude: number
+  
+  // Details
   pet_policy: PetPolicy
   cuisine_type: string
+  cuisine_type_zh: string | null
+  cuisine_type_pt: string | null
   image_url: string
   contact_info: string
+  
+  // Timestamps
   created_at: string
   updated_at: string
+}
+
+// Helper function to get localized text
+export function getLocalizedText<T extends Record<string, unknown>>(
+  item: T,
+  field: string,
+  language: Language
+): string {
+  if (language === 'en') {
+    return (item[field] as string) || ''
+  }
+  
+  const localizedField = `${field}_${language}` as keyof T
+  return (item[localizedField] as string) || (item[field] as string) || ''
 }
 
 // Review entity
@@ -65,12 +126,20 @@ export interface Database {
 // Form types for submissions
 export interface RestaurantSubmission {
   name: string
+  name_zh?: string
+  name_pt?: string
   description: string
+  description_zh?: string
+  description_pt?: string
   address: string
+  address_zh?: string
+  address_pt?: string
   latitude?: number
   longitude?: number
   pet_policy: PetPolicy
   cuisine_type: string
+  cuisine_type_zh?: string
+  cuisine_type_pt?: string
   image_url?: string
   contact_info: string
 }

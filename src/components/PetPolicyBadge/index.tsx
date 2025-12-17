@@ -1,10 +1,11 @@
-import type { PetPolicy } from '@/types/database'
+import type { PetPolicy, Language } from '@/types/database'
 import { PET_POLICY_LABELS } from '@/types/database'
 import { PawPrint, TreePine, Dog, Cat, Heart } from 'lucide-react'
 
 interface PetPolicyBadgeProps {
   policy: PetPolicy
   size?: 'sm' | 'md' | 'lg'
+  language?: Language
 }
 
 const policyConfig: Record<PetPolicy, { icon: typeof PawPrint; colorClass: string }> = {
@@ -46,9 +47,10 @@ const iconSizes = {
   lg: 16,
 }
 
-export function PetPolicyBadge({ policy, size = 'md' }: PetPolicyBadgeProps) {
+export function PetPolicyBadge({ policy, size = 'md', language = 'en' }: PetPolicyBadgeProps) {
   const config = policyConfig[policy]
   const Icon = config.icon
+  const label = PET_POLICY_LABELS[policy][language]
 
   return (
     <span
@@ -60,7 +62,7 @@ export function PetPolicyBadge({ policy, size = 'md' }: PetPolicyBadgeProps) {
       `}
     >
       <Icon size={iconSizes[size]} />
-      <span>{PET_POLICY_LABELS[policy]}</span>
+      <span>{label}</span>
     </span>
   )
 }
