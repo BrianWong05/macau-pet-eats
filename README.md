@@ -1,73 +1,97 @@
-# React + TypeScript + Vite
+# 🐾 Macau Pet Eats
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, mobile-friendly web application to discover and share pet-friendly restaurants in Macau.
 
-Currently, two official plugins are available:
+![Project Banner](https://images.unsplash.com/photo-1544568100-847a948585b9?w=1200&q=80)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- **🔎 Explore:** Discover pet-friendly restaurants with detailed info on pet policies (patio only, indoors, etc.).
+- **🌐 Multilingual:** Full support for English, Traditional Chinese (中文), and Portuguese (Português).
+- **📝 Reviews:** Users can leave ratings, comments, and upload photos of their experience.
+- **📸 Gallery:** Browse photos of restaurants, food, and furry friends.
+- **✍️ Community Submissions:** Users can submit new pet-friendly spots for review.
+- **🛡️ Admin Panel:** Dedicated dashboard for administrators to manage restaurants, review submissions, and moderate content.
+- **📱 Responsive Design:** Optimized for both desktop and mobile devices with a sticky glassmorphism navigation.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **Framework:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Routing:** [React Router](https://reactrouter.com/) (HashRouter)
+- **Internationalization:** [i18next](https://www.i18next.com/)
+- **Backend & Auth:** [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage)
+- **Maps:** Google Maps Embed
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js (v18 or higher)
+- npm or yarn
+- A Supabase project
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/BrianWong05/macau-pet-eats.git
+    cd macau-pet-eats
+    ```
+
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3.  Set up environment variables:
+    Create a `.env` file in the root directory (or use the existing one if committed):
+    ```env
+    VITE_SUPABASE_URL=your_supabase_project_url
+    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+    ```
+
+4.  Start the development server:
+    ```bash
+    npm run dev
+    ```
+
+## 🚢 Deployment
+
+This project is configured for deployment on **GitHub Pages**.
+
+### Deploying Updates
+
+To build and deploy the latest changes to the `gh-pages` branch:
+
+```bash
+npm run deploy
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The site will be live at: `https://BrianWong05.github.io/macau-pet-eats/`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Configuration Notes
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+-   **Base Path:** The project is served from a subdirectory (`/macau-pet-eats/`). `vite.config.ts` handles this conditionally (Root `/` for dev, `/macau-pet-eats/` for prod).
+-   **Routing:** Uses `HashRouter` to ensure compatibility with GitHub Pages static hosting.
+-   **Supabase Redirects:**
+    -   Production: `https://BrianWong05.github.io/macau-pet-eats/**`
+    -   Localhost: `http://localhost:5173/**` (Make sure to add these to your Supabase Auth Redirect URLs).
+
+## 🗄️ Database Schema
+
+The project uses Supabase (PostgreSQL). Key tables include:
+
+-   `restaurants`: Stores restaurant details (multilingual names/desc, location, pet policy, gallery images).
+-   `reviews`: User reviews and photos linked to restaurants.
+-   `profiles`: User profiles (synced with Auth) and admin status.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
