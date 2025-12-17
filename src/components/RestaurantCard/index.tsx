@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { MapPin, Utensils } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
+import { getLocalizedText } from '@/types/database'
 import { PetPolicyBadge } from '@/components/PetPolicyBadge'
 
 interface RestaurantCardProps {
@@ -8,7 +10,16 @@ interface RestaurantCardProps {
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
-  const { id, name, description, address, pet_policy, cuisine_type, image_url } = restaurant
+  const { i18n } = useTranslation()
+  const lang = i18n.language as 'zh' | 'en' | 'pt'
+  
+  const { id, pet_policy, image_url } = restaurant
+  
+  // Get localized content
+  const name = getLocalizedText(restaurant, 'name', lang)
+  const description = getLocalizedText(restaurant, 'description', lang)
+  const address = getLocalizedText(restaurant, 'address', lang)
+  const cuisineType = getLocalizedText(restaurant, 'cuisine_type', lang)
 
   return (
     <Link
@@ -42,7 +53,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             rounded-full
           ">
             <Utensils size={14} />
-            {cuisine_type}
+            {cuisineType}
           </span>
         </div>
       </div>

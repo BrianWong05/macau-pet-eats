@@ -1,19 +1,19 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Search, X } from 'lucide-react'
 
 interface SearchBarProps {
   onSearch: (query: string) => void
-  placeholder?: string
   initialValue?: string
   debounceMs?: number
 }
 
 export function SearchBar({
   onSearch,
-  placeholder = 'Search by restaurant name or cuisine...',
   initialValue = '',
   debounceMs = 300,
 }: SearchBarProps) {
+  const { t } = useTranslation()
   const [value, setValue] = useState(initialValue)
 
   // Debounced search
@@ -39,7 +39,7 @@ export function SearchBar({
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder={placeholder}
+        placeholder={t('home.searchPlaceholder')}
         className="
           w-full pl-12 pr-12 py-4
           text-lg
@@ -62,7 +62,7 @@ export function SearchBar({
             text-neutral-400 hover:text-neutral-600
             transition-colors
           "
-          aria-label="Clear search"
+          aria-label={t('common.close')}
         >
           <X className="h-5 w-5" />
         </button>

@@ -1,11 +1,14 @@
 import { useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PawPrint, Sparkles, MapPin } from 'lucide-react'
 import { SearchBar } from '@/components/SearchBar'
 import { RestaurantCard } from '@/components/RestaurantCard'
 import { SkeletonCardGrid } from '@/components/SkeletonCard'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useRestaurants } from '@/hooks/useRestaurants'
 
 export function Home() {
+  const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
   const { featuredRestaurants, isLoading, error } = useRestaurants({ searchQuery })
 
@@ -15,6 +18,11 @@ export function Home() {
 
   return (
     <div className="min-h-screen">
+      {/* Header with Language Switcher */}
+      <header className="absolute top-0 right-0 p-4 z-50">
+        <LanguageSwitcher />
+      </header>
+
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
         {/* Decorative elements */}
@@ -29,22 +37,20 @@ export function Home() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-soft mb-8">
               <PawPrint className="w-5 h-5 text-primary-500" />
               <span className="text-sm font-medium text-neutral-700">
-                Macau's #1 Pet-Friendly Dining Guide
+                {t('home.badge')}
               </span>
               <Sparkles className="w-4 h-4 text-primary-400" />
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 leading-tight">
-              Find the Best Places to Dine with Your{' '}
-              <span className="text-gradient">Furry Friend</span>{' '}
-              in Macau
+              {t('home.headline')}{' '}
+              <span className="text-gradient">{t('home.headlineHighlight')}</span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Discover pet-friendly restaurants, cafés, and bars across Macau. 
-              From cozy patios to fully indoor-friendly spots.
+              {t('home.subheadline')}
             </p>
 
             {/* Search Bar */}
@@ -56,11 +62,11 @@ export function Home() {
             <div className="flex flex-wrap justify-center gap-8 mt-12">
               <div className="flex items-center gap-2 text-neutral-600">
                 <MapPin className="w-5 h-5 text-primary-500" />
-                <span className="font-medium">50+ Locations</span>
+                <span className="font-medium">{t('home.stats.locations')}</span>
               </div>
               <div className="flex items-center gap-2 text-neutral-600">
                 <PawPrint className="w-5 h-5 text-secondary-500" />
-                <span className="font-medium">All Pet Types Welcome</span>
+                <span className="font-medium">{t('home.stats.allPets')}</span>
               </div>
             </div>
           </div>
@@ -73,12 +79,12 @@ export function Home() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
-              {searchQuery ? 'Search Results' : 'Featured Restaurants'}
+              {searchQuery ? t('home.featured.searchTitle') : t('home.featured.title')}
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
               {searchQuery 
-                ? `Showing results for "${searchQuery}"`
-                : 'Hand-picked spots where you and your pet are always welcome'
+                ? t('home.featured.searchSubtitle', { query: searchQuery })
+                : t('home.featured.subtitle')
               }
             </p>
           </div>
@@ -87,7 +93,7 @@ export function Home() {
           {error && (
             <div className="text-center py-12">
               <div className="inline-flex items-center gap-3 px-6 py-4 bg-red-50 text-red-700 rounded-xl">
-                <span className="font-medium">Error loading restaurants:</span>
+                <span className="font-medium">{t('errors.loadingRestaurants')}:</span>
                 <span>{error}</span>
               </div>
             </div>
@@ -115,12 +121,12 @@ export function Home() {
                 <div className="text-center py-16">
                   <PawPrint className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-neutral-700 mb-2">
-                    No restaurants found
+                    {t('home.noResults.title')}
                   </h3>
                   <p className="text-neutral-500">
                     {searchQuery 
-                      ? 'Try adjusting your search terms'
-                      : 'Check back soon for new additions!'
+                      ? t('home.noResults.searchHint')
+                      : t('home.noResults.defaultHint')
                     }
                   </p>
                 </div>
@@ -143,7 +149,7 @@ export function Home() {
                 "
               >
                 <MapPin className="w-5 h-5" />
-                Explore All on Map
+                {t('home.exploreButton')}
               </a>
             </div>
           )}
@@ -156,10 +162,10 @@ export function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
               <PawPrint className="w-6 h-6 text-primary-400" />
-              <span className="font-semibold text-white">Macau Pet Eats</span>
+              <span className="font-semibold text-white">{t('common.appName')}</span>
             </div>
             <p className="text-sm">
-              © 2024 Macau Pet-Friendly Eats. Made with 🐾 for pet lovers.
+              {t('footer.copyright')}
             </p>
           </div>
         </div>

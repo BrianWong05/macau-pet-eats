@@ -1,0 +1,67 @@
+{
+  "common": {
+    "appName": "Macau Pet-Friendly Eats",
+    "loading": "A carregar...",
+    "error": "Erro",
+    "search": "Pesquisar",
+    "viewAll": "Ver Tudo",
+    "learnMore": "Saber Mais",
+    "getDirections": "Obter Direções",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "close": "Fechar"
+  },
+  "nav": {
+    "home": "Início",
+    "explore": "Explorar Mapa",
+    "submit": "Sugerir Local"
+  },
+  "home": {
+    "badge": "O Guia #1 de Restaurantes Pet-Friendly em Macau",
+    "headline": "Encontre os Melhores Lugares para Jantar com o Seu",
+    "headlineHighlight": "Amigo Peludo",
+    "subheadline": "Descubra restaurantes, cafés e bares pet-friendly em Macau. De pátios acolhedores a espaços totalmente amigos dos animais.",
+    "searchPlaceholder": "Pesquisar por nome ou tipo de cozinha...",
+    "stats": {
+      "locations": "50+ Locais",
+      "allPets": "Todos os Animais Bem-vindos"
+    },
+    "featured": {
+      "title": "Restaurantes em Destaque",
+      "subtitle": "Locais selecionados onde você e o seu animal são sempre bem-vindos",
+      "searchTitle": "Resultados da Pesquisa",
+      "searchSubtitle": "A mostrar resultados para \"{{query}}\""
+    },
+    "noResults": {
+      "title": "Nenhum restaurante encontrado",
+      "searchHint": "Tente ajustar os termos de pesquisa",
+      "defaultHint": "Volte em breve para novas adições!"
+    },
+    "exploreButton": "Explorar Tudo no Mapa"
+  },
+  "restaurant": {
+    "cuisine": "Cozinha",
+    "address": "Morada",
+    "contact": "Contacto"
+  },
+  "petPolicy": {
+    "indoors_allowed": "Interior Permitido",
+    "patio_only": "Apenas Terraço",
+    "small_pets_only": "Apenas Animais Pequenos",
+    "all_pets_welcome": "Todos os Animais Bem-vindos",
+    "dogs_only": "Apenas Cães",
+    "cats_only": "Apenas Gatos"
+  },
+  "footer": {
+    "copyright": "© 2024 Macau Pet-Friendly Eats. Feito com 🐾 para amantes de animais."
+  },
+  "language": {
+    "zh": "繁體中文",
+    "en": "English",
+    "pt": "Português"
+  },
+  "errors": {
+    "loadingRestaurants": "Falha ao carregar restaurantes",
+    "missingSupabase": "Variáveis de ambiente Supabase em falta. Por favor defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no ficheiro .env."
+  }
+}

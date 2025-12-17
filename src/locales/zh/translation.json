@@ -1,0 +1,67 @@
+{
+  "common": {
+    "appName": "澳門寵物友善餐廳",
+    "loading": "載入中...",
+    "error": "錯誤",
+    "search": "搜尋",
+    "viewAll": "查看全部",
+    "learnMore": "了解更多",
+    "getDirections": "取得路線",
+    "submit": "提交",
+    "cancel": "取消",
+    "close": "關閉"
+  },
+  "nav": {
+    "home": "首頁",
+    "explore": "探索地圖",
+    "submit": "推薦餐廳"
+  },
+  "home": {
+    "badge": "澳門第一寵物友善餐廳指南",
+    "headline": "在澳門找到與毛孩一起用餐的",
+    "headlineHighlight": "最佳餐廳",
+    "subheadline": "探索澳門各區的寵物友善餐廳、咖啡廳和酒吧。從舒適的露台到完全室內友善的場所。",
+    "searchPlaceholder": "搜尋餐廳名稱或菜式...",
+    "stats": {
+      "locations": "50+ 地點",
+      "allPets": "歡迎所有寵物"
+    },
+    "featured": {
+      "title": "精選餐廳",
+      "subtitle": "精心挑選的寵物友善好去處",
+      "searchTitle": "搜尋結果",
+      "searchSubtitle": "顯示「{{query}}」的結果"
+    },
+    "noResults": {
+      "title": "找不到餐廳",
+      "searchHint": "請嘗試調整搜尋條件",
+      "defaultHint": "稍後再來查看新增的餐廳！"
+    },
+    "exploreButton": "在地圖上探索"
+  },
+  "restaurant": {
+    "cuisine": "菜式",
+    "address": "地址",
+    "contact": "聯絡方式"
+  },
+  "petPolicy": {
+    "indoors_allowed": "允許室內",
+    "patio_only": "僅限露台",
+    "small_pets_only": "僅限小型寵物",
+    "all_pets_welcome": "歡迎所有寵物",
+    "dogs_only": "僅限狗狗",
+    "cats_only": "僅限貓咪"
+  },
+  "footer": {
+    "copyright": "© 2024 澳門寵物友善餐廳。由寵物愛好者用心製作。"
+  },
+  "language": {
+    "zh": "繁體中文",
+    "en": "English",
+    "pt": "Português"
+  },
+  "errors": {
+    "loadingRestaurants": "載入餐廳資料失敗",
+    "missingSupabase": "缺少 Supabase 環境變數。請在 .env 檔案中設定 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY。"
+  }
+}

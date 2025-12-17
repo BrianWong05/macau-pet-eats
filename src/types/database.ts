@@ -10,40 +10,6 @@ export type PetPolicy =
   | 'dogs_only'
   | 'cats_only'
 
-// Pet policy display labels (multilingual)
-export const PET_POLICY_LABELS: Record<PetPolicy, Record<Language, string>> = {
-  indoors_allowed: {
-    en: 'Indoors Allowed',
-    zh: '允許室內',
-    pt: 'Interior Permitido',
-  },
-  patio_only: {
-    en: 'Patio Only',
-    zh: '僅限露台',
-    pt: 'Apenas Terraço',
-  },
-  small_pets_only: {
-    en: 'Small Pets Only',
-    zh: '僅限小型寵物',
-    pt: 'Apenas Animais Pequenos',
-  },
-  all_pets_welcome: {
-    en: 'All Pets Welcome',
-    zh: '歡迎所有寵物',
-    pt: 'Todos os Animais Bem-vindos',
-  },
-  dogs_only: {
-    en: 'Dogs Only',
-    zh: '僅限狗狗',
-    pt: 'Apenas Cães',
-  },
-  cats_only: {
-    en: 'Cats Only',
-    zh: '僅限貓咪',
-    pt: 'Apenas Gatos',
-  },
-}
-
 // Restaurant entity with multilingual fields
 export interface Restaurant {
   id: string
@@ -78,20 +44,23 @@ export interface Restaurant {
   // Timestamps
   created_at: string
   updated_at: string
+  
+  // Index signature for dynamic access
+  [key: string]: string | number | null
 }
 
-// Helper function to get localized text
-export function getLocalizedText<T extends Record<string, unknown>>(
-  item: T,
-  field: string,
+// Helper function to get localized text from Restaurant
+export function getLocalizedText(
+  restaurant: Restaurant,
+  field: 'name' | 'description' | 'address' | 'cuisine_type',
   language: Language
 ): string {
   if (language === 'en') {
-    return (item[field] as string) || ''
+    return (restaurant[field] as string) || ''
   }
   
-  const localizedField = `${field}_${language}` as keyof T
-  return (item[localizedField] as string) || (item[field] as string) || ''
+  const localizedField = `${field}_${language}`
+  return (restaurant[localizedField] as string) || (restaurant[field] as string) || ''
 }
 
 // Review entity

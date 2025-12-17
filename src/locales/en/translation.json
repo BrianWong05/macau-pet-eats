@@ -1,0 +1,67 @@
+{
+  "common": {
+    "appName": "Macau Pet-Friendly Eats",
+    "loading": "Loading...",
+    "error": "Error",
+    "search": "Search",
+    "viewAll": "View All",
+    "learnMore": "Learn More",
+    "getDirections": "Get Directions",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore Map",
+    "submit": "Submit a Spot"
+  },
+  "home": {
+    "badge": "Macau's #1 Pet-Friendly Dining Guide",
+    "headline": "Find the Best Places to Dine with Your",
+    "headlineHighlight": "Furry Friend",
+    "subheadline": "Discover pet-friendly restaurants, cafés, and bars across Macau. From cozy patios to fully indoor-friendly spots.",
+    "searchPlaceholder": "Search by restaurant name or cuisine...",
+    "stats": {
+      "locations": "50+ Locations",
+      "allPets": "All Pet Types Welcome"
+    },
+    "featured": {
+      "title": "Featured Restaurants",
+      "subtitle": "Hand-picked spots where you and your pet are always welcome",
+      "searchTitle": "Search Results",
+      "searchSubtitle": "Showing results for \"{{query}}\""
+    },
+    "noResults": {
+      "title": "No restaurants found",
+      "searchHint": "Try adjusting your search terms",
+      "defaultHint": "Check back soon for new additions!"
+    },
+    "exploreButton": "Explore All on Map"
+  },
+  "restaurant": {
+    "cuisine": "Cuisine",
+    "address": "Address",
+    "contact": "Contact"
+  },
+  "petPolicy": {
+    "indoors_allowed": "Indoors Allowed",
+    "patio_only": "Patio Only",
+    "small_pets_only": "Small Pets Only",
+    "all_pets_welcome": "All Pets Welcome",
+    "dogs_only": "Dogs Only",
+    "cats_only": "Cats Only"
+  },
+  "footer": {
+    "copyright": "© 2024 Macau Pet-Friendly Eats. Made with 🐾 for pet lovers."
+  },
+  "language": {
+    "zh": "繁體中文",
+    "en": "English",
+    "pt": "Português"
+  },
+  "errors": {
+    "loadingRestaurants": "Failed to load restaurants",
+    "missingSupabase": "Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
+  }
+}
