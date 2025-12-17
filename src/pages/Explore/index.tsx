@@ -8,7 +8,8 @@ import {
   MapPin,
   Utensils,
   Filter,
-  X
+  X,
+  Upload
 } from 'lucide-react'
 import { useRestaurants } from '@/hooks/useRestaurants'
 import type { Restaurant, PetPolicy } from '@/types/database'
@@ -108,6 +109,13 @@ export function Explore() {
               <span className="w-2 h-2 bg-primary-500 rounded-full" />
             )}
           </button>
+          <Link
+            to="/submit"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
+          >
+            <Upload size={16} />
+            <span className="hidden sm:inline">{t('nav.submit')}</span>
+          </Link>
           <LanguageSwitcher />
         </div>
       </header>

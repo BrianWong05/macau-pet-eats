@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { PawPrint, Sparkles, MapPin, Upload } from 'lucide-react'
 import { SearchBar } from '@/components/SearchBar'
@@ -46,7 +47,15 @@ export function Home() {
             <User size={18} />
             <span>{t('auth.login') || 'Login'}</span>
           </button>
+
         )}
+        <Link
+          to="/submit"
+          className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:shadow-md transition-all text-neutral-700 font-medium"
+        >
+          <Upload size={18} />
+          <span className="hidden sm:inline">{t('nav.submit')}</span>
+        </Link>
         <LanguageSwitcher />
       </header>
 
