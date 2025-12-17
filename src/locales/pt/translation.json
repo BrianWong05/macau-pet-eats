@@ -51,6 +51,47 @@
     "noResults": "Nenhum restaurante corresponde aos filtros",
     "viewDetails": "Ver Detalhes"
   },
+  "submit": {
+    "title": "Sugerir Local",
+    "subtitle": "Conhece um restaurante pet-friendly? Conte-nos!",
+    "form": {
+      "name": "Nome do Restaurante",
+      "namePlaceholder": "Introduza o nome do restaurante",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Descreva este restaurante...",
+      "address": "Morada",
+      "addressPlaceholder": "Introduza a morada do restaurante",
+      "petPolicy": "Política de Animais",
+      "cuisineType": "Tipo de Cozinha",
+      "cuisineTypePlaceholder": "ex: Português, Cantonês, Fusão",
+      "contactInfo": "Telefone de Contacto",
+      "contactInfoPlaceholder": "+853 xxxx xxxx",
+      "imageUrl": "URL da Imagem (opcional)",
+      "imageUrlPlaceholder": "https://...",
+      "selectCuisine": "Selecione o tipo de cozinha",
+      "uploadPhoto": "Carregar Foto (opcional)",
+      "clickToUpload": "Clique para carregar uma foto",
+      "uploadHint": "Suporta JPG, PNG, GIF (máx 5MB)",
+      "selectFile": "Selecionar Ficheiro"
+    },
+    "submitButton": "Enviar Recomendação",
+    "successTitle": "Obrigado pela sua sugestão!",
+    "successMessage": "Vamos rever a sua sugestão e adicioná-la à lista em breve.",
+    "errorMessage": "Falha no envio. Por favor tente novamente mais tarde.",
+    "backToHome": "Voltar ao Início"
+  },
+  "cuisineTypes": {
+    "portuguese": "Português",
+    "cantonese": "Cantonês",
+    "fusion": "Fusão",
+    "international": "Internacional",
+    "seafood": "Mariscos",
+    "brunch": "Brunch",
+    "japanese": "Japonês",
+    "italian": "Italiano",
+    "thai": "Tailandês",
+    "other": "Outro"
+  },
   "restaurant": {
     "cuisine": "Cozinha",
     "address": "Morada",

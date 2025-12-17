@@ -51,6 +51,47 @@
     "noResults": "No restaurants match your filters",
     "viewDetails": "View Details"
   },
+  "submit": {
+    "title": "Submit a Spot",
+    "subtitle": "Know a pet-friendly restaurant? Let us know!",
+    "form": {
+      "name": "Restaurant Name",
+      "namePlaceholder": "Enter restaurant name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe this restaurant...",
+      "address": "Address",
+      "addressPlaceholder": "Enter restaurant address",
+      "petPolicy": "Pet Policy",
+      "cuisineType": "Cuisine Type",
+      "cuisineTypePlaceholder": "e.g., Portuguese, Cantonese, Fusion",
+      "contactInfo": "Contact Phone",
+      "contactInfoPlaceholder": "+853 xxxx xxxx",
+      "imageUrl": "Image URL (optional)",
+      "imageUrlPlaceholder": "https://...",
+      "selectCuisine": "Select cuisine type",
+      "uploadPhoto": "Upload Photo (optional)",
+      "clickToUpload": "Click to upload a photo",
+      "uploadHint": "Supports JPG, PNG, GIF (max 5MB)",
+      "selectFile": "Select File"
+    },
+    "submitButton": "Submit Recommendation",
+    "successTitle": "Thank you for your submission!",
+    "successMessage": "We'll review your submission and add it to the list soon.",
+    "errorMessage": "Submission failed. Please try again later.",
+    "backToHome": "Back to Home"
+  },
+  "cuisineTypes": {
+    "portuguese": "Portuguese",
+    "cantonese": "Cantonese",
+    "fusion": "Fusion",
+    "international": "International",
+    "seafood": "Seafood",
+    "brunch": "Brunch",
+    "japanese": "Japanese",
+    "italian": "Italian",
+    "thai": "Thai",
+    "other": "Other"
+  },
   "restaurant": {
     "cuisine": "Cuisine",
     "address": "Address",
