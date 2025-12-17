@@ -11,11 +11,13 @@ import {
   Star,
   MessageSquare,
   User,
-  Trash2,
-  LogOut,
   Camera,
   Image as ImageIcon,
-  X
+  X,
+  PawPrint,
+  Upload,
+  Trash2,
+  LogOut
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
@@ -36,6 +38,15 @@ export function RestaurantDetail() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
   
   // Reviews state
   const { reviews, isLoading: reviewsLoading, submitReview, deleteReview } = useReviews({ 
@@ -187,17 +198,56 @@ export function RestaurantDetail() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Header with Language Switcher */}
-      <header className="absolute top-0 right-0 p-4 z-50 flex items-center gap-2">
-        {user && (
-          <button
-            onClick={() => signOut()}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-white/80 hover:bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 transition-colors"
+      <header 
+        className={`
+          fixed top-0 left-0 right-0 z-50 transition-all duration-300
+          ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-4'}
+        `}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <Link
+            to="/"
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${isScrolled ? 'text-neutral-600 hover:bg-neutral-100' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}
           >
-            <LogOut size={16} />
-            <span className="hidden sm:inline">{t('auth.signOut')}</span>
-          </button>
-        )}
-        <LanguageSwitcher />
+            <ArrowLeft size={20} />
+            <span className="font-medium hidden sm:block">{t('restaurant.backToList')}</span>
+          </Link>
+
+          <div className="flex items-center gap-3">
+            {user ? (
+              <div className="flex items-center gap-2 sm:gap-4">
+                <span className={`text-sm font-medium hidden sm:block ${isScrolled ? 'text-neutral-700' : 'text-white drop-shadow-md'}`}>
+                  {user.email}
+                </span>
+                <button
+                  onClick={() => signOut()}
+                  className={`p-2 rounded-full transition-all ${isScrolled ? 'bg-white shadow-sm text-neutral-600 hover:text-red-600' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}
+                  title={t('auth.logout') || 'Logout'}
+                >
+                  <LogOut size={20} />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all font-medium ${isScrolled ? 'bg-white text-neutral-700' : 'bg-white/90 backdrop-blur-sm text-neutral-700'}`}
+              >
+                <User size={18} />
+                <span>{t('auth.login') || 'Login'}</span>
+              </button>
+            )}
+            <Link
+              to="/submit"
+              className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all font-medium ${isScrolled ? 'bg-white text-neutral-700' : 'bg-white/90 backdrop-blur-sm text-neutral-700'}`}
+            >
+              <Upload size={18} />
+              <span className="hidden sm:inline">{t('nav.submit')}</span>
+            </Link>
+            <div className={isScrolled ? '' : 'bg-white/20 backdrop-blur-sm rounded-lg'}>
+             <LanguageSwitcher />
+            </div>
+          </div>
+        </div>
       </header>
 
       {/* Hero Image */}
@@ -209,13 +259,7 @@ export function RestaurantDetail() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
         
-        <Link
-          to="/"
-          className="absolute top-4 left-4 inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm text-neutral-700 rounded-xl font-medium hover:bg-white transition-colors shadow-lg"
-        >
-          <ArrowLeft size={18} />
-          {t('restaurant.backToList')}
-        </Link>
+
 
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
           <div className="max-w-4xl mx-auto">
