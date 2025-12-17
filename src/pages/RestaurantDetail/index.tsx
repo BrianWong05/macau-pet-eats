@@ -14,7 +14,6 @@ import {
   Camera,
   Image as ImageIcon,
   X,
-  PawPrint,
   Upload,
   Trash2,
   LogOut
