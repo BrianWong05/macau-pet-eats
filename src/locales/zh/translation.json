@@ -121,5 +121,41 @@
   "errors": {
     "loadingRestaurants": "載入餐廳資料失敗",
     "missingSupabase": "缺少 Supabase 環境變數。請在 .env 檔案中設定 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY。"
+  },
+  "auth": {
+    "loginTitle": "登入",
+    "loginSubtitle": "登入以撰寫評論",
+    "signupTitle": "建立帳號",
+    "signupSubtitle": "註冊以開始使用",
+    "continueWithGoogle": "使用 Google 帳號繼續",
+    "or": "或",
+    "email": "電郵地址",
+    "emailPlaceholder": "輸入您的電郵地址",
+    "password": "密碼",
+    "passwordPlaceholder": "輸入密碼（至少 6 個字元）",
+    "loginButton": "登入",
+    "signupButton": "註冊",
+    "noAccount": "還沒有帳號？",
+    "hasAccount": "已經有帳號？",
+    "signupLink": "立即註冊",
+    "loginLink": "立即登入",
+    "signOut": "登出"
+  },
+  "reviews": {
+    "title": "顧客評論",
+    "writeReview": "撰寫評論",
+    "noReviews": "暫時沒有評論。成為第一個評論者！",
+    "yourRating": "您的評分",
+    "yourReview": "您的評論",
+    "reviewPlaceholder": "分享您和寵物的用餐體驗...",
+    "submitReview": "提交評論",
+    "loginToReview": "登入後即可撰寫評論",
+    "deleteReview": "刪除評論",
+    "reviewSubmitted": "評論提交成功！",
+    "addPhoto": "添加照片",
+    "takePhoto": "拍照",
+    "uploadPhoto": "上傳照片",
+    "removePhoto": "移除照片",
+    "photoHint": "可選：添加用餐照片"
   }
 }

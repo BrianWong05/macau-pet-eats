@@ -121,5 +121,41 @@
   "errors": {
     "loadingRestaurants": "Falha ao carregar restaurantes",
     "missingSupabase": "Variáveis de ambiente Supabase em falta. Por favor defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no ficheiro .env."
+  },
+  "auth": {
+    "loginTitle": "Entrar",
+    "loginSubtitle": "Entre para escrever avaliações",
+    "signupTitle": "Criar Conta",
+    "signupSubtitle": "Registe-se para começar",
+    "continueWithGoogle": "Continuar com Google",
+    "or": "ou",
+    "email": "Email",
+    "emailPlaceholder": "Introduza o seu email",
+    "password": "Senha",
+    "passwordPlaceholder": "Introduza a senha (mín 6 caracteres)",
+    "loginButton": "Entrar",
+    "signupButton": "Registar",
+    "noAccount": "Não tem conta?",
+    "hasAccount": "Já tem conta?",
+    "signupLink": "Registe-se agora",
+    "loginLink": "Entre agora",
+    "signOut": "Sair"
+  },
+  "reviews": {
+    "title": "Avaliações",
+    "writeReview": "Escrever Avaliação",
+    "noReviews": "Sem avaliações ainda. Seja o primeiro a avaliar!",
+    "yourRating": "A Sua Avaliação",
+    "yourReview": "A Sua Opinião",
+    "reviewPlaceholder": "Partilhe a sua experiência gastronómica com o seu animal...",
+    "submitReview": "Enviar Avaliação",
+    "loginToReview": "Entre para escrever uma avaliação",
+    "deleteReview": "Apagar Avaliação",
+    "reviewSubmitted": "Avaliação enviada com sucesso!",
+    "addPhoto": "Adicionar Foto",
+    "takePhoto": "Tirar Foto",
+    "uploadPhoto": "Carregar Foto",
+    "removePhoto": "Remover Foto",
+    "photoHint": "Opcional: Adicione uma foto da sua experiência"
   }
 }

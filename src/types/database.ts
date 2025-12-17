@@ -70,6 +70,7 @@ export interface Review {
   user_id: string
   rating: 1 | 2 | 3 | 4 | 5
   comment: string
+  image_url?: string | null
   created_at: string
   updated_at: string
 }

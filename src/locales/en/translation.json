@@ -121,5 +121,41 @@
   "errors": {
     "loadingRestaurants": "Failed to load restaurants",
     "missingSupabase": "Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
+  },
+  "auth": {
+    "loginTitle": "Log In",
+    "loginSubtitle": "Sign in to write reviews",
+    "signupTitle": "Create Account",
+    "signupSubtitle": "Sign up to get started",
+    "continueWithGoogle": "Continue with Google",
+    "or": "or",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email address",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password (min 6 characters)",
+    "loginButton": "Log In",
+    "signupButton": "Sign Up",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signupLink": "Sign up now",
+    "loginLink": "Log in now",
+    "signOut": "Sign Out"
+  },
+  "reviews": {
+    "title": "Customer Reviews",
+    "writeReview": "Write a Review",
+    "noReviews": "No reviews yet. Be the first to review!",
+    "yourRating": "Your Rating",
+    "yourReview": "Your Review",
+    "reviewPlaceholder": "Share your dining experience with your pet...",
+    "submitReview": "Submit Review",
+    "loginToReview": "Log in to write a review",
+    "deleteReview": "Delete Review",
+    "reviewSubmitted": "Review submitted successfully!",
+    "addPhoto": "Add Photo",
+    "takePhoto": "Take Photo",
+    "uploadPhoto": "Upload Photo",
+    "removePhoto": "Remove Photo",
+    "photoHint": "Optional: Add a photo of your experience"
   }
 }
