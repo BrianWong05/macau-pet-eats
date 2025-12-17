@@ -37,7 +37,12 @@
       "searchHint": "Try adjusting your search terms",
       "defaultHint": "Check back soon for new additions!"
     },
-    "exploreButton": "Explore All on Map"
+    "exploreButton": "Explore All on Map",
+    "cta": {
+      "title": "Discovered a new pet friendly restaurant?",
+      "subtitle": "Help us build the most complete guide to pet-friendly dining in Macau!",
+      "button": "Upload / Submit"
+    }
   },
   "explore": {
     "title": "Explore Restaurants",

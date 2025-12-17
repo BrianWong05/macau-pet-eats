@@ -37,7 +37,12 @@
       "searchHint": "Tente ajustar os termos de pesquisa",
       "defaultHint": "Volte em breve para novas adições!"
     },
-    "exploreButton": "Explorar Tudo no Mapa"
+    "exploreButton": "Explorar Tudo no Mapa",
+    "cta": {
+      "title": "Descobriu um novo restaurante pet friendly?",
+      "subtitle": "Ajude-nos a criar o guia mais completo de restaurantes pet-friendly em Macau!",
+      "button": "Carregar / Submeter"
+    }
   },
   "explore": {
     "title": "Explorar Restaurantes",
