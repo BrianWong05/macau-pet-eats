@@ -47,20 +47,15 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
         query = query.eq('cuisine_type', cuisineFilter)
       }
 
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Request timed out')), 30000)
-      )
-
-      const queryPromise = query.order('created_at', { ascending: false })
-      
-      const result = await Promise.race([queryPromise, timeoutPromise]) as any
-      const { data, error: fetchError } = result
+      console.log('useRestaurants: Fetching restaurants...')
+      const { data, error: fetchError } = await query.order('created_at', { ascending: false })
 
       if (fetchError) {
+        console.error('useRestaurants: Error', fetchError)
         throw fetchError
       }
 
+      console.log('useRestaurants: Data received', data?.length)
       setRestaurants(data || [])
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch restaurants'

@@ -25,45 +25,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Get initial session
     const initAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setSession(session)
-      setUser(session?.user ?? null)
-      
-      if (session?.user) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('is_admin')
-          .eq('id', session.user.id)
-          .single()
+      try {
+        console.log('Auth: Initializing...')
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        if (sessionError) throw sessionError
         
-        setIsAdmin(!!(data as unknown as Profile)?.is_admin)
-      } else {
+        console.log('Auth: Session retrieved', session?.user?.id)
+        setSession(session)
+        setUser(session?.user ?? null)
+        
+        // Check JWT for admin status (Zero DB lookup)
+        if (session?.user?.app_metadata?.is_admin) {
+           console.log('Auth: Admin detected via JWT')
+           setIsAdmin(true)
+        } else {
+           setIsAdmin(false)
+        }
+      } catch (error) {
+        console.error('Auth: Initialization error:', error)
         setIsAdmin(false)
+      } finally {
+        console.log('Auth: Loading complete')
+        setIsLoading(false)
       }
-      
-      setIsLoading(false)
     }
     initAuth()
 
     // Listen to auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session)
-        setUser(session?.user ?? null)
-        
-        if (session?.user) {
-          const { data } = await supabase
-            .from('profiles')
-            .select('is_admin')
-            .eq('id', session.user.id)
-            .single()
+      (_event, session) => {
+        try {
+          console.log('Auth: State change event', _event)
+          setSession(session)
+          setUser(session?.user ?? null)
           
-          setIsAdmin(!!(data as unknown as Profile)?.is_admin)
-        } else {
-          setIsAdmin(false)
+          if (session?.user?.app_metadata?.is_admin) {
+            console.log('Auth: Admin detected via JWT (Update)')
+            setIsAdmin(true)
+          } else {
+            setIsAdmin(false)
+          }
+        } catch (error) {
+          console.error('Auth: State change error:', error)
+        } finally {
+          setIsLoading(false)
         }
-        
-        setIsLoading(false)
       }
     )
 
@@ -97,7 +103,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    // 1. Clear local state IMMEDIATELY to update UI
+    console.log('Auth: Clearing local state')
+    setSession(null)
+    setUser(null)
+    setIsAdmin(false)
+    
+    // 2. Attempt network sign out in background (don't await)
+    try {
+      console.log('Auth: Signing out network...')
+      // Use a timeout race to prevent hanging
+      const signOutPromise = supabase.auth.signOut()
+      const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 2000))
+      await Promise.race([signOutPromise, timeoutPromise])
+    } catch (err) {
+      console.error('Auth: SignOut exception', err)
+    }
   }
 
   return (

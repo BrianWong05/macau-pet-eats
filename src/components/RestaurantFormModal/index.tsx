@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { X, Loader } from 'lucide-react'
+import { toast } from 'sonner'
 // import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
@@ -92,8 +93,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
       }
       onSave()
       onClose()
+      toast.success(restaurant ? 'Restaurant updated successfully' : 'Restaurant created successfully')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      const message = err instanceof Error ? err.message : 'An error occurred'
+      setError(message)
+      toast.error(message)
     } finally {
       setLoading(false)
     }

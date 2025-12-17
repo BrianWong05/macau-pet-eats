@@ -8,6 +8,7 @@ import {
   Clock,
   Edit
 } from 'lucide-react'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
 import { RestaurantFormModal } from '@/components/RestaurantFormModal'
@@ -45,6 +46,7 @@ export function AdminRestaurants() {
 
     const { error } = await supabase.from('restaurants').delete().eq('id', id)
     if (!error) {
+      toast.success('Restaurant deleted successfully')
       fetchRestaurants()
     }
   }
@@ -56,6 +58,7 @@ export function AdminRestaurants() {
       .eq('id', id)
 
     if (!error) {
+      toast.success(`Restaurant ${status} successfully`)
       fetchRestaurants()
     }
   }
@@ -143,7 +146,7 @@ export function AdminRestaurants() {
                 <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Restaurant</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Pet Policy</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Submited</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">Submitted</th>
                 <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
