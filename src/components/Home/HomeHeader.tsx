@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { PawPrint, LogOut, User, Upload } from 'lucide-react'
+import { LogOut, User, Upload } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -23,9 +23,11 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className={`p-2 rounded-xl transition-colors ${isScrolled ? 'bg-primary-50 text-primary-600' : 'bg-white/80 backdrop-blur-sm text-primary-600'}`}>
-            <PawPrint size={24} />
-          </div>
+          <img 
+            src="/logo.png" 
+            alt="Logo" 
+            className={`w-10 h-10 rounded-xl transition-all ${isScrolled ? '' : 'shadow-sm'}`}
+          />
           <span className={`font-bold text-lg hidden sm:block ${isScrolled ? 'text-neutral-900' : 'text-neutral-900'}`}>
             {t('common.appName')}
           </span>
