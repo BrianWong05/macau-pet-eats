@@ -108,6 +108,12 @@
     "openInMaps": "在 Google 地圖中開啟",
     "photos": "相片",
     "menu": "菜單",
+    "socialMedia": {
+      "title": "社交媒體",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "website": "網站"
+    },
     "reportUpdate": "回報更新",
     "reportModal": {
       "title": "回報資訊更新",

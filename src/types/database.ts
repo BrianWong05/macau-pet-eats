@@ -45,13 +45,14 @@ export interface Restaurant {
   contact_info: string
   opening_hours: OpeningHours | null
   menu_images: string[]
+  social_media: SocialMedia | null
   
   // Timestamps
   created_at: string
   updated_at: string
   
   // Index signature for dynamic access
-  [key: string]: string | number | null | string[] | OpeningHours | null
+  [key: string]: string | number | null | string[] | OpeningHours | SocialMedia | null
 }
 
 // Opening hours type
@@ -64,6 +65,13 @@ export interface DayHours {
 
 export type OpeningHours = {
   [key in DayOfWeek]?: DayHours | null
+}
+
+// Social media links
+export interface SocialMedia {
+  facebook?: string
+  instagram?: string
+  website?: string
 }
 
 // Helper function to get localized text from Restaurant

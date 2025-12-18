@@ -574,6 +574,54 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             />
           </div>
 
+          {/* Social Media */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-neutral-700">
+              {t('restaurant.socialMedia.title')}
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <label className="text-xs text-neutral-500">{t('restaurant.socialMedia.facebook')}</label>
+                <input
+                  type="url"
+                  value={(formData.social_media as {facebook?: string})?.facebook || ''}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    social_media: { ...(prev.social_media as object || {}), facebook: e.target.value || undefined }
+                  }))}
+                  className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                  placeholder="https://facebook.com/..."
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs text-neutral-500">{t('restaurant.socialMedia.instagram')}</label>
+                <input
+                  type="url"
+                  value={(formData.social_media as {instagram?: string})?.instagram || ''}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    social_media: { ...(prev.social_media as object || {}), instagram: e.target.value || undefined }
+                  }))}
+                  className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                  placeholder="https://instagram.com/..."
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs text-neutral-500">{t('restaurant.socialMedia.website')}</label>
+                <input
+                  type="url"
+                  value={(formData.social_media as {website?: string})?.website || ''}
+                  onChange={(e) => setFormData(prev => ({ 
+                    ...prev, 
+                    social_media: { ...(prev.social_media as object || {}), website: e.target.value || undefined }
+                  }))}
+                  className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Opening Hours */}
           <div className="space-y-3">
             <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">

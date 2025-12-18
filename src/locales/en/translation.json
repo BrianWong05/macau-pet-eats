@@ -108,6 +108,12 @@
     "openInMaps": "Open in Google Maps",
     "photos": "Photos",
     "menu": "Menu",
+    "socialMedia": {
+      "title": "Social Media",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "website": "Website"
+    },
     "reportUpdate": "Report Update",
     "reportModal": {
       "title": "Report an Update",
