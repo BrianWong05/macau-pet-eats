@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { PawPrint, Sparkles, MapPin, Upload } from 'lucide-react'
@@ -15,9 +15,8 @@ export function Home() {
   const { t } = useTranslation()
   const { user, signOut } = useAuth()
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
-  const { featuredRestaurants, isLoading, error } = useRestaurants({ searchQuery })
+  const { featuredRestaurants, isLoading, error } = useRestaurants({})
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,10 +24,6 @@ export function Home() {
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query)
   }, [])
 
   return (
@@ -120,7 +115,7 @@ export function Home() {
 
             {/* Search Bar */}
             <div className="flex justify-center">
-              <SearchBar onSearch={handleSearch} />
+              <SearchBar />
             </div>
 
             {/* Quick Stats */}
@@ -144,13 +139,10 @@ export function Home() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
-              {searchQuery ? t('home.featured.searchTitle') : t('home.featured.title')}
+              {t('home.featured.title')}
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              {searchQuery 
-                ? t('home.featured.searchSubtitle', { query: searchQuery })
-                : t('home.featured.subtitle')
-              }
+              {t('home.featured.subtitle')}
             </p>
           </div>
 
@@ -189,10 +181,7 @@ export function Home() {
                     {t('home.noResults.title')}
                   </h3>
                   <p className="text-neutral-500">
-                    {searchQuery 
-                      ? t('home.noResults.searchHint')
-                      : t('home.noResults.defaultHint')
-                    }
+                    {t('home.noResults.defaultHint')}
                   </p>
                 </div>
               )}
@@ -200,7 +189,7 @@ export function Home() {
           )}
 
           {/* View All Button */}
-          {!searchQuery && featuredRestaurants.length > 0 && (
+          {featuredRestaurants.length > 0 && (
             <div className="text-center mt-12">
               <Link
                 to="/explore"

@@ -4,6 +4,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { Home } from '@/pages/Home'
 import { RestaurantDetail } from '@/pages/RestaurantDetail'
 import { Explore } from '@/pages/Explore'
+import { Search } from '@/pages/Search'
 import { Submit } from '@/pages/Submit'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AdminLayout } from '@/components/AdminLayout'
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/restaurant/:id" element={<RestaurantDetail />} />
           <Route path="/submit" element={<Submit />} />
           

@@ -56,6 +56,14 @@
     "noResults": "Nenhum restaurante corresponde aos filtros",
     "viewDetails": "Ver Detalhes"
   },
+  "search": {
+    "title": "Pesquisar Restaurantes",
+    "placeholder": "Pesquisar por nome, tipo de cozinha...",
+    "results": "Encontrados {{count}} restaurantes",
+    "noResults": "Nenhum restaurante encontrado",
+    "noResultsHint": "Tente palavras-chave diferentes ou ajuste os filtros",
+    "clearFilters": "Limpar filtros"
+  },
   "submit": {
     "title": "Sugerir Local",
     "subtitle": "Conhece um restaurante pet-friendly? Conte-nos!",

@@ -56,6 +56,14 @@
     "noResults": "沒有符合條件的餐廳",
     "viewDetails": "查看詳情"
   },
+  "search": {
+    "title": "搜尋餐廳",
+    "placeholder": "按名稱、菜式搜尋...",
+    "results": "找到 {{count}} 間餐廳",
+    "noResults": "找不到餐廳",
+    "noResultsHint": "試試不同的關鍵字或調整篩選條件",
+    "clearFilters": "清除篩選"
+  },
   "submit": {
     "title": "推薦餐廳",
     "subtitle": "知道一間寵物友善餐廳？告訴我們！",
