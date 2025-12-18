@@ -13,6 +13,7 @@
   },
   "homepage": "https://BrianWong05.github.io/macau-pet-eats",
   "dependencies": {
+    "@react-google-maps/api": "^2.20.8",
     "@supabase/supabase-js": "^2.88.0",
     "i18next": "^25.7.3",
     "i18next-browser-languagedetector": "^8.2.0",

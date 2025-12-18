@@ -191,7 +191,8 @@
         "latitude": "Latitude",
         "longitude": "Longitude",
         "imageUrl": "Imagens",
-        "contactInfo": "Telefone de Contacto"
+        "contactInfo": "Telefone de Contacto",
+        "location": "Localização"
       },
       "placeholders": {
         "selectCuisine": "Selecionar cozinha",

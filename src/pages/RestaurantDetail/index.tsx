@@ -369,7 +369,23 @@ export function RestaurantDetail() {
               style={{ border: 0 }}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${restaurant.latitude},${restaurant.longitude}&zoom=16`}
+              src={(() => {
+                // If google_maps_url is available, extract place name for embed
+                if (restaurant.google_maps_url) {
+                  const placeMatch = restaurant.google_maps_url.match(/\/place\/([^/@]+)/)
+                  if (placeMatch) {
+                    const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '))
+                    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=15&output=embed`
+                  }
+                  const queryMatch = restaurant.google_maps_url.match(/[?&]q=([^&]+)/)
+                  if (queryMatch) {
+                    const query = decodeURIComponent(queryMatch[1].replace(/\+/g, ' '))
+                    return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`
+                  }
+                }
+                // Fallback to coordinates
+                return `https://maps.google.com/maps?q=${restaurant.latitude},${restaurant.longitude}&z=16&output=embed`
+              })()}
             />
           </div>
         </div>

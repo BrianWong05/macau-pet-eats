@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Loader, Upload, Image as ImageIcon } from 'lucide-react'
+import { X, Loader, Upload, Image as ImageIcon, MapPin, Link as LinkIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
+
+
 
 interface RestaurantFormModalProps {
   isOpen: boolean
@@ -34,15 +36,74 @@ const PET_POLICIES = [
   'cats_only'
 ]
 
+// Function to extract coordinates from Google Maps URL
+function extractCoordsFromUrl(url: string): { lat: number; lng: number } | null {
+  // Pattern for URLs like: https://maps.google.com/?q=22.1937,113.5399
+  // Or: https://www.google.com/maps/place/.../@22.1937,113.5399,17z
+  // Or: https://goo.gl/maps/... (won't work without API)
+  
+  const patterns = [
+    /@(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // @lat,lng format
+    /[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // ?q=lat,lng format
+    /place\/(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // place/lat,lng format
+    /!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/,  // !3d...!4d... format
+  ]
+  
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match) {
+      const lat = parseFloat(match[1])
+      const lng = parseFloat(match[2])
+      if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+        return { lat, lng }
+      }
+    }
+  }
+  return null
+}
+
+// Extract place query from Google Maps URL for embedding
+function extractPlaceFromUrl(url: string): string | null {
+  // Try to extract place name from /place/<name>/ pattern
+  const placeMatch = url.match(/\/place\/([^/@]+)/)
+  if (placeMatch) {
+    return decodeURIComponent(placeMatch[1].replace(/\+/g, ' '))
+  }
+  // Try to extract from ?q= parameter
+  const queryMatch = url.match(/[?&]q=([^&]+)/)
+  if (queryMatch) {
+    return decodeURIComponent(queryMatch[1].replace(/\+/g, ' '))
+  }
+  return null
+}
+
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
   const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mapsUrl, setMapsUrl] = useState('')
   
   // Image State
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleMapsUrlChange = (url: string) => {
+    setMapsUrl(url)
+    const coords = extractCoordsFromUrl(url)
+    if (coords) {
+      setFormData(prev => ({ 
+        ...prev, 
+        latitude: coords.lat, 
+        longitude: coords.lng,
+        google_maps_url: url  // Save the URL to formData
+      }))
+      toast.success('Location extracted from URL!')
+    } else if (url) {
+      // Even if coords can't be extracted, still save the URL
+      setFormData(prev => ({ ...prev, google_maps_url: url }))
+    }
+  }
 
   const [formData, setFormData] = useState<Partial<Restaurant>>({
     name: '',
@@ -71,6 +132,8 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
       // For now, we only have persisted URLs. We can mix them or valid files.
       // Ideally, we treat existing URLs separately from new files.
       setImagePreviews(restaurant.gallery_images || [])
+      // Load existing Google Maps URL if present
+      setMapsUrl(restaurant.google_maps_url || '')
       // If we want to show the main image as part of the gallery or separate?
       // "Upload multiple images" usually implies a gallery.
       // Let's assume we are editing gallery_images.
@@ -425,27 +488,74 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.latitude')} *</label>
-              <input
-                type="number"
-                step="any"
-                required
-                value={formData.latitude || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, latitude: parseFloat(e.target.value) }))}
-                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
+                <MapPin size={16} className="text-primary-500" />
+                {t('admin.modal.labels.location')} *
+              </label>
+              <span className="text-xs text-neutral-500">
+                {formData.latitude?.toFixed(6)}, {formData.longitude?.toFixed(6)}
+              </span>
             </div>
+            
+            {/* Google Maps URL Input */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.longitude')} *</label>
-              <input
-                type="number"
-                step="any"
-                required
-                value={formData.longitude || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, longitude: parseFloat(e.target.value) }))}
-                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+              <div className="relative">
+                <LinkIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                <input
+                  type="text"
+                  value={mapsUrl}
+                  onChange={(e) => handleMapsUrlChange(e.target.value)}
+                  placeholder="Paste Google Maps URL here..."
+                  className="w-full pl-10 pr-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+              <p className="text-xs text-neutral-500">
+                1. Search the restaurant on <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">Google Maps</a>
+                {' '}2. Copy the URL from your browser 3. Paste it above
+              </p>
+            </div>
+
+            {/* Manual Coordinate Input - Only show when no URL */}
+            {!mapsUrl && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs text-neutral-500">Latitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={formData.latitude || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, latitude: parseFloat(e.target.value) }))}
+                    className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs text-neutral-500">Longitude</label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={formData.longitude || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, longitude: parseFloat(e.target.value) }))}
+                    className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+              </div>
+            )}
+            
+            {/* Google MAP Preview */}
+            <div className="h-64 rounded-xl overflow-hidden border border-neutral-200">
+              <iframe
+                title="Location preview"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={mapsUrl && extractPlaceFromUrl(mapsUrl)
+                  ? `https://maps.google.com/maps?q=${encodeURIComponent(extractPlaceFromUrl(mapsUrl)!)}&z=15&output=embed`
+                  : `https://maps.google.com/maps?q=${formData.latitude || 22.1937},${formData.longitude || 113.5399}&z=15&output=embed`
+                }
               />
             </div>
           </div>

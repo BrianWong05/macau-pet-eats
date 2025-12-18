@@ -237,7 +237,8 @@
         "latitude": "緯度",
         "longitude": "經度",
         "imageUrl": "圖片網址",
-        "contactInfo": "聯絡電話"
+        "contactInfo": "聯絡電話",
+        "location": "位置"
       },
       "placeholders": {
         "selectCuisine": "選擇菜式",

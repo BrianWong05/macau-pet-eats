@@ -33,6 +33,7 @@ export interface Restaurant {
   // Location
   latitude: number
   longitude: number
+  google_maps_url: string | null
   
   // Details
   pet_policy: PetPolicy
