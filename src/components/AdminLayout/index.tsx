@@ -5,7 +5,8 @@ import {
   LogOut, 
   Menu,
   X,
-  Flag
+  Flag,
+  Utensils
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
@@ -20,6 +21,7 @@ export function AdminLayout() {
   const navItems = [
     { path: '/admin', icon: BarChart, label: t('admin.sidebar.dashboard') },
     { path: '/admin/restaurants', icon: Store, label: t('admin.sidebar.restaurants') },
+    { path: '/admin/cuisine-types', icon: Utensils, label: t('admin.cuisineTypes.title') },
     { path: '/admin/reports', icon: Flag, label: t('admin.reports.title') },
   ]
 

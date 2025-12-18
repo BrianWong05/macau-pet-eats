@@ -3,7 +3,7 @@ import { X, Loader, Upload, Image as ImageIcon, MapPin, Link as LinkIcon, Clock 
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
-import type { Restaurant, DayOfWeek, OpeningHours, DayHours } from '@/types/database'
+import type { Restaurant, DayOfWeek, OpeningHours, DayHours, CuisineType } from '@/types/database'
 
 const DAYS_OF_WEEK: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
@@ -15,22 +15,6 @@ interface RestaurantFormModalProps {
   onSave: () => void
   restaurant?: Restaurant | null
 }
-
-const CUISINE_TYPES = [
-  'portuguese',
-  'macanese',
-  'cantonese',
-  'chinese',
-  'japanese',
-  'italian',
-  'american',
-  'fusion',
-  'seafood',
-  'cafe',
-  'bar',
-  'dessert',
-  'other'
-]
 
 const PET_POLICIES = [
   'indoors_allowed',
@@ -83,10 +67,11 @@ function extractPlaceFromUrl(url: string): string | null {
 }
 
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [mapsUrl, setMapsUrl] = useState('')
+  const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
   
   // Image State
   const [imageFiles, setImageFiles] = useState<File[]>([])
@@ -97,6 +82,18 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   const [menuFiles, setMenuFiles] = useState<File[]>([])
   const [menuPreviews, setMenuPreviews] = useState<string[]>([])
   const menuInputRef = useRef<HTMLInputElement>(null)
+
+  // Fetch cuisine types from database
+  useEffect(() => {
+    const fetchCuisineTypes = async () => {
+      const { data } = await supabase
+        .from('cuisine_types')
+        .select('*')
+        .order('sort_order', { ascending: true })
+      if (data) setCuisineTypes(data)
+    }
+    fetchCuisineTypes()
+  }, [])
 
   const handleMapsUrlChange = (url: string) => {
     setMapsUrl(url)
@@ -463,8 +460,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="">{t('admin.modal.placeholders.selectCuisine')}</option>
-                  {CUISINE_TYPES.map(type => (
-                    <option key={type} value={type}>{t(`cuisineTypes.${type}`)}</option>
+                  {cuisineTypes.map((ct: CuisineType) => (
+                    <option key={ct.id} value={ct.name}>
+                      {i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
+                       i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name}
+                    </option>
                   ))}
                 </select>
                 {(formData.cuisine_type || '').toLowerCase() === 'other' && (

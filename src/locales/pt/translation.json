@@ -277,6 +277,11 @@
         "rejected": "Rejeitado",
         "all": "Todos"
       }
+    },
+    "cuisineTypes": {
+      "title": "Tipos de Cozinha",
+      "subtitle": "Gerir opções de tipo de cozinha",
+      "add": "Adicionar Tipo"
     }
   }
 }

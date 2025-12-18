@@ -328,6 +328,11 @@
         "rejected": "已拒絕",
         "all": "全部"
       }
+    },
+    "cuisineTypes": {
+      "title": "菜式類型",
+      "subtitle": "管理菜式類型選項",
+      "add": "新增類型"
     }
   }
 }

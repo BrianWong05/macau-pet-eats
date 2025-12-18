@@ -74,6 +74,17 @@ export interface SocialMedia {
   website?: string
 }
 
+// Cuisine type from database
+export interface CuisineType {
+  id: string
+  name: string
+  name_zh?: string
+  name_pt?: string
+  sort_order: number
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper function to get localized text from Restaurant
 export function getLocalizedText(
   restaurant: Restaurant,

@@ -11,8 +11,9 @@ import {
   X,
   Image as ImageIcon
 } from 'lucide-react'
-import type { PetPolicy, RestaurantSubmission } from '@/types/database'
+import type { PetPolicy, RestaurantSubmission, CuisineType } from '@/types/database'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { supabase } from '@/lib/supabase'
 
 // Pet policy options
 const PET_POLICY_OPTIONS: PetPolicy[] = [
@@ -24,28 +25,12 @@ const PET_POLICY_OPTIONS: PetPolicy[] = [
   'cats_only'
 ]
 
-// Cuisine type options
-const CUISINE_TYPE_OPTIONS = [
-  { value: 'portuguese', labelKey: 'cuisineTypes.portuguese' },
-  { value: 'macanese', labelKey: 'cuisineTypes.macanese' },
-  { value: 'cantonese', labelKey: 'cuisineTypes.cantonese' },
-  { value: 'chinese', labelKey: 'cuisineTypes.chinese' },
-  { value: 'japanese', labelKey: 'cuisineTypes.japanese' },
-  { value: 'italian', labelKey: 'cuisineTypes.italian' },
-  { value: 'american', labelKey: 'cuisineTypes.american' },
-  { value: 'fusion', labelKey: 'cuisineTypes.fusion' },
-  { value: 'seafood', labelKey: 'cuisineTypes.seafood' },
-  { value: 'cafe', labelKey: 'cuisineTypes.cafe' },
-  { value: 'bar', labelKey: 'cuisineTypes.bar' },
-  { value: 'dessert', labelKey: 'cuisineTypes.dessert' },
-  { value: 'other', labelKey: 'cuisineTypes.other' }
-]
-
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
 export function Submit() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [isScrolled, setIsScrolled] = useState(false)
+  const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
   
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +38,18 @@ export function Submit() {
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Fetch cuisine types from database
+  useEffect(() => {
+    const fetchCuisineTypes = async () => {
+      const { data } = await supabase
+        .from('cuisine_types')
+        .select('*')
+        .order('sort_order', { ascending: true })
+      if (data) setCuisineTypes(data)
+    }
+    fetchCuisineTypes()
   }, [])
   
   const [formState, setFormState] = useState<FormState>('idle')
@@ -309,9 +306,10 @@ export function Submit() {
                 className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all appearance-none bg-white"
               >
                 <option value="">{t('submit.form.selectCuisine')}</option>
-                {CUISINE_TYPE_OPTIONS.map((cuisine) => (
-                  <option key={cuisine.value} value={cuisine.value}>
-                    {t(cuisine.labelKey)}
+                {cuisineTypes.map((ct: CuisineType) => (
+                  <option key={ct.id} value={ct.name}>
+                    {i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
+                     i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name}
                   </option>
                 ))}
               </select>

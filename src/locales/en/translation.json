@@ -277,6 +277,11 @@
         "rejected": "Rejected",
         "all": "All"
       }
+    },
+    "cuisineTypes": {
+      "title": "Cuisine Types",
+      "subtitle": "Manage cuisine type options",
+      "add": "Add Type"
     }
   }
 }
