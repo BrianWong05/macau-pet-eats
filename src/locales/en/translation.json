@@ -105,7 +105,8 @@
     "callNow": "Call Now",
     "backToList": "Back to List",
     "location": "Location",
-    "openInMaps": "Open in Google Maps"
+    "openInMaps": "Open in Google Maps",
+    "photos": "Photos"
   },
   "petPolicy": {
     "indoors_allowed": "Indoors Allowed",

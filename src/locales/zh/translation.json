@@ -105,7 +105,8 @@
     "callNow": "立即致電",
     "backToList": "返回列表",
     "location": "位置",
-    "openInMaps": "在 Google 地圖中開啟"
+    "openInMaps": "在 Google 地圖中開啟",
+    "photos": "相片"
   },
   "petPolicy": {
     "indoors_allowed": "允許室內",
