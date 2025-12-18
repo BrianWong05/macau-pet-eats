@@ -683,13 +683,21 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.contactInfo')}</label>
-            <input
-              type="tel"
-              value={formData.contact_info || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, contact_info: e.target.value }))}
-              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-              placeholder="+853 xxxx xxxx"
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <span className="text-neutral-500 font-medium">+853</span>
+              </div>
+              <input
+                type="text"
+                value={formData.contact_info?.replace(/^\+853\s?/, '') || ''}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/^\+853\s?/, '')
+                  setFormData(prev => ({ ...prev, contact_info: `+853 ${val}` }))
+                }}
+                className="w-full pl-16 pr-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder="6666 6666"
+              />
+            </div>
           </div>
 
           {/* Social Media */}

@@ -275,15 +275,24 @@ export function RestaurantForm({
         <label htmlFor="contact_info" className="block text-sm font-medium text-neutral-700 mb-2">
           {t('submit.form.contactInfo')} ({t('submit.form.optional')})
         </label>
-        <input
-          type="text"
-          id="contact_info"
-          name="contact_info"
-          value={formData.contact_info}
-          onChange={handleInputChange}
-          placeholder={t('submit.form.contactInfoPlaceholder')}
-          className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
-        />
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <span className="text-neutral-500 font-medium">+853</span>
+          </div>
+          <input
+            type="text"
+            id="contact_info"
+            name="contact_info"
+            value={formData.contact_info?.replace(/^\+853\s?/, '') || ''}
+            onChange={(e) => {
+              // Allow spaces/numbers but strip strictly +853 if pasted
+              const val = e.target.value.replace(/^\+853\s?/, '')
+              setFormData(prev => ({ ...prev, contact_info: `+853 ${val}` }))
+            }}
+            placeholder="6666 6666"
+            className="w-full pl-16 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
+          />
+        </div>
       </div>
 
       {/* Social Media (Optional) */}
