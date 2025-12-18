@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { MapPin } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
+import { extractCoordsFromUrl, extractPlaceFromUrl } from '@/lib/mapUtils'
 
 interface MapEmbedProps {
   restaurant: Restaurant
@@ -13,20 +14,28 @@ export function MapEmbed({ restaurant, lang }: MapEmbedProps) {
   const name = getLocalizedText(restaurant, 'name', lang)
 
   const getMapSrc = () => {
-    // If google_maps_url is available, extract place name for embed
+    // If google_maps_url is available, try to parse it for best experience
     if (restaurant.google_maps_url) {
-      const placeMatch = restaurant.google_maps_url.match(/\/place\/([^/@]+)/)
-      if (placeMatch) {
-        const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '))
+      const coords = extractCoordsFromUrl(restaurant.google_maps_url)
+      const placeName = extractPlaceFromUrl(restaurant.google_maps_url)
+
+      if (coords && placeName) {
+        // Best case: Coords + Name
+        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}+(${encodeURIComponent(placeName)})&z=15&output=embed`
+      }
+      
+      if (placeName) {
+        // Name only
         return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=15&output=embed`
       }
-      const queryMatch = restaurant.google_maps_url.match(/[?&]q=([^&]+)/)
-      if (queryMatch) {
-        const query = decodeURIComponent(queryMatch[1].replace(/\+/g, ' '))
-        return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`
+      
+      if (coords) {
+        // Coords only
+        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&z=15&output=embed`
       }
     }
-    // Fallback to coordinates
+    
+    // Fallback to database coordinates
     return `https://maps.google.com/maps?q=${restaurant.latitude},${restaurant.longitude}&z=16&output=embed`
   }
 

@@ -3,6 +3,7 @@ import { X, Loader, Upload, MapPin, Link as LinkIcon, Clock } from 'lucide-react
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
+import { extractCoordsFromUrl, extractPlaceFromUrl } from '@/lib/mapUtils'
 import type { Restaurant, DayOfWeek, OpeningHours, DayHours, CuisineType } from '@/types/database'
 
 const DAYS_OF_WEEK: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -25,46 +26,9 @@ const PET_POLICIES = [
   'cats_only'
 ]
 
-// Function to extract coordinates from Google Maps URL
-function extractCoordsFromUrl(url: string): { lat: number; lng: number } | null {
-  // Pattern for URLs like: https://maps.google.com/?q=22.1937,113.5399
-  // Or: https://www.google.com/maps/place/.../@22.1937,113.5399,17z
-  // Or: https://goo.gl/maps/... (won't work without API)
-  
-  const patterns = [
-    /@(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // @lat,lng format
-    /[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // ?q=lat,lng format
-    /place\/(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // place/lat,lng format
-    /!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/,  // !3d...!4d... format
-  ]
-  
-  for (const pattern of patterns) {
-    const match = url.match(pattern)
-    if (match) {
-      const lat = parseFloat(match[1])
-      const lng = parseFloat(match[2])
-      if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
-        return { lat, lng }
-      }
-    }
-  }
-  return null
-}
 
-// Extract place query from Google Maps URL for embedding
-function extractPlaceFromUrl(url: string): string | null {
-  // Try to extract place name from /place/<name>/ pattern
-  const placeMatch = url.match(/\/place\/([^/@]+)/)
-  if (placeMatch) {
-    return decodeURIComponent(placeMatch[1].replace(/\+/g, ' '))
-  }
-  // Try to extract from ?q= parameter
-  const queryMatch = url.match(/[?&]q=([^&]+)/)
-  if (queryMatch) {
-    return decodeURIComponent(queryMatch[1].replace(/\+/g, ' '))
-  }
-  return null
-}
+
+
 
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
   const { t, i18n } = useTranslation()
@@ -897,10 +861,26 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 style={{ border: 0 }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                src={mapsUrl && extractPlaceFromUrl(mapsUrl)
-                  ? `https://maps.google.com/maps?q=${encodeURIComponent(extractPlaceFromUrl(mapsUrl)!)}&z=15&output=embed`
-                  : `https://maps.google.com/maps?q=${formData.latitude || 22.1937},${formData.longitude || 113.5399}&z=15&output=embed`
-                }
+                src={(() => {
+                  if (!mapsUrl) return `https://maps.google.com/maps?q=${formData.latitude || 22.1937},${formData.longitude || 113.5399}&z=15&output=embed`
+                  
+                  const placeName = extractPlaceFromUrl(mapsUrl)
+                  const coords = extractCoordsFromUrl(mapsUrl)
+                  
+                  if (coords && placeName) {
+                    // Best case: We have both. Show pin at coords but labeled with name.
+                    return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}+(${encodeURIComponent(placeName)})&z=15&output=embed`
+                  } else if (placeName) {
+                    // Only name (search)
+                    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=15&output=embed`
+                  } else if (coords) {
+                     // Only coords (pin)
+                     return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&z=15&output=embed`
+                  } else {
+                     // Fallback to manual coords
+                     return `https://maps.google.com/maps?q=${formData.latitude || 22.1937},${formData.longitude || 113.5399}&z=15&output=embed`
+                  }
+                })()}
               />
             </div>
           </div>
