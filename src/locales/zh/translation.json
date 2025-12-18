@@ -78,7 +78,8 @@
       "clickToUpload": "點擊上傳照片",
       "uploadHint": "支援 JPG, PNG, GIF（最大 5MB）",
       "selectFile": "選擇檔案",
-      "optional": "選填"
+      "optional": "選填",
+      "otherCuisinePlaceholder": "請輸入菜式類型"
     },
     "submitButton": "提交推薦",
     "successTitle": "感謝您的推薦！",
@@ -96,6 +97,12 @@
     "japanese": "日本菜",
     "italian": "意大利菜",
     "thai": "泰國菜",
+    "macanese": "澳門菜",
+    "chinese": "中國菜",
+    "american": "美式料理",
+    "cafe": "咖啡店",
+    "bar": "酒吧",
+    "dessert": "甜品店",
     "other": "其他"
   },
   "restaurant": {

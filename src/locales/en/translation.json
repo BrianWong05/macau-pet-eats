@@ -78,7 +78,8 @@
       "clickToUpload": "Click to upload a photo",
       "uploadHint": "Supports JPG, PNG, GIF (max 5MB)",
       "selectFile": "Select File",
-      "optional": "Optional"
+      "optional": "Optional",
+      "otherCuisinePlaceholder": "Please specify cuisine type"
     },
     "submitButton": "Submit Recommendation",
     "successTitle": "Thank you for your submission!",
@@ -96,6 +97,12 @@
     "japanese": "Japanese",
     "italian": "Italian",
     "thai": "Thai",
+    "macanese": "Macanese",
+    "chinese": "Chinese",
+    "american": "American",
+    "cafe": "Café",
+    "bar": "Bar",
+    "dessert": "Dessert",
     "other": "Other"
   },
   "restaurant": {

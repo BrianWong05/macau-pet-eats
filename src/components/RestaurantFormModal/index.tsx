@@ -17,16 +17,19 @@ interface RestaurantFormModalProps {
 }
 
 const CUISINE_TYPES = [
-  'Portuguese',
-  'Macanese',
-  'Chinese',
-  'Japanese',
-  'Italian',
-  'American',
-  'Cafe',
-  'Bar',
-  'Dessert',
-  'Other'
+  'portuguese',
+  'macanese',
+  'cantonese',
+  'chinese',
+  'japanese',
+  'italian',
+  'american',
+  'fusion',
+  'seafood',
+  'cafe',
+  'bar',
+  'dessert',
+  'other'
 ]
 
 const PET_POLICIES = [
@@ -455,15 +458,24 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.cuisineType')} *</label>
                 <select
                   required
-                  value={formData.cuisine_type || ''}
+                  value={(formData.cuisine_type || '').toLowerCase()}
                   onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type: e.target.value }))}
                   className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="">{t('admin.modal.placeholders.selectCuisine')}</option>
                   {CUISINE_TYPES.map(type => (
-                    <option key={type} value={type}>{t(`cuisineTypes.${type.toLowerCase()}`) || type}</option>
+                    <option key={type} value={type}>{t(`cuisineTypes.${type}`)}</option>
                   ))}
                 </select>
+                {(formData.cuisine_type || '').toLowerCase() === 'other' && (
+                  <input
+                    type="text"
+                    value={(formData as any).cuisine_type_other || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type_other: e.target.value }))}
+                    placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify'}
+                    className="w-full mt-2 px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                  />
+                )}
               </div>
 
               <div className="space-y-2">

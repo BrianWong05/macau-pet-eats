@@ -27,14 +27,17 @@ const PET_POLICY_OPTIONS: PetPolicy[] = [
 // Cuisine type options
 const CUISINE_TYPE_OPTIONS = [
   { value: 'portuguese', labelKey: 'cuisineTypes.portuguese' },
+  { value: 'macanese', labelKey: 'cuisineTypes.macanese' },
   { value: 'cantonese', labelKey: 'cuisineTypes.cantonese' },
-  { value: 'fusion', labelKey: 'cuisineTypes.fusion' },
-  { value: 'international', labelKey: 'cuisineTypes.international' },
-  { value: 'seafood', labelKey: 'cuisineTypes.seafood' },
-  { value: 'brunch', labelKey: 'cuisineTypes.brunch' },
+  { value: 'chinese', labelKey: 'cuisineTypes.chinese' },
   { value: 'japanese', labelKey: 'cuisineTypes.japanese' },
   { value: 'italian', labelKey: 'cuisineTypes.italian' },
-  { value: 'thai', labelKey: 'cuisineTypes.thai' },
+  { value: 'american', labelKey: 'cuisineTypes.american' },
+  { value: 'fusion', labelKey: 'cuisineTypes.fusion' },
+  { value: 'seafood', labelKey: 'cuisineTypes.seafood' },
+  { value: 'cafe', labelKey: 'cuisineTypes.cafe' },
+  { value: 'bar', labelKey: 'cuisineTypes.bar' },
+  { value: 'dessert', labelKey: 'cuisineTypes.dessert' },
   { value: 'other', labelKey: 'cuisineTypes.other' }
 ]
 
@@ -312,6 +315,16 @@ export function Submit() {
                   </option>
                 ))}
               </select>
+              {formData.cuisine_type === 'other' && (
+                <input
+                  type="text"
+                  name="cuisine_type_other"
+                  value={(formData as any).cuisine_type_other || ''}
+                  onChange={handleInputChange}
+                  placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify cuisine type'}
+                  className="w-full mt-3 px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
+                />
+              )}
             </div>
           </div>
 
