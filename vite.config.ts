@@ -12,4 +12,16 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['lucide-react', 'sonner'],
+          'map-vendor': ['leaflet', 'react-leaflet'],
+          'supabase': ['@supabase/supabase-js'],
+        }
+      }
+    }
+  }
 }))
