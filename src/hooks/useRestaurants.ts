@@ -43,9 +43,9 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
         query = query.eq('pet_policy', petPolicyFilter)
       }
 
-      // Apply cuisine filter
+      // Apply cuisine filter - use ilike for case-insensitive matching
       if (cuisineFilter) {
-        query = query.eq('cuisine_type', cuisineFilter)
+        query = query.ilike('cuisine_type', cuisineFilter)
       }
 
       console.log('useRestaurants: Fetching restaurants...')
