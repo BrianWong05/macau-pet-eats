@@ -9,7 +9,8 @@
     "getDirections": "Obter Direções",
     "submit": "Enviar",
     "cancel": "Cancelar",
-    "close": "Fechar"
+    "close": "Fechar",
+    "other": "Outros"
   },
   "nav": {
     "home": "Início",
@@ -88,7 +89,8 @@
       "uploadHint": "Suporta JPG, PNG, GIF (máx 5MB)",
       "selectFile": "Selecionar Ficheiro",
       "optional": "Opcional",
-      "otherCuisinePlaceholder": "Por favor especifique o tipo de cozinha"
+      "otherCuisinePlaceholder": "Por favor especifique o tipo de cozinha",
+      "selectAtLeastOne": "Por favor selecione pelo menos um tipo de cozinha"
     },
     "submitButton": "Enviar Recomendação",
     "successTitle": "Obrigado pela sua sugestão!",

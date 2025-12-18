@@ -82,7 +82,11 @@ export function RestaurantsTable({
                       />
                       <div>
                         <p className="font-medium text-neutral-900">{restaurant.name_zh || restaurant.name}</p>
-                        <p className="text-sm text-neutral-500">{t(`cuisineTypes.${restaurant.cuisine_type.toLowerCase()}`) || restaurant.cuisine_type}</p>
+                        <p className="text-sm text-neutral-500">
+                          {Array.isArray(restaurant.cuisine_type) 
+                            ? restaurant.cuisine_type.map(c => t(`cuisineTypes.${c.toLowerCase()}`) || c).join(', ')
+                            : restaurant.cuisine_type}
+                        </p>
                       </div>
                     </div>
                   </td>

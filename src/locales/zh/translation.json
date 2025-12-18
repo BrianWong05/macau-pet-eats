@@ -9,7 +9,8 @@
     "getDirections": "取得路線",
     "submit": "提交",
     "cancel": "取消",
-    "close": "關閉"
+    "close": "關閉",
+    "other": "其他"
   },
   "nav": {
     "home": "首頁",
@@ -88,7 +89,8 @@
       "uploadHint": "支援 JPG, PNG, GIF（最大 5MB）",
       "selectFile": "選擇檔案",
       "optional": "選填",
-      "otherCuisinePlaceholder": "請輸入菜式類型"
+      "otherCuisinePlaceholder": "請輸入菜式類型",
+      "selectAtLeastOne": "請至少選擇一種菜式"
     },
     "submitButton": "提交推薦",
     "successTitle": "感謝您的推薦！",

@@ -42,7 +42,7 @@ export function Submit() {
     description: '',
     address: '',
     pet_policy: 'patio_only',
-    cuisine_type: '',
+    cuisine_type: [],
     contact_info: '',
     image_url: '',
     social_media: {
@@ -61,7 +61,7 @@ export function Submit() {
       description: '',
       address: '',
       pet_policy: 'patio_only',
-      cuisine_type: '',
+      cuisine_type: [],
       contact_info: '',
       image_url: '',
       social_media: {

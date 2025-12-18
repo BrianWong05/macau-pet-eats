@@ -37,9 +37,9 @@ export interface Restaurant {
   
   // Details
   pet_policy: PetPolicy
-  cuisine_type: string
-  cuisine_type_zh: string | null
-  cuisine_type_pt: string | null
+  cuisine_type: string[]
+  cuisine_type_zh: string[] | null
+  cuisine_type_pt: string[] | null
   image_url: string
   gallery_images: string[]
   contact_info: string
@@ -88,15 +88,34 @@ export interface CuisineType {
 // Helper function to get localized text from Restaurant
 export function getLocalizedText(
   restaurant: Restaurant,
+  field: 'name' | 'description' | 'address',
+  language: Language
+): string
+export function getLocalizedText(
+  restaurant: Restaurant,
+  field: 'cuisine_type',
+  language: Language
+): string[]
+export function getLocalizedText(
+  restaurant: Restaurant,
   field: 'name' | 'description' | 'address' | 'cuisine_type',
   language: Language
-): string {
+): string | string[] {
   if (language === 'en') {
-    return (restaurant[field] as string) || ''
+    return (restaurant[field] as string | string[]) || (field === 'cuisine_type' ? [] : '')
   }
   
   const localizedField = `${field}_${language}`
-  return (restaurant[localizedField] as string) || (restaurant[field] as string) || ''
+  const val = restaurant[localizedField]
+  if (val) {
+    if (Array.isArray(val) && val.length > 0) {
+       return val as string[]
+    }
+    if (typeof val === 'string') {
+       return val
+    }
+  }
+  return (restaurant[field] as string | string[]) || (field === 'cuisine_type' ? [] : '')
 }
 
 // Profile entity
@@ -178,9 +197,9 @@ export interface RestaurantSubmission {
   latitude?: number
   longitude?: number
   pet_policy: PetPolicy
-  cuisine_type: string
-  cuisine_type_zh?: string
-  cuisine_type_pt?: string
+  cuisine_type: string[]
+  cuisine_type_zh?: string[]
+  cuisine_type_pt?: string[]
   image_url?: string
   contact_info: string
   social_media?: SocialMedia

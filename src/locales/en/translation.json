@@ -9,7 +9,8 @@
     "getDirections": "Get Directions",
     "submit": "Submit",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "other": "Other"
   },
   "nav": {
     "home": "Home",
@@ -88,7 +89,8 @@
       "uploadHint": "Supports JPG, PNG, GIF (max 5MB)",
       "selectFile": "Select File",
       "optional": "Optional",
-      "otherCuisinePlaceholder": "Please specify cuisine type"
+      "otherCuisinePlaceholder": "Please specify cuisine type",
+      "selectAtLeastOne": "Please select at least one cuisine type"
     },
     "submitButton": "Submit Recommendation",
     "successTitle": "Thank you for your submission!",

@@ -10,7 +10,7 @@ interface RestaurantCardProps {
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
   
   const { id, pet_policy, image_url } = restaurant
@@ -44,7 +44,6 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         
-        {/* Cuisine badge */}
         <div className="absolute top-3 right-3">
           <span className="
             inline-flex items-center gap-1.5 px-3 py-1.5
@@ -53,7 +52,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             rounded-full
           ">
             <Utensils size={14} />
-            {cuisineType}
+            {cuisineType.map(c => i18n.exists(`cuisineTypes.${c.toLowerCase()}`) ? t(`cuisineTypes.${c.toLowerCase()}`) : c).join(', ')}
           </span>
         </div>
       </div>

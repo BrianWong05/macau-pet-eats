@@ -35,7 +35,9 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
 
       // Apply search filter
       if (searchQuery.trim()) {
-        query = query.or(`name.ilike.%${searchQuery}%,cuisine_type.ilike.%${searchQuery}%`)
+        // Simple search on name for now as cuisine_type is array
+        // To search array text, we would need to cast or use text search
+        query = query.ilike('name', `%${searchQuery}%`)
       }
 
       // Apply pet policy filter
@@ -43,9 +45,9 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
         query = query.eq('pet_policy', petPolicyFilter)
       }
 
-      // Apply cuisine filter - use ilike for case-insensitive matching
+      // Apply cuisine filter
       if (cuisineFilter) {
-        query = query.ilike('cuisine_type', cuisineFilter)
+        query = query.contains('cuisine_type', [cuisineFilter])
       }
 
       console.log('useRestaurants: Fetching restaurants...')

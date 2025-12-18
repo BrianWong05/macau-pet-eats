@@ -123,7 +123,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     description_zh: '',
     description_pt: '',
     pet_policy: 'patio_only',
-    cuisine_type: '',
+    cuisine_type: [],
     contact_info: '',
     image_url: '',
     gallery_images: [],
@@ -163,7 +163,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         description_zh: '',
         description_pt: '',
         pet_policy: 'patio_only',
-        cuisine_type: '',
+        cuisine_type: [],
         contact_info: '',
         image_url: '',
         gallery_images: [],
@@ -374,6 +374,73 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         image_url: mainImageUrl || ''
       }
 
+      // Auto-populate cuisine_type_zh and cuisine_type_pt if empty or needs sync
+      // We derive them from the selected cuisine_type keys
+      if (formData.cuisine_type && Array.isArray(formData.cuisine_type)) {
+        const getLocalizedCuisines = (lang: string) => {
+          return formData.cuisine_type!.map(key => {
+            if (key === 'Other') {
+              // Note: using cuisine_type_other for custom value if available, 
+              // BUT cuisine_type_other isn't strictly part of Restaurant interface unless we cast.
+              // We rely on formData being cast to 'any' for the temp field.
+              return (formData as any).cuisine_type_other || 'Other'
+            }
+            // Use translation resource directly or via t
+            // Since we need specific language, we can use i18n.getFixedT or just t with lng option if available
+            // standard i18next t function accepts `lng` in options
+            return i18n.getFixedT(lang)(`cuisineTypes.${key.toLowerCase()}`)
+          })
+        }
+
+        // Only update if they are not manually set (or if we decide to overwrite always?)
+        // Let's overwrite always for standard keys to ensure consistency, 
+        // unless we want to support manual overrides.
+        // Given the requirement "database is not updated", updating them now seems desired.
+        dataToSave.cuisine_type_zh = getLocalizedCuisines('zh')
+        dataToSave.cuisine_type_pt = getLocalizedCuisines('pt')
+        
+        // Also handle the case where "Other" was replaced by logic above
+        // If "Other" is in list, we actually want to REPLACE "Other" in the main list with the custom value?
+        // OR do we keep 'Other' in the key list and store custom value in translations?
+        // Usually, for filter logic, we want the custom value in the main list too if it's not a standard key.
+        // But our UI logic uses includes('Other').
+        // If we save 'FusionXYZ' in cuisine_type, the UI won't match 'Other' button next time.
+        // Let's keep 'Other' in cuisine_type for now if that's how UI works, 
+        // BUT for display, we want the custom value.
+        // Let's stick to: cuisine_type has KEYS. 'Other' is a key. 
+        // Real value is in _zh / _pt? Or maybe we should append the custom value to cuisine_type?
+        
+        // If user typed "Fusion", adding "Fusion" to cuisine_type is better than "Other".
+        // Let's try to append the custom value if 'Other' is selected.
+        if (dataToSave.cuisine_type?.includes('Other') && (formData as any).cuisine_type_other) {
+           // Replace 'Other' with the actual custom string
+           const customVal = (formData as any).cuisine_type_other
+           dataToSave.cuisine_type = dataToSave.cuisine_type!.map((c: string) => c === 'Other' ? customVal : c)
+           
+           // And for translations, we assume the custom value is the same for all langs unless manually edited
+           // (which we don't support in UI yet).
+           // So apply customVal to zh/pt arrays as well at the correct position.
+           // getLocalizedCuisines will return 'Other' (translated) or customVal?
+           // My logic above used cuisine_type_other for 'zh'/'pt' too.
+           // So if key became customVal, it won't match keys in Translation.
+           
+           // Update: getLocalizedCuisines relies on KEYS.
+           // If we change keys in dataToSave.cuisine_type, we should do it AFTER generating translations?
+           // OR we map the custom value as is.
+           
+           // Let's simplify:
+           // 1. Generate translations based on KEYS (including Other -> Other_zh)
+           // 2. If Other is present, replace it in the FINAL ARRAYS with the custom value.
+           
+           const custom = (formData as any).cuisine_type_other
+           if (custom) {
+             dataToSave.cuisine_type = dataToSave.cuisine_type.map(c => c === 'Other' ? custom : c)
+             dataToSave.cuisine_type_zh = dataToSave.cuisine_type_zh.map(c => c === '其他' || c === 'Other' ? custom : c)
+             dataToSave.cuisine_type_pt = dataToSave.cuisine_type_pt.map(c => c === 'Outros' || c === 'Other' ? custom : c)
+           }
+        }
+      }
+
       if (restaurant?.id) {
         // Update
         const { error } = await supabase
@@ -453,21 +520,59 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.cuisineType')} *</label>
-                <select
-                  required
-                  value={(formData.cuisine_type || '').toLowerCase()}
-                  onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type: e.target.value }))}
-                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                >
-                  <option value="">{t('admin.modal.placeholders.selectCuisine')}</option>
-                  {cuisineTypes.map((ct: CuisineType) => (
-                    <option key={ct.id} value={ct.name}>
-                      {i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
-                       i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name}
-                    </option>
-                  ))}
-                </select>
-                {(formData.cuisine_type || '').toLowerCase() === 'other' && (
+                <div className="grid grid-cols-2 xs:grid-cols-3 gap-2">
+                  {cuisineTypes.filter(ct => ct.name !== 'Other').map((ct: CuisineType) => {
+                    const name = i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
+                                 i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name
+                    // Ensure cuisine_type is treated as array
+                    const currentTypes = (formData.cuisine_type as string[]) || []
+                    const isSelected = currentTypes.includes(ct.name)
+                    
+                    return (
+                      <button
+                        key={ct.id}
+                        type="button"
+                        onClick={() => {
+                          const current = (formData.cuisine_type as string[]) || []
+                          const newTypes = current.includes(ct.name)
+                            ? current.filter(c => c !== ct.name)
+                            : [...current, ct.name]
+                          setFormData(prev => ({ ...prev, cuisine_type: newTypes }))
+                        }}
+                        className={`
+                          px-2 py-1.5 rounded-lg text-xs font-medium transition-all border text-center truncate
+                          ${isSelected
+                            ? 'bg-primary-500 text-white border-primary-500 shadow-sm'
+                            : 'bg-white text-neutral-600 border-neutral-200 hover:border-primary-300 hover:bg-neutral-50'
+                          }
+                        `}
+                      >
+                        {name}
+                      </button>
+                    )
+                  })}
+                  
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = (formData.cuisine_type as string[]) || []
+                      const newTypes = current.includes('Other')
+                        ? current.filter(c => c !== 'Other')
+                        : [...current, 'Other']
+                      setFormData(prev => ({ ...prev, cuisine_type: newTypes }))
+                    }}
+                    className={`
+                      px-2 py-1.5 rounded-lg text-xs font-medium transition-all border text-center truncate
+                      ${((formData.cuisine_type as string[]) || []).includes('Other')
+                        ? 'bg-primary-500 text-white border-primary-500 shadow-sm'
+                        : 'bg-white text-neutral-600 border-neutral-200 hover:border-primary-300 hover:bg-neutral-50'
+                      }
+                    `}
+                  >
+                    {t('common.other') || 'Other'}
+                  </button>
+                </div>
+                {((formData.cuisine_type as string[]) || []).includes('Other') && (
                   <input
                     type="text"
                     required

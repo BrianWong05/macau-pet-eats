@@ -3,12 +3,15 @@ import { PetPolicyBadge } from '@/components/PetPolicyBadge'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
 
+import { useTranslation } from 'react-i18next'
+
 interface HeroImageProps {
   restaurant: Restaurant
   lang: 'zh' | 'en' | 'pt'
 }
 
 export function HeroImage({ restaurant, lang }: HeroImageProps) {
+  const { t, i18n } = useTranslation()
   const name = getLocalizedText(restaurant, 'name', lang)
   const cuisineType = getLocalizedText(restaurant, 'cuisine_type', lang)
 
@@ -28,10 +31,12 @@ export function HeroImage({ restaurant, lang }: HeroImageProps) {
           </h1>
           <div className="flex flex-wrap items-center gap-3">
             <PetPolicyBadge policy={restaurant.pet_policy} size="lg" />
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm text-sm font-medium text-neutral-700 rounded-full">
-              <Utensils size={14} />
-              {cuisineType}
-            </span>
+            {cuisineType.map((type, idx) => (
+              <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm text-sm font-medium text-neutral-700 rounded-full">
+                <Utensils size={14} />
+                {i18n.exists(`cuisineTypes.${type.toLowerCase()}`) ? t(`cuisineTypes.${type.toLowerCase()}`) : type}
+              </span>
+            ))}
           </div>
         </div>
       </div>

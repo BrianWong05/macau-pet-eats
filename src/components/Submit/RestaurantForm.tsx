@@ -75,8 +75,32 @@ export function RestaurantForm({
     setFormState('submitting')
 
     try {
+      // Prepare data with localized cuisine types
+      const dataToSave = { ...formData }
+      
+      if (dataToSave.cuisine_type && Array.isArray(dataToSave.cuisine_type)) {
+        const getLocalizedCuisines = (lang: string) => {
+          return dataToSave.cuisine_type!.map(key => {
+            // Use i18n to get fixed language translation
+            return i18n.getFixedT(lang)(`cuisineTypes.${key.toLowerCase()}`)
+          })
+        }
+        
+        dataToSave.cuisine_type_zh = getLocalizedCuisines('zh')
+        dataToSave.cuisine_type_pt = getLocalizedCuisines('pt')
+
+        // Handle "Other" custom value
+        if (dataToSave.cuisine_type.includes('Other') && (formData as any).cuisine_type_other) {
+           const customVal = (formData as any).cuisine_type_other
+           dataToSave.cuisine_type = dataToSave.cuisine_type.map(c => c === 'Other' ? customVal : c)
+           // Replace in translations too
+           dataToSave.cuisine_type_zh = dataToSave.cuisine_type_zh!.map(c => c === '其他' || c === 'Other' ? customVal : c)
+           dataToSave.cuisine_type_pt = dataToSave.cuisine_type_pt!.map(c => c === 'Outros' || c === 'Other' ? customVal : c)
+        }
+      }
+
       await new Promise(resolve => setTimeout(resolve, 1500))
-      console.log('Restaurant submission:', formData)
+      console.log('Restaurant submission:', dataToSave)
       console.log('Image file:', imageFile)
       setFormState('success')
     } catch {
@@ -172,33 +196,77 @@ export function RestaurantForm({
           <label htmlFor="cuisine_type" className="block text-sm font-medium text-neutral-700 mb-2">
             {t('submit.form.cuisineType')} *
           </label>
-          <select
-            id="cuisine_type"
-            name="cuisine_type"
-            required
-            value={formData.cuisine_type}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all appearance-none bg-white"
-          >
-            <option value="">{t('submit.form.selectCuisine')}</option>
-            {cuisineTypes.map((ct: CuisineType) => (
-              <option key={ct.id} value={ct.name}>
-                {i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
-                 i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name}
-              </option>
-            ))}
-          </select>
-          {formData.cuisine_type === 'other' && (
-            <input
-              type="text"
-              name="cuisine_type_other"
-              required
-              value={(formData as any).cuisine_type_other || ''}
-              onChange={handleInputChange}
-              placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify cuisine type'}
-              className="w-full mt-3 px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
-            />
-          )}
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
+              {cuisineTypes.filter(ct => ct.name !== 'Other').map((ct: CuisineType) => {
+                const name = i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
+                             i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name
+                const isSelected = (formData.cuisine_type || []).includes(ct.name)
+                
+                return (
+                  <button
+                    key={ct.id}
+                    type="button"
+                    onClick={() => {
+                      const current = formData.cuisine_type || []
+                      const newTypes = current.includes(ct.name)
+                        ? current.filter(c => c !== ct.name)
+                        : [...current, ct.name]
+                      setFormData(prev => ({ ...prev, cuisine_type: newTypes }))
+                    }}
+                    className={`
+                      px-3 py-1.5 rounded-full text-sm font-medium transition-all border
+                      ${isSelected
+                        ? 'bg-primary-500 text-white border-primary-500 shadow-sm'
+                        : 'bg-white text-neutral-600 border-neutral-200 hover:border-primary-300 hover:bg-neutral-50'
+                      }
+                    `}
+                  >
+                    {name}
+                  </button>
+                )
+              })}
+              
+              {/* Other option */}
+              <button
+                type="button"
+                onClick={() => {
+                  const current = formData.cuisine_type || []
+                  const newTypes = current.includes('Other')
+                    ? current.filter(c => c !== 'Other')
+                    : [...current, 'Other']
+                  setFormData(prev => ({ ...prev, cuisine_type: newTypes }))
+                }}
+                className={`
+                  px-3 py-1.5 rounded-full text-sm font-medium transition-all border
+                  ${(formData.cuisine_type || []).includes('Other')
+                    ? 'bg-primary-500 text-white border-primary-500 shadow-sm'
+                    : 'bg-white text-neutral-600 border-neutral-200 hover:border-primary-300 hover:bg-neutral-50'
+                  }
+                `}
+              >
+                {t('common.other') || 'Other'}
+              </button>
+            </div>
+
+            {(formData.cuisine_type || []).includes('Other') && (
+              <input
+                type="text"
+                name="cuisine_type_other"
+                value={(formData as any).cuisine_type_other || ''}
+                onChange={handleInputChange}
+                placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify cuisine type'}
+                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
+              />
+            )}
+            
+            {/* Hidden input for validation if needed, or rely on state check on submit */}
+            {(formData.cuisine_type || []).length === 0 && (
+              <p className="text-sm text-red-500 mt-1">
+                {t('submit.form.selectAtLeastOne') || 'Please select at least one cuisine type'}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
