@@ -1,0 +1,6 @@
+import{u as a,j as t}from"./index-D0_Up7zE.js";import{u as i,D as l,H as c,P as p,v as d}from"./ui-vendor-r0va27WY.js";function u(s,o,r){if(r==="en")return s[o]||(o==="cuisine_type"?[]:"");const n=`${o}_${r}`,e=s[n];return e&&(Array.isArray(e)&&e.length>0||typeof e=="string")?e:s[o]||(o==="cuisine_type"?[]:"")}const m={indoors_allowed:{icon:c,colorClass:"bg-secondary-100 text-secondary-700 border-secondary-200"},patio_only:{icon:d,colorClass:"bg-accent-100 text-accent-700 border-accent-200"},small_pets_only:{icon:p,colorClass:"bg-primary-100 text-primary-700 border-primary-200"},all_pets_welcome:{icon:c,colorClass:"bg-secondary-100 text-secondary-700 border-secondary-200"},dogs_only:{icon:l,colorClass:"bg-amber-100 text-amber-700 border-amber-200"},cats_only:{icon:i,colorClass:"bg-purple-100 text-purple-700 border-purple-200"}},y={sm:"px-2 py-0.5 text-xs",md:"px-2.5 py-1 text-sm",lg:"px-3 py-1.5 text-base"},x={sm:12,md:14,lg:16};function _({policy:s,size:o="md"}){const{t:r}=a(),n=m[s],e=n.icon;return t.jsxs("span",{className:`
+        inline-flex items-center gap-1.5 
+        font-medium rounded-full border
+        ${n.colorClass}
+        ${y[o]}
+      `,children:[t.jsx(e,{size:x[o]}),t.jsx("span",{children:r(`petPolicy.${s}`)})]})}export{_ as P,u as g};
