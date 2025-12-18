@@ -73,12 +73,17 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   const [mapsUrl, setMapsUrl] = useState('')
   const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
   
-  // Image State
-  const [imageFiles, setImageFiles] = useState<File[]>([])
-  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+  // Unified Image State
+  type ImageItem = {
+    id: string
+    preview: string
+    file?: File // If new upload
+    url?: string // If existing
+  }
+  const [imageItems, setImageItems] = useState<ImageItem[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   
-  // Menu Image State
+  // Menu Image State (Keep simple for now unless requested)
   const [menuFiles, setMenuFiles] = useState<File[]>([])
   const [menuPreviews, setMenuPreviews] = useState<string[]>([])
   const menuInputRef = useRef<HTMLInputElement>(null)
@@ -103,11 +108,10 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         ...prev, 
         latitude: coords.lat, 
         longitude: coords.lng,
-        google_maps_url: url  // Save the URL to formData
+        google_maps_url: url
       }))
       toast.success('Location extracted from URL!')
     } else if (url) {
-      // Even if coords can't be extracted, still save the URL
       setFormData(prev => ({ ...prev, google_maps_url: url }))
     }
   }
@@ -136,20 +140,29 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   useEffect(() => {
     if (restaurant) {
       setFormData(restaurant)
-      // Initialize previews with existing images if any (from gallery_images)
-      // For now, we only have persisted URLs. We can mix them or valid files.
-      // Ideally, we treat existing URLs separately from new files.
-      setImagePreviews(restaurant.gallery_images || [])
-      // Load existing Google Maps URL if present
       setMapsUrl(restaurant.google_maps_url || '')
-      // If we want to show the main image as part of the gallery or separate?
-      // "Upload multiple images" usually implies a gallery.
-      // Let's assume we are editing gallery_images.
-      // But we also have image_url (main image).
-      // Let's keep image_url as main, and gallery_images as additional.
-      // OR, user implies replacing single upload with multiple.
-      // Let's support uploading to gallery_images.
-      // Load existing menu images
+      
+      // Initialize Image Items
+      // Prioritize gallery_images. If empty but image_url exists, use that.
+      // Ideally gallery_images contains ALL images including cover.
+      let initImages: ImageItem[] = []
+      
+      if (restaurant.gallery_images && restaurant.gallery_images.length > 0) {
+        initImages = restaurant.gallery_images.map((url, index) => ({
+           id: `existing-${index}-${Date.now()}`,
+           preview: url,
+           url: url
+        }))
+      } else if (restaurant.image_url) {
+        // Legacy fallback
+        initImages = [{
+           id: `legacy-${Date.now()}`,
+           preview: restaurant.image_url,
+           url: restaurant.image_url
+        }]
+      }
+      setImageItems(initImages)
+
       setMenuPreviews(restaurant.menu_images || [])
     } else {
       setFormData({
@@ -172,79 +185,66 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         longitude: 113.5399,
         status: 'approved'
       })
-      setImagePreviews([])
+      setImageItems([])
       setMenuPreviews([])
     }
-    setImageFiles([])
     setMenuFiles([])
   }, [restaurant, isOpen])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
     if (files.length > 0) {
-      // Validate sizes
       const validFiles = files.filter(file => {
-        if (file.size > 2 * 1024 * 1024) {
-          toast.error(`Image ${file.name} is too large (max 2MB)`)
+        if (file.size > 5 * 1024 * 1024) { // 5MB limit
+          toast.error(`Image ${file.name} is too large (max 5MB)`)
           return false
         }
         return true
       })
 
-      if (validFiles.length === 0) return
-
-      setImageFiles(prev => [...prev, ...validFiles])
-
-      // Generate previews
-      validFiles.forEach(file => {
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          setImagePreviews(prev => [...prev, reader.result as string])
-        }
-        reader.readAsDataURL(file)
-      })
+      if (validFiles.length > 0) {
+        validFiles.forEach(file => {
+          const reader = new FileReader()
+          reader.onloadend = () => {
+            setImageItems(prev => [...prev, {
+              id: `new-${Math.random().toString(36).substr(2, 9)}`,
+              preview: reader.result as string,
+              file: file
+            }])
+          }
+          reader.readAsDataURL(file)
+        })
+      }
     }
+    // Reset input
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const removeImage = (index: number) => {
-    // Check if index corresponds to existing URL or new file
-    // Current strategy: merge everything into imagePreviews for display
-    // But we need to separate existing vs new for deletion logic
-    // Simplified: We verify if it is a new file or existing URL based on formData
+  const removeImage = (id: string) => {
+    setImageItems(prev => prev.filter(item => item.id !== id))
+  }
+
+  const moveImage = (index: number, direction: 'left' | 'right') => {
+    if (direction === 'left' && index === 0) return
+    if (direction === 'right' && index === imageItems.length - 1) return
     
-    // Actually, simpler approach:
-    // Keep formData.gallery_images as "saved images"
-    // Keep imageFiles as "new images to upload"
-    // imagePreviews can be derived or state?
-    // Let's modify: 
-    // If index < formData.gallery_images.length (if we assume previews order = existing + new)
-    // But we initialized previews with ALL.
+    const newItems = [...imageItems]
+    const targetIndex = direction === 'left' ? index - 1 : index + 1
     
-    // Let's reconstruct removal:
-    // If removing an existing image (from formData.gallery_images)
-    // If removing a new image (from imageFiles)
+    // Swap
+    const temp = newItems[index]
+    newItems[index] = newItems[targetIndex]
+    newItems[targetIndex] = temp
     
-    // Let's assume imagePreviews maps 1:1 to [ ...formData.gallery_images, ...newFilesPreviews ]
-    const existingCount = (formData.gallery_images || []).length
-    
-    if (index < existingCount) {
-      // Removing existing image
-      const newGallery = [...(formData.gallery_images || [])]
-      newGallery.splice(index, 1)
-      setFormData(prev => ({ ...prev, gallery_images: newGallery }))
-      
-      // Also update previews (which we initialized with existing)
-      setImagePreviews(prev => prev.filter((_, i) => i !== index))
-    } else {
-      // Removing new file
-      const newFileIndex = index - existingCount
-      setImageFiles(prev => prev.filter((_, i) => i !== newFileIndex))
-      setImagePreviews(prev => prev.filter((_, i) => i !== index))
-    }
-    
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
+    setImageItems(newItems)
+  }
+  
+  const setCover = (index: number) => {
+    if (index === 0) return
+    const newItems = [...imageItems]
+    const item = newItems.splice(index, 1)[0]
+    newItems.unshift(item)
+    setImageItems(newItems)
   }
 
   const handleMenuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,18 +303,21 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         return
       }
 
-      const uploadedUrls: string[] = []
-
-      // Upload new images
-      if (imageFiles.length > 0) {
-        for (const file of imageFiles) {
-          const fileExt = file.name.split('.').pop()
+      // Process Images sequentially to preserve order
+      const finalGalleryImages: string[] = []
+      
+      for (const item of imageItems) {
+        if (item.url) {
+          finalGalleryImages.push(item.url)
+        } else if (item.file) {
+          // Upload new file
+          const fileExt = item.file.name.split('.').pop()
           const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
           const filePath = `${fileName}`
 
           const { error: uploadError } = await supabase.storage
             .from('restaurants')
-            .upload(filePath, file)
+            .upload(filePath, item.file)
 
           if (uploadError) throw new Error(`Image upload failed: ${uploadError.message}`)
 
@@ -322,28 +325,12 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             .from('restaurants')
             .getPublicUrl(filePath)
             
-          uploadedUrls.push(publicUrl)
+          finalGalleryImages.push(publicUrl)
         }
       }
 
-      // Merge with existing images
-      const finalGalleryImages = [
-        ...(formData.gallery_images || []),
-        ...uploadedUrls
-      ]
-      
       // Ensure image_url (main image) is set too. Use first gallery image if available.
-      let mainImageUrl = formData.image_url
-      if (!mainImageUrl && finalGalleryImages.length > 0) {
-        mainImageUrl = finalGalleryImages[0]
-      }
-      // If user removed main image but has others?
-      // For now, if image_url is empty, take the first one. 
-      // Or we can let user select main image? 
-      // Simplest: Always sync image_url to first image of gallery if gallery exists.
-      if (finalGalleryImages.length > 0) {
-         mainImageUrl = finalGalleryImages[0]
-      }
+      let mainImageUrl = finalGalleryImages.length > 0 ? finalGalleryImages[0] : ''
 
       // Upload new menu images
       const uploadedMenuUrls: string[] = []
@@ -377,70 +364,27 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         ...formData,
         gallery_images: finalGalleryImages,
         menu_images: finalMenuImages,
-        image_url: mainImageUrl || ''
+        image_url: mainImageUrl
       }
 
-      // Auto-populate cuisine_type_zh and cuisine_type_pt if empty or needs sync
-      // We derive them from the selected cuisine_type keys
+      // Auto-populate cuisine_type_zh and cuisine_type_pt logic (kept same as before)
       if (formData.cuisine_type && Array.isArray(formData.cuisine_type)) {
         const getLocalizedCuisines = (lang: string) => {
           return formData.cuisine_type!.map(key => {
             if (key === 'Other') {
-              // Note: using cuisine_type_other for custom value if available, 
-              // BUT cuisine_type_other isn't strictly part of Restaurant interface unless we cast.
-              // We rely on formData being cast to 'any' for the temp field.
               return (formData as any).cuisine_type_other || 'Other'
             }
-            // Use translation resource directly or via t
-            // Since we need specific language, we can use i18n.getFixedT or just t with lng option if available
-            // standard i18next t function accepts `lng` in options
             return i18n.getFixedT(lang)(`cuisineTypes.${key.toLowerCase()}`)
           })
         }
-
-        // Only update if they are not manually set (or if we decide to overwrite always?)
-        // Let's overwrite always for standard keys to ensure consistency, 
-        // unless we want to support manual overrides.
-        // Given the requirement "database is not updated", updating them now seems desired.
         dataToSave.cuisine_type_zh = getLocalizedCuisines('zh')
         dataToSave.cuisine_type_pt = getLocalizedCuisines('pt')
         
-        // Also handle the case where "Other" was replaced by logic above
-        // If "Other" is in list, we actually want to REPLACE "Other" in the main list with the custom value?
-        // OR do we keep 'Other' in the key list and store custom value in translations?
-        // Usually, for filter logic, we want the custom value in the main list too if it's not a standard key.
-        // But our UI logic uses includes('Other').
-        // If we save 'FusionXYZ' in cuisine_type, the UI won't match 'Other' button next time.
-        // Let's keep 'Other' in cuisine_type for now if that's how UI works, 
-        // BUT for display, we want the custom value.
-        // Let's stick to: cuisine_type has KEYS. 'Other' is a key. 
-        // Real value is in _zh / _pt? Or maybe we should append the custom value to cuisine_type?
-        
-        // If user typed "Fusion", adding "Fusion" to cuisine_type is better than "Other".
-        // Let's try to append the custom value if 'Other' is selected.
         if (dataToSave.cuisine_type?.includes('Other') && (formData as any).cuisine_type_other) {
-           // Replace 'Other' with the actual custom string
            const customVal = (formData as any).cuisine_type_other
            dataToSave.cuisine_type = dataToSave.cuisine_type!.map((c: string) => c === 'Other' ? customVal : c)
-           
-           // And for translations, we assume the custom value is the same for all langs unless manually edited
-           // (which we don't support in UI yet).
-           // So apply customVal to zh/pt arrays as well at the correct position.
-           // getLocalizedCuisines will return 'Other' (translated) or customVal?
-           // My logic above used cuisine_type_other for 'zh'/'pt' too.
-           // So if key became customVal, it won't match keys in Translation.
-           
-           // Update: getLocalizedCuisines relies on KEYS.
-           // If we change keys in dataToSave.cuisine_type, we should do it AFTER generating translations?
-           // OR we map the custom value as is.
-           
-           // Let's simplify:
-           // 1. Generate translations based on KEYS (including Other -> Other_zh)
-           // 2. If Other is present, replace it in the FINAL ARRAYS with the custom value.
-           
            const custom = (formData as any).cuisine_type_other
            if (custom) {
-             dataToSave.cuisine_type = dataToSave.cuisine_type.map(c => c === 'Other' ? custom : c)
              dataToSave.cuisine_type_zh = dataToSave.cuisine_type_zh.map(c => c === '其他' || c === 'Other' ? custom : c)
              dataToSave.cuisine_type_pt = dataToSave.cuisine_type_pt.map(c => c === 'Outros' || c === 'Other' ? custom : c)
            }
@@ -938,72 +882,96 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.imageUrl')}</h3>
             
-            {imagePreviews.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {imagePreviews.map((preview, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={preview}
-                      alt={`Preview ${index}`}
-                      className="w-full h-32 object-cover rounded-xl border border-neutral-200"
-                    />
+            <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-4">
+              {imageItems.map((item, index) => (
+                <div key={item.id} className="relative aspect-square group">
+                   <img
+                    src={item.preview}
+                    alt={`Preview ${index + 1}`}
+                    className={`w-full h-full object-cover rounded-xl transition-all ${index === 0 ? 'ring-4 ring-primary-500' : ''}`}
+                  />
+                  {index === 0 && (
+                    <div className="absolute top-2 left-2 px-2 py-1 bg-primary-500 text-white text-xs font-bold rounded-md shadow-sm">
+                      Cover
+                    </div>
+                  )}
+                  
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-2">
+                    {/* Reorder Buttons */}
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => moveImage(index, 'left')}
+                        className="p-1.5 bg-white/20 hover:bg-white text-white hover:text-neutral-900 rounded-full backdrop-blur-sm transition-all"
+                        title="Move Left"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                      </button>
+                    )}
+                    
+                    {index < imageItems.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() => moveImage(index, 'right')}
+                        className="p-1.5 bg-white/20 hover:bg-white text-white hover:text-neutral-900 rounded-full backdrop-blur-sm transition-all"
+                        title="Move Right"
+                      >
+                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                      </button>
+                    )}
+
+                    {index !== 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setCover(index)}
+                        className="p-1.5 bg-primary-500 hover:bg-primary-600 text-white rounded-full transition-all"
+                        title="Make Cover"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      </button>
+                    )}
+
                     <button
                       type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                      onClick={() => removeImage(item.id)}
+                      className="p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full transition-all"
+                      title="Remove"
                     >
-                      <X size={14} />
+                      <X size={16} />
                     </button>
-                    {index === 0 && (
-                      <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/60 text-white text-xs rounded-lg backdrop-blur-sm">
-                        Cover
-                      </div>
-                    )}
                   </div>
-                ))}
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="
-                    h-32 border-2 border-dashed border-neutral-300
-                    rounded-xl flex flex-col items-center justify-center
-                    cursor-pointer hover:border-primary-400 hover:bg-primary-50
-                    transition-all
-                  "
-                >
-                  <Upload size={20} className="text-neutral-400 mb-2" />
-                  <span className="text-sm text-neutral-500">Add More</span>
                 </div>
-              </div>
-            ) : (
+              ))}
+
+              {/* Add More Button */}
               <div
                 onClick={() => fileInputRef.current?.click()}
                 className="
                   border-2 border-dashed border-neutral-300
-                  rounded-xl p-8
-                  text-center cursor-pointer
+                  rounded-xl aspect-square
+                  flex flex-col items-center justify-center
+                  cursor-pointer
                   hover:border-primary-400 hover:bg-primary-50
                   transition-all
                 "
               >
-                <div className="flex flex-col items-center gap-3">
-                  <div className="p-3 bg-neutral-100 rounded-full">
-                    <ImageIcon className="w-6 h-6 text-neutral-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-neutral-700">
-                      Click to upload images
-                    </p>
-                    <p className="text-sm text-neutral-500 mt-1">
-                      PNG, JPG up to 2MB
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 text-primary-600">
-                    <Upload size={18} />
-                    <span className="font-medium">Select Files</span>
-                  </div>
+                <div className="p-2 bg-neutral-100 rounded-full mb-2">
+                  <Upload size={20} className="text-neutral-400" />
                 </div>
+                <span className="text-xs font-medium text-neutral-600 text-center px-2">
+                  {imageItems.length === 0 ? 'Upload Photos' : 'Add More'}
+                </span>
               </div>
-            )}
+            </div>
+            
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              className="hidden"
+            />
             
             <input
               ref={fileInputRef}
