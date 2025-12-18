@@ -63,23 +63,23 @@ export function getGoogleMapsEmbedSrc(
       const cidMatch = placeId.match(/:0x([a-f0-9]+)$/)
       if (cidMatch) {
         const cid = BigInt('0x' + cidMatch[1]).toString()
-        return `https://maps.google.com/maps?cid=${cid}&z=17&output=embed`
+        return `https://maps.google.com/maps?cid=${cid}&z=17&output=embed&hl=zh-TW`
       }
     }
     
     // Fallback to place name from URL
     const placeName = extractPlaceFromUrl(url)
     if (placeName) {
-      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&ll=${lat},${lng}&z=17&output=embed`
+      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&ll=${lat},${lng}&z=17&output=embed&hl=zh-TW`
     }
   }
   
   // If we have a restaurant name, use it with coordinates
   if (restaurantName) {
     const searchQuery = `${restaurantName} Macau`
-    return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&ll=${lat},${lng}&z=17&output=embed`
+    return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&ll=${lat},${lng}&z=17&output=embed&hl=zh-TW`
   }
   
   // Fallback to coordinates only
-  return `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`
+  return `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed&hl=zh-TW`
 }
