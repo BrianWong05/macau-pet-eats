@@ -556,12 +556,24 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                               const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
                               weekdays.forEach(d => { newHours[d] = { ...currentHours } })
                               setFormData(prev => ({ ...prev, opening_hours: newHours }))
-                              toast.success('Applied to weekdays')
                             }}
                             className="px-2 py-0.5 text-xs bg-neutral-100 hover:bg-neutral-200 text-neutral-600 rounded transition-colors"
-                            title="Apply to Mon-Fri"
                           >
-                            → Weekdays
+                            {t('openingHours.applyToWeekdays')}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const currentHours = (formData.opening_hours as OpeningHours)?.[day] as DayHours
+                              if (!currentHours) return
+                              const weekend: DayOfWeek[] = ['saturday', 'sunday']
+                              const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
+                              weekend.forEach(d => { newHours[d] = { ...currentHours } })
+                              setFormData(prev => ({ ...prev, opening_hours: newHours }))
+                            }}
+                            className="px-2 py-0.5 text-xs bg-neutral-100 hover:bg-neutral-200 text-neutral-600 rounded transition-colors"
+                          >
+                            {t('openingHours.applyToWeekend')}
                           </button>
                           <button
                             type="button"
@@ -571,12 +583,10 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                               const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
                               DAYS_OF_WEEK.forEach(d => { newHours[d] = { ...currentHours } })
                               setFormData(prev => ({ ...prev, opening_hours: newHours }))
-                              toast.success('Applied to all days')
                             }}
                             className="px-2 py-0.5 text-xs bg-primary-100 hover:bg-primary-200 text-primary-600 rounded transition-colors"
-                            title="Apply to all days"
                           >
-                            → All
+                            {t('openingHours.applyToAll')}
                           </button>
                         </div>
                       </div>

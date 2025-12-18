@@ -142,6 +142,9 @@
     "openNow": "營業中",
     "closedNow": "已休息",
     "everyday": "每天",
+    "applyToWeekdays": "→ 平日",
+    "applyToWeekend": "→ 週末",
+    "applyToAll": "→ 全部",
     "days": {
       "monday": "星期一",
       "tuesday": "星期二",

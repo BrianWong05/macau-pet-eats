@@ -142,6 +142,9 @@
     "openNow": "Aberto Agora",
     "closedNow": "Fechado Agora",
     "everyday": "Todos os dias",
+    "applyToWeekdays": "→ Dias úteis",
+    "applyToWeekend": "→ Fim de semana",
+    "applyToAll": "→ Todos",
     "days": {
       "monday": "Segunda-feira",
       "tuesday": "Terça-feira",

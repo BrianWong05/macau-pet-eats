@@ -142,6 +142,9 @@
     "openNow": "Open Now",
     "closedNow": "Closed Now",
     "everyday": "Every day",
+    "applyToWeekdays": "→ Weekdays",
+    "applyToWeekend": "→ Weekend",
+    "applyToAll": "→ All",
     "days": {
       "monday": "Monday",
       "tuesday": "Tuesday",
