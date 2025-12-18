@@ -134,7 +134,7 @@ export function Search() {
               `}
             >
               <Filter size={18} />
-              <span className="hidden sm:inline">{t('explore.filters.petPolicy')}</span>
+              <span className="hidden sm:inline">{t('search.filter')}</span>
               {hasActiveFilters && (
                 <span className="w-2 h-2 bg-primary-500 rounded-full" />
               )}

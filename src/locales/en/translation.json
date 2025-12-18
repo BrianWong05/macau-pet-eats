@@ -62,7 +62,8 @@
     "results": "Found {{count}} restaurants",
     "noResults": "No restaurants found",
     "noResultsHint": "Try different keywords or adjust your filters",
-    "clearFilters": "Clear filters"
+    "clearFilters": "Clear filters",
+    "filter": "Filter"
   },
   "submit": {
     "title": "Submit a Spot",

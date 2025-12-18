@@ -62,7 +62,8 @@
     "results": "Encontrados {{count}} restaurantes",
     "noResults": "Nenhum restaurante encontrado",
     "noResultsHint": "Tente palavras-chave diferentes ou ajuste os filtros",
-    "clearFilters": "Limpar filtros"
+    "clearFilters": "Limpar filtros",
+    "filter": "Filtrar"
   },
   "submit": {
     "title": "Sugerir Local",
