@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Send, AlertCircle, Upload, X, Image as ImageIcon } from 'lucide-react'
+import { Send, AlertCircle, Upload, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { RestaurantSubmission, CuisineType, PetPolicy } from '@/types/database'
 

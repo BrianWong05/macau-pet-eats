@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Loader, Upload, Image as ImageIcon, MapPin, Link as LinkIcon, Clock } from 'lucide-react'
+import { X, Loader, Upload, MapPin, Link as LinkIcon, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
@@ -141,6 +141,28 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     if (restaurant) {
       setFormData(restaurant)
       setMapsUrl(restaurant.google_maps_url || '')
+      
+      // Handle Custom Cuisine Load
+      // We need to identify any cuisine types that are NOT in the standard list
+      // And move them to 'Other' state
+      if (restaurant.cuisine_type && restaurant.cuisine_type.length > 0 && cuisineTypes.length > 0) {
+        const standardNames = cuisineTypes.map(ct => ct.name)
+        // Find first custom type (assuming UI only supports one input for now)
+        const customType = restaurant.cuisine_type.find(t => !standardNames.includes(t) && t !== 'Other')
+        
+        if (customType) {
+           // We found a custom type (e.g. 'Vietnamese')
+           // Update formData to have ['Other', ...standardTypes]
+           // AND set cuisine_type_other = 'Vietnamese'
+           const newTypes = restaurant.cuisine_type.map(t => t === customType ? 'Other' : t)
+           setFormData(prev => ({
+             ...prev,
+             cuisine_type: newTypes,
+             // Cast to any because cuisine_type_other is temp field
+             ['cuisine_type_other' as any]: customType
+           }))
+        }
+      }
       
       // Initialize Image Items
       // Prioritize gallery_images. If empty but image_url exists, use that.
@@ -398,7 +420,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         // Update
         const { error } = await supabase
           .from('restaurants')
-          .update(dataToSave)
+          .update(dataToSave as never)
           .eq('id', restaurant.id)
         if (error) throw error
       } else {

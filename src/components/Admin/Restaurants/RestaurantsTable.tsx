@@ -17,7 +17,7 @@ export function RestaurantsTable({
   onEdit, 
   onDelete 
 }: RestaurantsTableProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const StatusBadge = ({ status }: { status: string }) => {
     const styles = {
@@ -84,7 +84,7 @@ export function RestaurantsTable({
                         <p className="font-medium text-neutral-900">{restaurant.name_zh || restaurant.name}</p>
                         <p className="text-sm text-neutral-500">
                           {Array.isArray(restaurant.cuisine_type) 
-                            ? restaurant.cuisine_type.map(c => t(`cuisineTypes.${c.toLowerCase()}`) || c).join(', ')
+                            ? restaurant.cuisine_type.map(c => i18n.exists(`cuisineTypes.${c.toLowerCase()}`) ? t(`cuisineTypes.${c.toLowerCase()}`) : c).join(', ')
                             : restaurant.cuisine_type}
                         </p>
                       </div>
