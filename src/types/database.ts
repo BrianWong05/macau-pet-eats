@@ -201,6 +201,7 @@ export interface RestaurantSubmission {
   cuisine_type_zh?: string[]
   cuisine_type_pt?: string[]
   image_url?: string
+  gallery_images?: string[]
   contact_info: string
   social_media?: SocialMedia
 }

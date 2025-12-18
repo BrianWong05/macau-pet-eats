@@ -297,6 +297,12 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     setError(null)
 
     try {
+      if (!formData.cuisine_type || formData.cuisine_type.length === 0) {
+        toast.error(t('submit.form.selectAtLeastOne') || 'Please select at least one cuisine type')
+        setLoading(false)
+        return
+      }
+
       const uploadedUrls: string[] = []
 
       // Upload new images

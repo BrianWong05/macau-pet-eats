@@ -34,8 +34,8 @@ export function Submit() {
   }, [])
   
   const [formState, setFormState] = useState<FormState>('idle')
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
   
   const [formData, setFormData] = useState<RestaurantSubmission>({
     name: '',
@@ -45,6 +45,7 @@ export function Submit() {
     cuisine_type: [],
     contact_info: '',
     image_url: '',
+    gallery_images: [],
     social_media: {
       facebook: '',
       instagram: '',
@@ -54,8 +55,8 @@ export function Submit() {
 
   const resetForm = () => {
     setFormState('idle')
-    setImageFile(null)
-    setImagePreview(null)
+    setImageFiles([])
+    setImagePreviews([])
     setFormData({
       name: '',
       description: '',
@@ -64,6 +65,7 @@ export function Submit() {
       cuisine_type: [],
       contact_info: '',
       image_url: '',
+      gallery_images: [],
       social_media: {
         facebook: '',
         instagram: '',
@@ -88,10 +90,10 @@ export function Submit() {
           cuisineTypes={cuisineTypes}
           formState={formState}
           setFormState={setFormState}
-          imageFile={imageFile}
-          setImageFile={setImageFile}
-          imagePreview={imagePreview}
-          setImagePreview={setImagePreview}
+          imageFiles={imageFiles}
+          setImageFiles={setImageFiles}
+          imagePreviews={imagePreviews}
+          setImagePreviews={setImagePreviews}
         />
       </div>
 
