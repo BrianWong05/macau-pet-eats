@@ -107,6 +107,7 @@
     "location": "Location",
     "openInMaps": "Open in Google Maps",
     "photos": "Photos",
+    "menu": "Menu",
     "reportUpdate": "Report Update",
     "reportModal": {
       "title": "Report an Update",

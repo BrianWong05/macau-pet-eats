@@ -44,6 +44,7 @@ export interface Restaurant {
   gallery_images: string[]
   contact_info: string
   opening_hours: OpeningHours | null
+  menu_images: string[]
   
   // Timestamps
   created_at: string

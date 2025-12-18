@@ -89,6 +89,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Menu Image State
+  const [menuFiles, setMenuFiles] = useState<File[]>([])
+  const [menuPreviews, setMenuPreviews] = useState<string[]>([])
+  const menuInputRef = useRef<HTMLInputElement>(null)
 
   const handleMapsUrlChange = (url: string) => {
     setMapsUrl(url)
@@ -122,6 +127,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     contact_info: '',
     image_url: '',
     gallery_images: [],
+    menu_images: [],
     latitude: 22.1937,
     longitude: 113.5399,
     status: 'approved'
@@ -143,6 +149,8 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
       // Let's keep image_url as main, and gallery_images as additional.
       // OR, user implies replacing single upload with multiple.
       // Let's support uploading to gallery_images.
+      // Load existing menu images
+      setMenuPreviews(restaurant.menu_images || [])
     } else {
       setFormData({
         name: '',
@@ -159,13 +167,16 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         contact_info: '',
         image_url: '',
         gallery_images: [],
+        menu_images: [],
         latitude: 22.1937,
         longitude: 113.5399,
         status: 'approved'
       })
       setImagePreviews([])
+      setMenuPreviews([])
     }
     setImageFiles([])
+    setMenuFiles([])
   }, [restaurant, isOpen])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,6 +247,50 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     }
   }
 
+  const handleMenuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length > 0) {
+      const validFiles = files.filter(file => {
+        if (file.size > 2 * 1024 * 1024) {
+          toast.error(`Image ${file.name} is too large (max 2MB)`)
+          return false
+        }
+        return true
+      })
+
+      if (validFiles.length === 0) return
+
+      setMenuFiles(prev => [...prev, ...validFiles])
+
+      validFiles.forEach(file => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          setMenuPreviews(prev => [...prev, reader.result as string])
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+  }
+
+  const removeMenu = (index: number) => {
+    const existingCount = (formData.menu_images || []).length
+    
+    if (index < existingCount) {
+      const newMenuImages = [...(formData.menu_images || [])]
+      newMenuImages.splice(index, 1)
+      setFormData(prev => ({ ...prev, menu_images: newMenuImages }))
+      setMenuPreviews(prev => prev.filter((_, i) => i !== index))
+    } else {
+      const newFileIndex = index - existingCount
+      setMenuFiles(prev => prev.filter((_, i) => i !== newFileIndex))
+      setMenuPreviews(prev => prev.filter((_, i) => i !== index))
+    }
+    
+    if (menuInputRef.current) {
+      menuInputRef.current.value = ''
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -284,9 +339,38 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
          mainImageUrl = finalGalleryImages[0]
       }
 
+      // Upload new menu images
+      const uploadedMenuUrls: string[] = []
+      if (menuFiles.length > 0) {
+        for (const file of menuFiles) {
+          const fileExt = file.name.split('.').pop()
+          const fileName = `menu_${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+          const filePath = `${fileName}`
+
+          const { error: uploadError } = await supabase.storage
+            .from('restaurants')
+            .upload(filePath, file)
+
+          if (uploadError) throw new Error(`Menu upload failed: ${uploadError.message}`)
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('restaurants')
+            .getPublicUrl(filePath)
+            
+          uploadedMenuUrls.push(publicUrl)
+        }
+      }
+
+      // Merge with existing menu images
+      const finalMenuImages = [
+        ...(formData.menu_images || []),
+        ...uploadedMenuUrls
+      ]
+
       const dataToSave = {
         ...formData,
         gallery_images: finalGalleryImages,
+        menu_images: finalMenuImages,
         image_url: mainImageUrl || ''
       }
 
@@ -747,6 +831,69 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               accept="image/*"
               multiple
               onChange={handleImageChange}
+              className="hidden"
+            />
+          </div>
+
+          {/* Menu Images Upload */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-neutral-700">{t('restaurant.menu')}</h3>
+            
+            {menuPreviews.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {menuPreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={preview}
+                      alt={`Menu ${index}`}
+                      className="w-full h-32 object-cover rounded-xl border border-neutral-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeMenu(index)}
+                      className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+                <div 
+                  onClick={() => menuInputRef.current?.click()}
+                  className="
+                    h-32 border-2 border-dashed border-neutral-300
+                    rounded-xl flex flex-col items-center justify-center
+                    cursor-pointer hover:border-primary-400 hover:bg-primary-50
+                    transition-all
+                  "
+                >
+                  <Upload size={20} className="text-neutral-400 mb-2" />
+                  <span className="text-sm text-neutral-500">Add More</span>
+                </div>
+              </div>
+            ) : (
+              <div
+                onClick={() => menuInputRef.current?.click()}
+                className="
+                  border-2 border-dashed border-neutral-300
+                  rounded-xl p-6
+                  text-center cursor-pointer
+                  hover:border-primary-400 hover:bg-primary-50
+                  transition-all
+                "
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <Upload size={24} className="text-neutral-400" />
+                  <p className="text-sm text-neutral-600">Upload menu images</p>
+                </div>
+              </div>
+            )}
+            
+            <input
+              ref={menuInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleMenuChange}
               className="hidden"
             />
           </div>
