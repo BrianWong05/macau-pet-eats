@@ -4,14 +4,16 @@ import { MapPin, Utensils } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
 import { PetPolicyBadge } from '@/components/PetPolicyBadge'
+import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
+  const { getLocalizedName } = useCuisineTypes()
   
   const { id, pet_policy, image_url } = restaurant
   
@@ -19,7 +21,8 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
   const name = getLocalizedText(restaurant, 'name', lang)
   const description = getLocalizedText(restaurant, 'description', lang)
   const address = getLocalizedText(restaurant, 'address', lang)
-  const cuisineType = getLocalizedText(restaurant, 'cuisine_type', lang)
+  // Always use 'en' for cuisine_type since localization happens via getLocalizedName()
+  const cuisineType = getLocalizedText(restaurant, 'cuisine_type', 'en')
 
   return (
     <Link
@@ -52,7 +55,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             rounded-full
           ">
             <Utensils size={14} />
-            {cuisineType.map(c => i18n.exists(`cuisineTypes.${c.toLowerCase()}`) ? t(`cuisineTypes.${c.toLowerCase()}`) : c).join(', ')}
+            {cuisineType.map(c => getLocalizedName(c, lang)).join(', ')}
           </span>
         </div>
       </div>

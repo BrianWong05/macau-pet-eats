@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { CuisineTypesProvider } from '@/contexts/CuisineTypesContext'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AdminLayout } from '@/components/AdminLayout'
 import { LoadingScreen } from '@/components/LoadingScreen'
@@ -22,28 +23,30 @@ const AdminCuisineTypes = lazy(() => import('@/pages/Admin/CuisineTypes').then(m
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Toaster position="top-right" richColors />
-        <Suspense fallback={<LoadingScreen />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-            <Route path="/submit" element={<Submit />} />
-            
-            {/* Admin Routes */}
-            <Route element={<ProtectedRoute requireAdmin />}>
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
-                <Route path="restaurants" element={<AdminRestaurants />} />
-                <Route path="cuisine-types" element={<AdminCuisineTypes />} />
-                <Route path="reports" element={<AdminReports />} />
+      <CuisineTypesProvider>
+        <Router>
+          <Toaster position="top-right" richColors />
+          <Suspense fallback={<LoadingScreen />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+              <Route path="/submit" element={<Submit />} />
+              
+              {/* Admin Routes */}
+              <Route element={<ProtectedRoute requireAdmin />}>
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="restaurants" element={<AdminRestaurants />} />
+                  <Route path="cuisine-types" element={<AdminCuisineTypes />} />
+                  <Route path="reports" element={<AdminReports />} />
+                </Route>
               </Route>
-            </Route>
-          </Routes>
-        </Suspense>
-      </Router>
+            </Routes>
+          </Suspense>
+        </Router>
+      </CuisineTypesProvider>
     </AuthProvider>
   )
 }

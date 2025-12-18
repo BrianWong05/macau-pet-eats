@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { CheckCircle, Clock, XCircle, Edit, Trash2 } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
+import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
 
 interface RestaurantsTableProps {
   restaurants: Restaurant[]
@@ -18,6 +19,8 @@ export function RestaurantsTable({
   onDelete 
 }: RestaurantsTableProps) {
   const { t, i18n } = useTranslation()
+  const { getLocalizedName } = useCuisineTypes()
+  const lang = i18n.language as 'zh' | 'en' | 'pt'
 
   const StatusBadge = ({ status }: { status: string }) => {
     const styles = {
@@ -84,7 +87,7 @@ export function RestaurantsTable({
                         <p className="font-medium text-neutral-900">{restaurant.name_zh || restaurant.name}</p>
                         <p className="text-sm text-neutral-500">
                           {Array.isArray(restaurant.cuisine_type) 
-                            ? restaurant.cuisine_type.map(c => i18n.exists(`cuisineTypes.${c.toLowerCase()}`) ? t(`cuisineTypes.${c.toLowerCase()}`) : c).join(', ')
+                            ? restaurant.cuisine_type.map(c => getLocalizedName(c, lang)).join(', ')
                             : restaurant.cuisine_type}
                         </p>
                       </div>

@@ -2,8 +2,7 @@ import { Utensils } from 'lucide-react'
 import { PetPolicyBadge } from '@/components/PetPolicyBadge'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
-
-import { useTranslation } from 'react-i18next'
+import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
 
 interface HeroImageProps {
   restaurant: Restaurant
@@ -11,9 +10,10 @@ interface HeroImageProps {
 }
 
 export function HeroImage({ restaurant, lang }: HeroImageProps) {
-  const { t, i18n } = useTranslation()
+  const { getLocalizedName } = useCuisineTypes()
   const name = getLocalizedText(restaurant, 'name', lang)
-  const cuisineType = getLocalizedText(restaurant, 'cuisine_type', lang)
+  // Always use 'en' for cuisine_type since localization happens via getLocalizedName()
+  const cuisineType = getLocalizedText(restaurant, 'cuisine_type', 'en')
 
   return (
     <div className="relative h-64 md:h-96">
@@ -34,7 +34,7 @@ export function HeroImage({ restaurant, lang }: HeroImageProps) {
             {cuisineType.map((type, idx) => (
               <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm text-sm font-medium text-neutral-700 rounded-full">
                 <Utensils size={14} />
-                {i18n.exists(`cuisineTypes.${type.toLowerCase()}`) ? t(`cuisineTypes.${type.toLowerCase()}`) : type}
+                {getLocalizedName(type, lang)}
               </span>
             ))}
           </div>
