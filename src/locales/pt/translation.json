@@ -165,5 +165,45 @@
     "uploadPhoto": "Carregar Foto",
     "removePhoto": "Remover Foto",
     "photoHint": "Opcional: Adicione uma foto da sua experiência"
+  },
+  "admin": {
+    "restaurants": {
+      "status": {
+        "pending": "Pendente",
+        "approved": "Aprovado",
+        "rejected": "Rejeitado"
+      }
+    },
+    "modal": {
+      "labels": {
+        "nameEn": "Nome (Inglês)",
+        "nameZh": "Nome (Chinês)",
+        "namePt": "Nome (Português)",
+        "cuisineType": "Tipo de Cozinha",
+        "petPolicy": "Política de Animais",
+        "status": "Estado",
+        "descriptionEn": "Descrição (Inglês)",
+        "descriptionZh": "Descrição (Chinês)",
+        "descriptionPt": "Descrição (Português)",
+        "addressEn": "Morada (Inglês)",
+        "addressZh": "Morada (Chinês)",
+        "addressPt": "Morada (Português)",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "imageUrl": "Imagens",
+        "contactInfo": "Telefone de Contacto"
+      },
+      "placeholders": {
+        "selectCuisine": "Selecionar cozinha",
+        "description": "Descreva este restaurante...",
+        "address": "Introduza a morada",
+        "imageUrl": "https://..."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Guardar Alterações",
+        "create": "Criar Restaurante"
+      }
+    }
   }
 }

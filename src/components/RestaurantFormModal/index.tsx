@@ -414,6 +414,17 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             </div>
           </div>
 
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.contactInfo')}</label>
+            <input
+              type="tel"
+              value={formData.contact_info || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, contact_info: e.target.value }))}
+              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+              placeholder="+853 xxxx xxxx"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.latitude')} *</label>
