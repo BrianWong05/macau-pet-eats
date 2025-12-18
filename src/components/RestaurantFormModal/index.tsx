@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Loader, Upload, Image as ImageIcon, MapPin, Link as LinkIcon } from 'lucide-react'
+import { X, Loader, Upload, Image as ImageIcon, MapPin, Link as LinkIcon, Clock } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
-import type { Restaurant } from '@/types/database'
+import type { Restaurant, DayOfWeek, OpeningHours, DayHours } from '@/types/database'
+
+const DAYS_OF_WEEK: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 
 
@@ -486,6 +488,105 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
               placeholder="+853 xxxx xxxx"
             />
+          </div>
+
+          {/* Opening Hours */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
+              <Clock size={16} className="text-primary-500" />
+              {t('openingHours.title')}
+            </label>
+            <div className="space-y-2">
+              {DAYS_OF_WEEK.map((day) => {
+                const hours = (formData.opening_hours as OpeningHours)?.[day]
+                const isOpen = hours !== null && hours !== undefined
+                
+                return (
+                  <div key={day} className="flex items-center gap-3">
+                    <div className="w-24 text-sm text-neutral-600">
+                      {t(`openingHours.days.${day}`)}
+                    </div>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={isOpen}
+                        onChange={(e) => {
+                          const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
+                          if (e.target.checked) {
+                            newHours[day] = { open: '09:00', close: '22:00' }
+                          } else {
+                            newHours[day] = null
+                          }
+                          setFormData(prev => ({ ...prev, opening_hours: newHours }))
+                        }}
+                        className="rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
+                      />
+                    </label>
+                    {isOpen ? (
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="time"
+                          value={(hours as DayHours)?.open || '09:00'}
+                          onChange={(e) => {
+                            const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
+                            newHours[day] = { ...(newHours[day] as DayHours || {}), open: e.target.value }
+                            setFormData(prev => ({ ...prev, opening_hours: newHours }))
+                          }}
+                          className="px-2 py-1 text-sm border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500"
+                        />
+                        <span className="text-neutral-400">-</span>
+                        <input
+                          type="time"
+                          value={(hours as DayHours)?.close || '22:00'}
+                          onChange={(e) => {
+                            const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
+                            newHours[day] = { ...(newHours[day] as DayHours || {}), close: e.target.value }
+                            setFormData(prev => ({ ...prev, opening_hours: newHours }))
+                          }}
+                          className="px-2 py-1 text-sm border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500"
+                        />
+                        {/* Batch apply button for this row */}
+                        <div className="flex gap-1 ml-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const currentHours = (formData.opening_hours as OpeningHours)?.[day] as DayHours
+                              if (!currentHours) return
+                              const weekdays: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+                              const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
+                              weekdays.forEach(d => { newHours[d] = { ...currentHours } })
+                              setFormData(prev => ({ ...prev, opening_hours: newHours }))
+                              toast.success('Applied to weekdays')
+                            }}
+                            className="px-2 py-0.5 text-xs bg-neutral-100 hover:bg-neutral-200 text-neutral-600 rounded transition-colors"
+                            title="Apply to Mon-Fri"
+                          >
+                            → Weekdays
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const currentHours = (formData.opening_hours as OpeningHours)?.[day] as DayHours
+                              if (!currentHours) return
+                              const newHours = { ...(formData.opening_hours as OpeningHours || {}) }
+                              DAYS_OF_WEEK.forEach(d => { newHours[d] = { ...currentHours } })
+                              setFormData(prev => ({ ...prev, opening_hours: newHours }))
+                              toast.success('Applied to all days')
+                            }}
+                            className="px-2 py-0.5 text-xs bg-primary-100 hover:bg-primary-200 text-primary-600 rounded transition-colors"
+                            title="Apply to all days"
+                          >
+                            → All
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-sm text-neutral-400">{t('openingHours.closed')}</span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           <div className="space-y-4">

@@ -43,13 +43,26 @@ export interface Restaurant {
   image_url: string
   gallery_images: string[]
   contact_info: string
+  opening_hours: OpeningHours | null
   
   // Timestamps
   created_at: string
   updated_at: string
   
   // Index signature for dynamic access
-  [key: string]: string | number | null | string[]
+  [key: string]: string | number | null | string[] | OpeningHours | null
+}
+
+// Opening hours type
+export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+
+export interface DayHours {
+  open: string  // e.g., "09:00"
+  close: string // e.g., "22:00"
+}
+
+export type OpeningHours = {
+  [key in DayOfWeek]?: DayHours | null
 }
 
 // Helper function to get localized text from Restaurant

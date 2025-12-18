@@ -135,6 +135,22 @@
     "dogs_only": "Apenas Cães",
     "cats_only": "Apenas Gatos"
   },
+  "openingHours": {
+    "title": "Horário de Funcionamento",
+    "closed": "Fechado",
+    "open": "Aberto",
+    "openNow": "Aberto Agora",
+    "closedNow": "Fechado Agora",
+    "days": {
+      "monday": "Segunda-feira",
+      "tuesday": "Terça-feira",
+      "wednesday": "Quarta-feira",
+      "thursday": "Quinta-feira",
+      "friday": "Sexta-feira",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    }
+  },
   "footer": {
     "copyright": "© 2024 Macau Pet-Friendly Eats. Feito com 🐾 para amantes de animais."
   },

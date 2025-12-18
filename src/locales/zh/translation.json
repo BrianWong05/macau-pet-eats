@@ -135,6 +135,22 @@
     "dogs_only": "僅限狗狗",
     "cats_only": "僅限貓咪"
   },
+  "openingHours": {
+    "title": "營業時間",
+    "closed": "休息",
+    "open": "營業",
+    "openNow": "營業中",
+    "closedNow": "已休息",
+    "days": {
+      "monday": "星期一",
+      "tuesday": "星期二",
+      "wednesday": "星期三",
+      "thursday": "星期四",
+      "friday": "星期五",
+      "saturday": "星期六",
+      "sunday": "星期日"
+    }
+  },
   "footer": {
     "copyright": "© 2024 澳門寵物友善餐廳。由寵物愛好者用心製作。"
   },

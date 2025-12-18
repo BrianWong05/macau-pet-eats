@@ -17,16 +17,19 @@ import {
   Upload,
   Trash2,
   LogOut,
-  Flag
+  Flag,
+  Clock
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import type { Restaurant } from '@/types/database'
+import type { Restaurant, DayOfWeek, OpeningHours, DayHours } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
 import { PetPolicyBadge } from '@/components/PetPolicyBadge'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { AuthModal } from '@/components/AuthModal'
 import { useAuth } from '@/contexts/AuthContext'
 import { useReviews } from '@/hooks/useReviews'
+
+const DAYS_OF_WEEK: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 export function RestaurantDetail() {
   const { id } = useParams<{ id: string }>()
@@ -402,6 +405,36 @@ export function RestaurantDetail() {
             </div>
           )}
         </div>
+
+        {/* Opening Hours */}
+        {restaurant.opening_hours && (
+          <div className="mt-6 bg-white rounded-2xl shadow-card p-6">
+            <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-primary-500" />
+              {t('openingHours.title')}
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {DAYS_OF_WEEK.map((day) => {
+                const hours = (restaurant.opening_hours as OpeningHours)?.[day]
+                const isOpen = hours !== null && hours !== undefined
+                
+                return (
+                  <div key={day} className="text-sm">
+                    <span className="font-medium text-neutral-700">
+                      {t(`openingHours.days.${day}`)}
+                    </span>
+                    <div className={isOpen ? 'text-neutral-600' : 'text-neutral-400'}>
+                      {isOpen 
+                        ? `${(hours as DayHours).open} - ${(hours as DayHours).close}`
+                        : t('openingHours.closed')
+                      }
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Map Embed */}
         <div className="mt-8 bg-white rounded-2xl shadow-card p-6">

@@ -135,6 +135,22 @@
     "dogs_only": "Dogs Only",
     "cats_only": "Cats Only"
   },
+  "openingHours": {
+    "title": "Opening Hours",
+    "closed": "Closed",
+    "open": "Open",
+    "openNow": "Open Now",
+    "closedNow": "Closed Now",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
   "footer": {
     "copyright": "© 2024 Macau Pet-Friendly Eats. Made with 🐾 for pet lovers."
   },
