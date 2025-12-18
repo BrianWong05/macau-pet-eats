@@ -1,57 +1,37 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { 
-  ArrowLeft, 
-  MapPin, 
-  Phone, 
-  Utensils, 
-  Navigation,
-  ExternalLink,
-  Star,
-  MessageSquare,
-  User,
-  Camera,
-  Image as ImageIcon,
-  X,
-  Upload,
-  Trash2,
-  LogOut,
-  Flag,
-  Clock,
-  Facebook,
-  Instagram,
-  Globe
-} from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import type { Restaurant, DayOfWeek, OpeningHours, DayHours, SocialMedia } from '@/types/database'
-import { getLocalizedText } from '@/types/database'
-import { PetPolicyBadge } from '@/components/PetPolicyBadge'
-import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import type { Restaurant } from '@/types/database'
 import { AuthModal } from '@/components/AuthModal'
 import { useAuth } from '@/contexts/AuthContext'
-import { useReviews } from '@/hooks/useReviews'
-
-const DAYS_OF_WEEK: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+import { DetailHeader } from '@/components/RestaurantDetail/DetailHeader'
+import { HeroImage } from '@/components/RestaurantDetail/HeroImage'
+import { ActionButtons } from '@/components/RestaurantDetail/ActionButtons'
+import { InfoCard } from '@/components/RestaurantDetail/InfoCard'
+import { SocialMediaSection } from '@/components/RestaurantDetail/SocialMediaSection'
+import { OpeningHours } from '@/components/RestaurantDetail/OpeningHours'
+import { MenuSection } from '@/components/RestaurantDetail/MenuSection'
+import { MapEmbed } from '@/components/RestaurantDetail/MapEmbed'
+import { PhotoGallery } from '@/components/RestaurantDetail/PhotoGallery'
+import { ReviewsSection } from '@/components/RestaurantDetail/ReviewsSection'
+import { ReportModal } from '@/components/RestaurantDetail/ReportModal'
+import { DetailFooter } from '@/components/RestaurantDetail/DetailFooter'
+import { LoadingState } from '@/components/RestaurantDetail/LoadingState'
+import { ErrorState } from '@/components/RestaurantDetail/ErrorState'
 
 export function RestaurantDetail() {
   const { id } = useParams<{ id: string }>()
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  
-  // Report modal state
   const [showReportModal, setShowReportModal] = useState(false)
-  const [reportField, setReportField] = useState('')
-  const [reportValue, setReportValue] = useState('')
-  const [reportReason, setReportReason] = useState('')
-  const [reportLoading, setReportLoading] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,42 +40,6 @@ export function RestaurantDetail() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-  
-  // Reviews state
-  const { reviews, isLoading: reviewsLoading, submitReview, deleteReview } = useReviews({ 
-    restaurantId: id || '' 
-  })
-  const [showReviewForm, setShowReviewForm] = useState(false)
-  const [rating, setRating] = useState(5)
-  const [comment, setComment] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [reviewError, setReviewError] = useState<string | null>(null)
-  
-  // Photo upload state
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) { // 2MB limit
-        setReviewError(t('submit.form.uploadHint'))
-        return
-      }
-      setImageFile(file)
-      
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const removeImage = () => {
-    setImageFile(null)
-    setImagePreview(null)
-  }
 
   useEffect(() => {
     async function fetchRestaurant() {
@@ -124,765 +68,72 @@ export function RestaurantDetail() {
     fetchRestaurant()
   }, [id])
 
-  // Generate Google Maps URL
-  const getGoogleMapsUrl = () => {
-    if (!restaurant) return '#'
-    const { latitude, longitude, name } = restaurant
-    return `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}&query_place_id=${encodeURIComponent(name)}`
-  }
-
-  // Generate phone link
-  const getPhoneLink = () => {
-    if (!restaurant?.contact_info) return '#'
-    return `tel:${restaurant.contact_info.replace(/\s/g, '')}`
-  }
-
-  const handleWriteReview = () => {
-    if (!user) {
-      setShowAuthModal(true)
-    } else {
-      setShowReviewForm(true)
-    }
-  }
-
-  const handleSubmitReview = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setReviewError(null)
-
-    const { error } = await submitReview(rating, comment, imageFile)
-    
-    if (error) {
-      setReviewError(error)
-    } else {
-      setShowReviewForm(false)
-      setComment('')
-      setRating(5)
-      setImageFile(null)
-      setImagePreview(null)
-    }
-    setIsSubmitting(false)
-  }
-
-  const handleDeleteReview = async (reviewId: string) => {
-    await deleteReview(reviewId)
-  }
-
-  const handleSubmitReport = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!reportField || !reportValue) return
-    
-    setReportLoading(true)
-    try {
-      const { error } = await supabase
-        .from('restaurant_reports')
-        .insert({
-          restaurant_id: restaurant?.id,
-          user_id: user?.id || null,
-          field_name: reportField,
-          suggested_value: reportValue,
-          reason: reportReason || null
-        })
-      
-      if (error) throw error
-      
-      setShowReportModal(false)
-      setReportField('')
-      setReportValue('')
-      setReportReason('')
-      // Show success toast or message
-      alert(t('restaurant.reportModal.success'))
-    } catch (err) {
-      console.error('Report submission error:', err)
-      alert(t('restaurant.reportModal.error'))
-    } finally {
-      setReportLoading(false)
-    }
-  }
-
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-neutral-50">
-        <div className="h-64 md:h-96 animate-shimmer" />
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="space-y-4">
-            <div className="h-10 w-3/4 rounded-lg animate-shimmer" />
-            <div className="h-6 w-1/2 rounded-lg animate-shimmer" />
-            <div className="h-32 rounded-xl animate-shimmer" />
-          </div>
-        </div>
-      </div>
-    )
+    return <LoadingState />
   }
 
   if (error || !restaurant) {
-    return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-center px-4">
-          <h1 className="text-2xl font-bold text-neutral-900 mb-4">
-            {t('errors.loadingRestaurants')}
-          </h1>
-          <p className="text-neutral-600 mb-6">{error}</p>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors"
-          >
-            <ArrowLeft size={18} />
-            {t('restaurant.backToList')}
-          </Link>
-        </div>
-      </div>
-    )
+    return <ErrorState error={error || 'Restaurant not found'} />
   }
-
-  const name = getLocalizedText(restaurant, 'name', lang)
-  const description = getLocalizedText(restaurant, 'description', lang)
-  const address = getLocalizedText(restaurant, 'address', lang)
-  const cuisineType = getLocalizedText(restaurant, 'cuisine_type', lang)
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Header with Language Switcher */}
-      <header 
-        className={`
-          fixed top-0 left-0 right-0 z-50 transition-all duration-300
-          ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-4'}
-        `}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <Link
-            to="/"
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${isScrolled ? 'text-neutral-600 hover:bg-neutral-100' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}
-          >
-            <ArrowLeft size={20} />
-            <span className="font-medium hidden sm:block">{t('restaurant.backToList')}</span>
-          </Link>
+      <DetailHeader 
+        isScrolled={isScrolled} 
+        onLoginClick={() => setShowAuthModal(true)} 
+      />
 
-          <div className="flex items-center gap-3">
-            {user ? (
-              <div className="flex items-center gap-2 sm:gap-4">
-                <span className={`text-sm font-medium hidden sm:block ${isScrolled ? 'text-neutral-700' : 'text-white drop-shadow-md'}`}>
-                  {user.email}
-                </span>
-                <button
-                  onClick={() => signOut()}
-                  className={`p-2 rounded-full transition-all ${isScrolled ? 'bg-white shadow-sm text-neutral-600 hover:text-red-600' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}
-                  title={t('auth.logout') || 'Logout'}
-                >
-                  <LogOut size={20} />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowAuthModal(true)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all font-medium ${isScrolled ? 'bg-white text-neutral-700' : 'bg-white/90 backdrop-blur-sm text-neutral-700'}`}
-              >
-                <User size={18} />
-                <span>{t('auth.login') || 'Login'}</span>
-              </button>
-            )}
-            <Link
-              to="/submit"
-              className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all font-medium ${isScrolled ? 'bg-white text-neutral-700' : 'bg-white/90 backdrop-blur-sm text-neutral-700'}`}
-            >
-              <Upload size={18} />
-              <span className="hidden sm:inline">{t('nav.submit')}</span>
-            </Link>
-            <div className={isScrolled ? '' : 'bg-white/20 backdrop-blur-sm rounded-lg'}>
-             <LanguageSwitcher />
-            </div>
-          </div>
-        </div>
-      </header>
+      <HeroImage 
+        restaurant={restaurant} 
+        lang={lang} 
+      />
 
-      {/* Hero Image */}
-      <div className="relative h-64 md:h-96">
-        <img
-          src={restaurant.image_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200'}
-          alt={name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-        
-
-
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg">
-              {name}
-            </h1>
-            <div className="flex flex-wrap items-center gap-3">
-              <PetPolicyBadge policy={restaurant.pet_policy} size="lg" />
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm text-sm font-medium text-neutral-700 rounded-full">
-                <Utensils size={14} />
-                {cuisineType}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <a
-            href={getGoogleMapsUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
-          >
-            <Navigation size={20} />
-            {t('restaurant.getDirections')}
-          </a>
-          
-          {restaurant.contact_info && (
-            <a
-              href={getPhoneLink()}
-              className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-neutral-200 hover:border-primary-300 text-neutral-700 font-semibold rounded-xl shadow-soft hover:shadow-lg transition-all"
-            >
-              <Phone size={20} />
-              {t('restaurant.callNow')}
-            </a>
-          )}
-          
-          <button
-            onClick={() => setShowReportModal(true)}
-            className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-neutral-200 hover:border-amber-300 text-neutral-700 font-semibold rounded-xl shadow-soft hover:shadow-lg transition-all"
-          >
-            <Flag size={20} />
-            {t('restaurant.reportUpdate')}
-          </button>
-        </div>
+        <ActionButtons 
+          restaurant={restaurant} 
+          onReportClick={() => setShowReportModal(true)} 
+        />
 
-        {/* Description Card */}
-        <div className="bg-white rounded-2xl shadow-card p-6 mb-6">
-          <p className="text-lg text-neutral-700 leading-relaxed">
-            {description}
-          </p>
-        </div>
+        <InfoCard 
+          restaurant={restaurant} 
+          lang={lang} 
+        />
 
-        {/* Details Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-card p-6">
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-primary-100 rounded-xl">
-                <MapPin className="w-6 h-6 text-primary-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-neutral-900 mb-1">
-                  {t('restaurant.address')}
-                </h3>
-                <p className="text-neutral-600 mb-3">{address}</p>
-                <a
-                  href={getGoogleMapsUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-primary-600 hover:text-primary-700 font-medium text-sm"
-                >
-                  {t('restaurant.openInMaps')}
-                  <ExternalLink size={14} />
-                </a>
-              </div>
-            </div>
-          </div>
+        <SocialMediaSection restaurant={restaurant} />
 
-          {restaurant.contact_info && (
-            <div className="bg-white rounded-2xl shadow-card p-6">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-secondary-100 rounded-xl">
-                  <Phone className="w-6 h-6 text-secondary-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-neutral-900 mb-1">
-                    {t('restaurant.contact')}
-                  </h3>
-                  <a
-                    href={getPhoneLink()}
-                    className="text-neutral-600 hover:text-primary-600 transition-colors"
-                  >
-                    {restaurant.contact_info}
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        <OpeningHours restaurant={restaurant} />
 
-        {/* Social Media Links */}
-        {restaurant.social_media && (
-          Object.values(restaurant.social_media as SocialMedia).some(v => v) && (
-            <div className="mt-4 bg-white rounded-2xl shadow-card p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4">
-                {t('restaurant.socialMedia.title')}
-              </h3>
-              <div className="flex gap-4">
-                {(restaurant.social_media as SocialMedia).facebook && (
-                  <a
-                    href={(restaurant.social_media as SocialMedia).facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-                  >
-                    <Facebook size={18} />
-                    <span className="text-sm font-medium">Facebook</span>
-                  </a>
-                )}
-                {(restaurant.social_media as SocialMedia).instagram && (
-                  <a
-                    href={(restaurant.social_media as SocialMedia).instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100 transition-colors"
-                  >
-                    <Instagram size={18} />
-                    <span className="text-sm font-medium">Instagram</span>
-                  </a>
-                )}
-                {(restaurant.social_media as SocialMedia).website && (
-                  <a
-                    href={(restaurant.social_media as SocialMedia).website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors"
-                  >
-                    <Globe size={18} />
-                    <span className="text-sm font-medium">{t('restaurant.socialMedia.website')}</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          )
-        )}
+        <MenuSection restaurant={restaurant} />
 
-        {/* Opening Hours */}
-        {restaurant.opening_hours && (() => {
-          // Group consecutive days with same hours
-          const openingHours = restaurant.opening_hours as OpeningHours
-          const groups: { days: DayOfWeek[], hours: DayHours | null }[] = []
-          
-          DAYS_OF_WEEK.forEach((day) => {
-            const hours = openingHours[day] || null
-            const hoursKey = hours ? `${hours.open}-${hours.close}` : 'closed'
-            const lastGroup = groups[groups.length - 1]
-            const lastHoursKey = lastGroup?.hours 
-              ? `${lastGroup.hours.open}-${lastGroup.hours.close}` 
-              : (lastGroup?.hours === null ? 'closed' : null)
-            
-            if (lastHoursKey === hoursKey) {
-              lastGroup.days.push(day)
-            } else {
-              groups.push({ days: [day], hours })
-            }
-          })
-          
-          const getDayLabel = (days: DayOfWeek[]) => {
-            if (days.length === 1) {
-              return t(`openingHours.days.${days[0]}`)
-            }
-            if (days.length === 7) {
-              return t('openingHours.everyday') || 'Every day'
-            }
-            const first = t(`openingHours.days.${days[0]}`)
-            const last = t(`openingHours.days.${days[days.length - 1]}`)
-            return `${first.substring(0, 3)} - ${last.substring(0, 3)}`
-          }
-          
-          return (
-            <div className="mt-6 bg-white rounded-2xl shadow-card p-6">
-              <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary-500" />
-                {t('openingHours.title')}
-              </h3>
-              <div className="space-y-2">
-                {groups.map((group, index) => (
-                  <div key={index} className="flex justify-between text-sm py-1 border-b border-neutral-100 last:border-0">
-                    <span className="font-medium text-neutral-700">
-                      {getDayLabel(group.days)}
-                    </span>
-                    <span className={group.hours ? 'text-neutral-600' : 'text-neutral-400'}>
-                      {group.hours 
-                        ? `${group.hours.open} - ${group.hours.close}`
-                        : t('openingHours.closed')
-                      }
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )
-        })()}
+        <MapEmbed 
+          restaurant={restaurant} 
+          lang={lang} 
+        />
 
-        {/* Menu Images */}
-        {restaurant.menu_images && restaurant.menu_images.length > 0 && (
-          <div className="mt-6 bg-white rounded-2xl shadow-card p-6">
-            <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-              <Utensils className="w-5 h-5 text-primary-500" />
-              {t('restaurant.menu')}
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {restaurant.menu_images.map((image, index) => (
-                <a
-                  key={index}
-                  href={image}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block overflow-hidden rounded-xl border border-neutral-200 hover:shadow-lg transition-shadow"
-                >
-                  <img
-                    src={image}
-                    alt={`Menu ${index + 1}`}
-                    className="w-full h-40 object-cover hover:scale-105 transition-transform"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
+        <PhotoGallery 
+          restaurant={restaurant} 
+          lang={lang} 
+        />
 
-        {/* Map Embed */}
-        <div className="mt-8 bg-white rounded-2xl shadow-card p-6">
-          <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary-500" />
-            {t('restaurant.location')}
-          </h3>
-          <div className="aspect-video rounded-xl overflow-hidden bg-neutral-100">
-            <iframe
-              title={`${name} location`}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              src={(() => {
-                // If google_maps_url is available, extract place name for embed
-                if (restaurant.google_maps_url) {
-                  const placeMatch = restaurant.google_maps_url.match(/\/place\/([^/@]+)/)
-                  if (placeMatch) {
-                    const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '))
-                    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=15&output=embed`
-                  }
-                  const queryMatch = restaurant.google_maps_url.match(/[?&]q=([^&]+)/)
-                  if (queryMatch) {
-                    const query = decodeURIComponent(queryMatch[1].replace(/\+/g, ' '))
-                    return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`
-                  }
-                }
-                // Fallback to coordinates
-                return `https://maps.google.com/maps?q=${restaurant.latitude},${restaurant.longitude}&z=16&output=embed`
-              })()}
-            />
-          </div>
-        </div>
-
-        {/* Gallery Section */}
-        {restaurant.gallery_images && restaurant.gallery_images.length > 0 && (
-          <div className="mt-8 bg-white rounded-2xl shadow-card p-6">
-            <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
-              <ImageIcon className="w-5 h-5 text-primary-500" />
-              {t('restaurant.photos')}
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {restaurant.gallery_images.map((img, index) => (
-                <div key={index} className="aspect-square rounded-xl overflow-hidden bg-neutral-100 group relative">
-                  <img
-                    src={img}
-                    alt={`${name} photo ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Reviews Section */}
-        <div className="mt-8 bg-white rounded-2xl shadow-card p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-primary-500" />
-              {t('reviews.title')}
-              <span className="text-neutral-400 font-normal">({reviews.length})</span>
-            </h3>
-            <button
-              onClick={handleWriteReview}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
-            >
-              <Star size={16} />
-              {t('reviews.writeReview')}
-            </button>
-          </div>
-
-          {/* Review Form */}
-          {showReviewForm && user && (
-            <form onSubmit={handleSubmitReview} className="mb-6 p-4 bg-neutral-50 rounded-xl">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  {t('reviews.yourRating')}
-                </label>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="transition-colors"
-                    >
-                      <Star
-                        size={28}
-                        className={star <= rating ? 'fill-amber-400 text-amber-400' : 'text-neutral-300'}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <label htmlFor="comment" className="block text-sm font-medium text-neutral-700 mb-2">
-                  {t('reviews.yourReview')}
-                </label>
-                <textarea
-                  id="comment"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder={t('reviews.reviewPlaceholder')}
-                  rows={3}
-                  required
-                  className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all resize-none"
-                />
-              </div>
-
-              {/* Photo Upload */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  {t('reviews.addPhoto')}
-                </label>
-                
-                {!imagePreview ? (
-                  <div className="flex gap-2">
-                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
-                      <ImageIcon size={18} />
-                      {t('reviews.uploadPhoto')}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                      />
-                    </label>
-                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
-                      <Camera size={18} />
-                      {t('reviews.takePhoto')}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={handleImageChange}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                ) : (
-                  <div className="relative inline-block">
-                    <img 
-                      src={imagePreview} 
-                      alt="Preview" 
-                      className="h-32 w-auto rounded-lg object-cover border border-neutral-200"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeImage}
-                      className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md text-neutral-500 hover:text-red-500 transition-colors"
-                      aria-label={t('reviews.removePhoto')}
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
-                <p className="mt-1 text-xs text-neutral-400">
-                  {t('reviews.photoHint')}
-                </p>
-              </div>
-
-              {reviewError && (
-                <p className="text-red-600 text-sm mb-4">{reviewError}</p>
-              )}
-
-              <div className="flex gap-3">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 text-white font-medium rounded-xl transition-colors"
-                >
-                  {isSubmitting ? t('common.loading') : t('reviews.submitReview')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowReviewForm(false)}
-                  className="px-6 py-2 bg-neutral-200 hover:bg-neutral-300 text-neutral-700 font-medium rounded-xl transition-colors"
-                >
-                  {t('common.cancel')}
-                </button>
-              </div>
-            </form>
-          )}
-
-          {/* Reviews List */}
-          {reviewsLoading ? (
-            <div className="space-y-4">
-              {[1, 2].map((i) => (
-                <div key={i} className="h-24 rounded-xl animate-shimmer" />
-              ))}
-            </div>
-          ) : reviews.length === 0 ? (
-            <div className="text-center py-8 text-neutral-500">
-              <MessageSquare className="w-12 h-12 mx-auto mb-3 text-neutral-300" />
-              <p>{t('reviews.noReviews')}</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <div key={review.id} className="p-4 bg-neutral-50 rounded-xl">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-neutral-500" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              size={14}
-                              className={star <= review.rating ? 'fill-amber-400 text-amber-400' : 'text-neutral-300'}
-                            />
-                          ))}
-                        </div>
-                        <p className="text-xs text-neutral-400">
-                          {new Date(review.created_at).toLocaleDateString(lang)}
-                        </p>
-                      </div>
-                    </div>
-                    {user?.id === review.user_id && (
-                      <button
-                        onClick={() => handleDeleteReview(review.id)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                        aria-label={t('reviews.deleteReview')}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    )}
-                  </div>
-                  <p className="text-neutral-700">{review.comment}</p>
-                  {review.image_url && (
-                    <div className="mt-3">
-                      <img 
-                        src={review.image_url} 
-                        alt="Review attachment" 
-                        className="max-h-48 rounded-lg object-cover border border-neutral-200"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <ReviewsSection 
+          restaurantId={restaurant.id} 
+          lang={lang} 
+          onAuthRequired={() => setShowAuthModal(true)} 
+        />
       </div>
 
-      {/* Footer */}
-      <footer className="bg-neutral-900 text-neutral-400 py-8 mt-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-sm">{t('footer.copyright')}</p>
-        </div>
-      </footer>
+      <DetailFooter />
 
-      {/* Report Modal */}
-      {showReportModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-neutral-900">
-                    {t('restaurant.reportModal.title')}
-                  </h2>
-                  <p className="text-sm text-neutral-500">
-                    {t('restaurant.reportModal.subtitle')}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setShowReportModal(false)}
-                  className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              
-              <form onSubmit={handleSubmitReport} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    {t('restaurant.reportModal.field')}
-                  </label>
-                  <select
-                    value={reportField}
-                    onChange={(e) => setReportField(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  >
-                    <option value="">--</option>
-                    <option value="pet_policy">{t('restaurant.reportModal.fields.pet_policy')}</option>
-                    <option value="contact_info">{t('restaurant.reportModal.fields.contact_info')}</option>
-                    <option value="address">{t('restaurant.reportModal.fields.address')}</option>
-                    <option value="cuisine_type">{t('restaurant.reportModal.fields.cuisine_type')}</option>
-                    <option value="other">{t('restaurant.reportModal.fields.other')}</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    {t('restaurant.reportModal.suggestedValue')}
-                  </label>
-                  <input
-                    type="text"
-                    value={reportValue}
-                    onChange={(e) => setReportValue(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    {t('restaurant.reportModal.reason')}
-                  </label>
-                  <textarea
-                    value={reportReason}
-                    onChange={(e) => setReportReason(e.target.value)}
-                    rows={3}
-                    placeholder={t('restaurant.reportModal.reasonPlaceholder')}
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                  />
-                </div>
-                
-                <button
-                  type="submit"
-                  disabled={reportLoading || !reportField || !reportValue}
-                  className="w-full py-3 bg-primary-500 hover:bg-primary-600 disabled:bg-neutral-300 text-white font-semibold rounded-xl transition-colors"
-                >
-                  {reportLoading ? '...' : t('restaurant.reportModal.submit')}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Auth Modal */}
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
+      />
+
+      <ReportModal 
+        isOpen={showReportModal} 
+        onClose={() => setShowReportModal(false)} 
+        restaurantId={restaurant.id}
+        userId={user?.id}
       />
     </div>
   )

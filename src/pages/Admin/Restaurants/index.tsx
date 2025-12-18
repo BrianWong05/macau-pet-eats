@@ -1,18 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { 
-  Trash2, 
-  Plus, 
-  Search,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Edit
-} from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
 import { RestaurantFormModal } from '@/components/RestaurantFormModal'
+import { RestaurantsFilter } from '@/components/Admin/Restaurants/RestaurantsFilter'
+import { RestaurantsTable } from '@/components/Admin/Restaurants/RestaurantsTable'
 
 export function AdminRestaurants() {
   const { t } = useTranslation()
@@ -71,29 +65,6 @@ export function AdminRestaurants() {
     r.name_zh?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const StatusBadge = ({ status }: { status: string }) => {
-    const styles = {
-      approved: 'bg-green-100 text-green-700',
-      pending: 'bg-amber-100 text-amber-700',
-      rejected: 'bg-red-100 text-red-700'
-    }
-    const icons = {
-      approved: CheckCircle,
-      pending: Clock,
-      rejected: XCircle
-    }
-    const Icon = icons[status as keyof typeof icons] || Clock
-
-    return (
-      <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || styles.pending}`}>
-        <Icon size={12} />
-        {status === 'pending' ? t('admin.restaurants.status.pending') :
-         status === 'approved' ? t('admin.restaurants.status.approved') :
-         status === 'rejected' ? t('admin.restaurants.status.rejected') : status}
-      </span>
-    )
-  }
-
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -113,133 +84,23 @@ export function AdminRestaurants() {
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder={t('admin.restaurants.searchPlaceholder')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          />
-        </div>
-        <div className="flex gap-2">
-          {(['all', 'pending', 'approved'] as const).map((status) => (
-            <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                filterStatus === status
-                  ? 'bg-neutral-900 text-white'
-                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
-              }`}
-            >
-              {t(`admin.restaurants.filters.${status}`)}
-            </button>
-          ))}
-        </div>
-      </div>
+      <RestaurantsFilter 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        filterStatus={filterStatus}
+        setFilterStatus={setFilterStatus}
+      />
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-neutral-50 border-b border-neutral-200">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.restaurant')}</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.status')}</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.petPolicy')}</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.submitted')}</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.actions')}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-200">
-              {isLoading ? (
-                [1, 2, 3].map((i) => (
-                  <tr key={i}>
-                    <td colSpan={5} className="px-6 py-4">
-                      <div className="h-4 bg-neutral-100 rounded w-3/4 animate-pulse" />
-                    </td>
-                  </tr>
-                ))
-              ) : filteredRestaurants.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-neutral-500">
-                    {t('admin.restaurants.table.noRestaurants')}
-                  </td>
-                </tr>
-              ) : (
-                filteredRestaurants.map((restaurant) => (
-                  <tr key={restaurant.id} className="hover:bg-neutral-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={restaurant.image_url || 'https://via.placeholder.com/40'}
-                          alt=""
-                          className="w-10 h-10 rounded-lg object-cover bg-neutral-100"
-                        />
-                        <div>
-                          <p className="font-medium text-neutral-900">{restaurant.name_zh || restaurant.name}</p>
-                          <p className="text-sm text-neutral-500">{t(`cuisineTypes.${restaurant.cuisine_type.toLowerCase()}`) || restaurant.cuisine_type}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={restaurant.status || 'approved'} />
-                    </td>
-                    <td className="px-6 py-4 text-sm text-neutral-600">
-                      {t(`petPolicy.${restaurant.pet_policy}`)}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-neutral-600">
-                      {new Date(restaurant.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {restaurant.status === 'pending' && (
-                          <>
-                            <button
-                              onClick={() => handleStatusUpdate(restaurant.id, 'approved')}
-                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                              title="Approve"
-                            >
-                              <CheckCircle size={18} />
-                            </button>
-                            <button
-                              onClick={() => handleStatusUpdate(restaurant.id, 'rejected')}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Reject"
-                            >
-                              <XCircle size={18} />
-                            </button>
-                            <div className="w-px h-4 bg-neutral-200 mx-1" />
-                          </>
-                        )}
-                        <button
-                          className="p-2 text-neutral-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
-                          onClick={() => {
-                            setEditingRestaurant(restaurant)
-                            setIsModalOpen(true)
-                          }}
-                        >
-                          <Edit size={18} />
-                        </button>
-                        <button
-                          className="p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          onClick={() => handleDelete(restaurant.id)}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <RestaurantsTable 
+        restaurants={filteredRestaurants}
+        isLoading={isLoading}
+        onStatusUpdate={handleStatusUpdate}
+        onEdit={(restaurant) => {
+          setEditingRestaurant(restaurant)
+          setIsModalOpen(true)
+        }}
+        onDelete={handleDelete}
+      />
 
       <RestaurantFormModal
         isOpen={isModalOpen}
