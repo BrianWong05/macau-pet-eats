@@ -1,4 +1,4 @@
-import{u as h,j as s}from"./index-Dm09gJhD.js";import{g as n,P as u}from"./index-D6J1BYw9.js";import{U as g,g as j}from"./ui-vendor-r0va27WY.js";import{L as f}from"./react-vendor-B-2HpIm1.js";function k({restaurant:e}){const{t:r,i18n:a}=h(),i=a.language,{id:o,pet_policy:c,image_url:d}=e,l=n(e,"name",i),m=n(e,"description",i),p=n(e,"address",i),x=n(e,"cuisine_type",i);return s.jsxs(f,{to:`/restaurant/${o}`,className:`
+import{u as h,j as s}from"./index-IO_Hw95i.js";import{g as n,P as u}from"./index-XKDUHcGs.js";import{U as g,g as j}from"./ui-vendor-r0va27WY.js";import{L as f}from"./react-vendor-B-2HpIm1.js";function k({restaurant:e}){const{t:r,i18n:a}=h(),i=a.language,{id:o,pet_policy:c,image_url:d}=e,l=n(e,"name",i),m=n(e,"description",i),p=n(e,"address",i),x=n(e,"cuisine_type",i);return s.jsxs(f,{to:`/restaurant/${o}`,className:`
         group block bg-white rounded-2xl overflow-hidden
         shadow-card card-hover
         focus:outline-none focus:ring-4 focus:ring-primary-200
