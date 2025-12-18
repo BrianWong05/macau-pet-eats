@@ -360,14 +360,17 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         ...uploadedMenuUrls
       ]
 
-      const dataToSave = {
+      const dataToSave: any = {
         ...formData,
         gallery_images: finalGalleryImages,
         menu_images: finalMenuImages,
         image_url: mainImageUrl
       }
 
-      // Auto-populate cuisine_type_zh and cuisine_type_pt logic (kept same as before)
+      // Remove temporary UI fields that shouldn't go to DB
+      delete dataToSave.cuisine_type_other
+
+      // Auto-populate cuisine_type_zh and cuisine_type_pt logic
       if (formData.cuisine_type && Array.isArray(formData.cuisine_type)) {
         const getLocalizedCuisines = (lang: string) => {
           return formData.cuisine_type!.map(key => {
@@ -385,8 +388,8 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
            dataToSave.cuisine_type = dataToSave.cuisine_type!.map((c: string) => c === 'Other' ? customVal : c)
            const custom = (formData as any).cuisine_type_other
            if (custom) {
-             dataToSave.cuisine_type_zh = dataToSave.cuisine_type_zh.map(c => c === '其他' || c === 'Other' ? custom : c)
-             dataToSave.cuisine_type_pt = dataToSave.cuisine_type_pt.map(c => c === 'Outros' || c === 'Other' ? custom : c)
+             dataToSave.cuisine_type_zh = dataToSave.cuisine_type_zh.map((c: string) => c === '其他' || c === 'Other' ? custom : c)
+             dataToSave.cuisine_type_pt = dataToSave.cuisine_type_pt.map((c: string) => c === 'Outros' || c === 'Other' ? custom : c)
            }
         }
       }
@@ -395,20 +398,21 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
         // Update
         const { error } = await supabase
           .from('restaurants')
-          .update(dataToSave as never)
+          .update(dataToSave)
           .eq('id', restaurant.id)
         if (error) throw error
       } else {
         // Create
         const { error } = await supabase
           .from('restaurants')
-          .insert(dataToSave as never)
+          .insert(dataToSave)
         if (error) throw error
       }
       onSave()
       onClose()
       toast.success(restaurant ? 'Restaurant updated successfully' : 'Restaurant created successfully')
     } catch (err) {
+      console.error('Submission error:', err)
       const message = err instanceof Error ? err.message : 'An error occurred'
       setError(message)
       toast.error(message)
