@@ -470,6 +470,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 {(formData.cuisine_type || '').toLowerCase() === 'other' && (
                   <input
                     type="text"
+                    required
                     value={(formData as any).cuisine_type_other || ''}
                     onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type_other: e.target.value }))}
                     placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify'}

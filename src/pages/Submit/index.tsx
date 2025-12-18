@@ -317,6 +317,7 @@ export function Submit() {
                 <input
                   type="text"
                   name="cuisine_type_other"
+                  required
                   value={(formData as any).cuisine_type_other || ''}
                   onChange={handleInputChange}
                   placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify cuisine type'}
