@@ -18,7 +18,8 @@ export function MapEmbed({ restaurant, lang }: MapEmbedProps) {
       restaurant.google_maps_url,
       restaurant.latitude,
       restaurant.longitude,
-      restaurant.name // Pass restaurant name for the map label
+      restaurant.name, // Pass restaurant name for the map label
+      lang // Pass language code
     )
   }
 

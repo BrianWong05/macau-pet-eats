@@ -52,8 +52,16 @@ export function getGoogleMapsEmbedSrc(
   url: string | null, 
   lat: number, 
   lng: number,
-  restaurantName?: string
+  restaurantName?: string,
+  lang: 'zh' | 'en' | 'pt' = 'zh'
 ): string {
+  // Map app language to Google Maps language code
+  const mapLang = {
+    'zh': 'zh-TW',
+    'en': 'en',
+    'pt': 'pt-PT'
+  }[lang] || 'zh-TW'
+
   // First, try to extract Place ID from URL - this is the most reliable identifier
   if (url) {
     const placeId = extractPlaceIdFromUrl(url)
@@ -63,23 +71,23 @@ export function getGoogleMapsEmbedSrc(
       const cidMatch = placeId.match(/:0x([a-f0-9]+)$/)
       if (cidMatch) {
         const cid = BigInt('0x' + cidMatch[1]).toString()
-        return `https://maps.google.com/maps?cid=${cid}&z=17&output=embed&hl=zh-TW`
+        return `https://maps.google.com/maps?cid=${cid}&z=17&output=embed&hl=${mapLang}`
       }
     }
     
     // Fallback to place name from URL
     const placeName = extractPlaceFromUrl(url)
     if (placeName) {
-      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&ll=${lat},${lng}&z=17&output=embed&hl=zh-TW`
+      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&ll=${lat},${lng}&z=17&output=embed&hl=${mapLang}`
     }
   }
   
   // If we have a restaurant name, use it with coordinates
   if (restaurantName) {
     const searchQuery = `${restaurantName} Macau`
-    return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&ll=${lat},${lng}&z=17&output=embed&hl=zh-TW`
+    return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&ll=${lat},${lng}&z=17&output=embed&hl=${mapLang}`
   }
   
   // Fallback to coordinates only
-  return `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed&hl=zh-TW`
+  return `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed&hl=${mapLang}`
 }

@@ -865,7 +865,8 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   mapsUrl, 
                   formData.latitude || 22.1937, 
                   formData.longitude || 113.5399,
-                  formData.name // Pass restaurant name for nice map label
+                  formData.name, // Pass restaurant name for nice map label
+                  i18n.language as 'zh' | 'en' | 'pt' // Pass current language
                 )}
               />
             </div>
