@@ -152,6 +152,9 @@ export function RestaurantForm({
         }
       }
 
+      // Remove temporary UI fields
+      delete (dataToSave as any).cuisine_type_other
+
       // Add default location (Macau Tower) if not present
       if (!dataToSave.latitude) dataToSave.latitude = 22.1897
       if (!dataToSave.longitude) dataToSave.longitude = 113.5378
