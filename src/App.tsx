@@ -9,6 +9,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AdminLayout } from '@/components/AdminLayout'
 import { AdminDashboard } from '@/pages/Admin/Dashboard'
 import { AdminRestaurants } from '@/pages/Admin/Restaurants'
+import { AdminReports } from '@/pages/Admin/Reports'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="restaurants" element={<AdminRestaurants />} />
+              <Route path="reports" element={<AdminReports />} />
             </Route>
           </Route>
         </Routes>

@@ -106,7 +106,26 @@
     "backToList": "Back to List",
     "location": "Location",
     "openInMaps": "Open in Google Maps",
-    "photos": "Photos"
+    "photos": "Photos",
+    "reportUpdate": "Report Update",
+    "reportModal": {
+      "title": "Report an Update",
+      "subtitle": "Help us keep information accurate",
+      "field": "What needs updating?",
+      "suggestedValue": "Correct information",
+      "reason": "Additional notes (optional)",
+      "reasonPlaceholder": "Why is this information incorrect?",
+      "submit": "Submit Report",
+      "success": "Report submitted! Thank you for helping.",
+      "error": "Failed to submit report. Please try again.",
+      "fields": {
+        "pet_policy": "Pet Policy",
+        "contact_info": "Contact Number",
+        "address": "Address",
+        "cuisine_type": "Cuisine Type",
+        "other": "Other"
+      }
+    }
   },
   "petPolicy": {
     "indoors_allowed": "Indoors Allowed",
@@ -204,6 +223,24 @@
         "cancel": "Cancel",
         "save": "Save Changes",
         "create": "Create Restaurant"
+      }
+    },
+    "reports": {
+      "title": "Update Reports",
+      "empty": "No reports found",
+      "fieldLabel": "Field",
+      "suggestedValue": "Suggested Value",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approveSuccess": "Report approved and changes applied",
+      "approveError": "Failed to approve report",
+      "rejectSuccess": "Report rejected",
+      "rejectError": "Failed to reject report",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "all": "All"
       }
     }
   }

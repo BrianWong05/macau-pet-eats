@@ -106,8 +106,29 @@ export interface Database {
         Insert: Omit<Profile, 'created_at' | 'updated_at'>
         Update: Partial<Omit<Profile, 'created_at' | 'updated_at'>>
       }
+      restaurant_reports: {
+        Row: RestaurantReport
+        Insert: Omit<RestaurantReport, 'id' | 'created_at' | 'reviewed_at' | 'reviewed_by' | 'status'>
+        Update: Partial<Pick<RestaurantReport, 'status' | 'reviewed_at' | 'reviewed_by'>>
+      }
     }
   }
+}
+
+// Restaurant Report type
+export type ReportStatus = 'pending' | 'approved' | 'rejected'
+
+export interface RestaurantReport {
+  id: string
+  restaurant_id: string
+  user_id: string | null
+  field_name: string
+  suggested_value: string
+  reason: string | null
+  status: ReportStatus
+  created_at: string
+  reviewed_at: string | null
+  reviewed_by: string | null
 }
 
 // Form types for submissions
@@ -130,3 +151,4 @@ export interface RestaurantSubmission {
   image_url?: string
   contact_info: string
 }
+

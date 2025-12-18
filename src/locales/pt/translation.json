@@ -106,7 +106,26 @@
     "backToList": "Voltar à Lista",
     "location": "Localização",
     "openInMaps": "Abrir no Google Maps",
-    "photos": "Fotos"
+    "photos": "Fotos",
+    "reportUpdate": "Reportar Atualização",
+    "reportModal": {
+      "title": "Reportar uma Atualização",
+      "subtitle": "Ajude-nos a manter as informações corretas",
+      "field": "O que precisa de atualização?",
+      "suggestedValue": "Informação correta",
+      "reason": "Notas adicionais (opcional)",
+      "reasonPlaceholder": "Porque é que esta informação está incorreta?",
+      "submit": "Enviar Relatório",
+      "success": "Relatório enviado! Obrigado pela ajuda.",
+      "error": "Falha ao enviar. Por favor tente novamente.",
+      "fields": {
+        "pet_policy": "Política de Animais",
+        "contact_info": "Número de Contacto",
+        "address": "Morada",
+        "cuisine_type": "Tipo de Cozinha",
+        "other": "Outro"
+      }
+    }
   },
   "petPolicy": {
     "indoors_allowed": "Interior Permitido",
@@ -204,6 +223,24 @@
         "cancel": "Cancelar",
         "save": "Guardar Alterações",
         "create": "Criar Restaurante"
+      }
+    },
+    "reports": {
+      "title": "Relatórios de Atualização",
+      "empty": "Nenhum relatório encontrado",
+      "fieldLabel": "Campo",
+      "suggestedValue": "Valor Sugerido",
+      "approve": "Aprovar",
+      "reject": "Rejeitar",
+      "approveSuccess": "Relatório aprovado e alterações aplicadas",
+      "approveError": "Falha ao aprovar",
+      "rejectSuccess": "Relatório rejeitado",
+      "rejectError": "Falha ao rejeitar",
+      "status": {
+        "pending": "Pendente",
+        "approved": "Aprovado",
+        "rejected": "Rejeitado",
+        "all": "Todos"
       }
     }
   }

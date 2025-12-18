@@ -16,7 +16,8 @@ import {
   X,
   Upload,
   Trash2,
-  LogOut
+  LogOut,
+  Flag
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
@@ -38,6 +39,13 @@ export function RestaurantDetail() {
   const [error, setError] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  
+  // Report modal state
+  const [showReportModal, setShowReportModal] = useState(false)
+  const [reportField, setReportField] = useState('')
+  const [reportValue, setReportValue] = useState('')
+  const [reportReason, setReportReason] = useState('')
+  const [reportLoading, setReportLoading] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -152,6 +160,38 @@ export function RestaurantDetail() {
 
   const handleDeleteReview = async (reviewId: string) => {
     await deleteReview(reviewId)
+  }
+
+  const handleSubmitReport = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!reportField || !reportValue) return
+    
+    setReportLoading(true)
+    try {
+      const { error } = await supabase
+        .from('restaurant_reports')
+        .insert({
+          restaurant_id: restaurant?.id,
+          user_id: user?.id || null,
+          field_name: reportField,
+          suggested_value: reportValue,
+          reason: reportReason || null
+        })
+      
+      if (error) throw error
+      
+      setShowReportModal(false)
+      setReportField('')
+      setReportValue('')
+      setReportReason('')
+      // Show success toast or message
+      alert(t('restaurant.reportModal.success'))
+    } catch (err) {
+      console.error('Report submission error:', err)
+      alert(t('restaurant.reportModal.error'))
+    } finally {
+      setReportLoading(false)
+    }
   }
 
   if (isLoading) {
@@ -299,6 +339,14 @@ export function RestaurantDetail() {
               {t('restaurant.callNow')}
             </a>
           )}
+          
+          <button
+            onClick={() => setShowReportModal(true)}
+            className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-neutral-200 hover:border-amber-300 text-neutral-700 font-semibold rounded-xl shadow-soft hover:shadow-lg transition-all"
+          >
+            <Flag size={20} />
+            {t('restaurant.reportUpdate')}
+          </button>
         </div>
 
         {/* Description Card */}
@@ -612,6 +660,87 @@ export function RestaurantDetail() {
           <p className="text-sm">{t('footer.copyright')}</p>
         </div>
       </footer>
+
+      {/* Report Modal */}
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900">
+                    {t('restaurant.reportModal.title')}
+                  </h2>
+                  <p className="text-sm text-neutral-500">
+                    {t('restaurant.reportModal.subtitle')}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowReportModal(false)}
+                  className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleSubmitReport} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    {t('restaurant.reportModal.field')}
+                  </label>
+                  <select
+                    value={reportField}
+                    onChange={(e) => setReportField(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  >
+                    <option value="">--</option>
+                    <option value="pet_policy">{t('restaurant.reportModal.fields.pet_policy')}</option>
+                    <option value="contact_info">{t('restaurant.reportModal.fields.contact_info')}</option>
+                    <option value="address">{t('restaurant.reportModal.fields.address')}</option>
+                    <option value="cuisine_type">{t('restaurant.reportModal.fields.cuisine_type')}</option>
+                    <option value="other">{t('restaurant.reportModal.fields.other')}</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    {t('restaurant.reportModal.suggestedValue')}
+                  </label>
+                  <input
+                    type="text"
+                    value={reportValue}
+                    onChange={(e) => setReportValue(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    {t('restaurant.reportModal.reason')}
+                  </label>
+                  <textarea
+                    value={reportReason}
+                    onChange={(e) => setReportReason(e.target.value)}
+                    rows={3}
+                    placeholder={t('restaurant.reportModal.reasonPlaceholder')}
+                    className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                  />
+                </div>
+                
+                <button
+                  type="submit"
+                  disabled={reportLoading || !reportField || !reportValue}
+                  className="w-full py-3 bg-primary-500 hover:bg-primary-600 disabled:bg-neutral-300 text-white font-semibold rounded-xl transition-colors"
+                >
+                  {reportLoading ? '...' : t('restaurant.reportModal.submit')}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Auth Modal */}
       <AuthModal 

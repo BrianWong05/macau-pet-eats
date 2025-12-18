@@ -106,7 +106,26 @@
     "backToList": "返回列表",
     "location": "位置",
     "openInMaps": "在 Google 地圖中開啟",
-    "photos": "相片"
+    "photos": "相片",
+    "reportUpdate": "回報更新",
+    "reportModal": {
+      "title": "回報資訊更新",
+      "subtitle": "幫助我們保持資訊準確",
+      "field": "需要更新什麼？",
+      "suggestedValue": "正確資訊",
+      "reason": "補充說明（選填）",
+      "reasonPlaceholder": "為什麼這個資訊不正確？",
+      "submit": "提交回報",
+      "success": "回報已提交！感謝您的幫助。",
+      "error": "提交失敗，請稍後再試。",
+      "fields": {
+        "pet_policy": "寵物政策",
+        "contact_info": "聯絡電話",
+        "address": "地址",
+        "cuisine_type": "菜式類型",
+        "other": "其他"
+      }
+    }
   },
   "petPolicy": {
     "indoors_allowed": "允許室內",
@@ -255,6 +274,24 @@
         "updateSuccess": "餐廳更新成功",
         "createSuccess": "餐廳建立成功",
         "error": "發生錯誤"
+      }
+    },
+    "reports": {
+      "title": "更新回報",
+      "empty": "沒有回報記錄",
+      "fieldLabel": "欄位",
+      "suggestedValue": "建議值",
+      "approve": "批准",
+      "reject": "拒絕",
+      "approveSuccess": "回報已批准並套用更新",
+      "approveError": "批准失敗",
+      "rejectSuccess": "回報已拒絕",
+      "rejectError": "拒絕失敗",
+      "status": {
+        "pending": "待處理",
+        "approved": "已批准",
+        "rejected": "已拒絕",
+        "all": "全部"
       }
     }
   }
