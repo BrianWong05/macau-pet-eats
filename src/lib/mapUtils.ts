@@ -4,10 +4,10 @@ export function extractCoordsFromUrl(url: string): { lat: number; lng: number } 
   // Or: https://goo.gl/maps/... (won't work without API)
   
   const patterns = [
-    /@(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // @lat,lng format
+    /!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/,  // !3d...!4d... format (ACTUAL place coords, check first!)
     /[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // ?q=lat,lng format
     /place\/(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // place/lat,lng format
-    /!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/,  // !3d...!4d... format
+    /@(-?\d+\.?\d*),(-?\d+\.?\d*)/,  // @lat,lng format (viewport center, check last)
   ]
   
   for (const pattern of patterns) {
@@ -36,4 +36,50 @@ export function extractPlaceFromUrl(url: string): string | null {
     return decodeURIComponent(queryMatch[1].replace(/\+/g, ' '))
   }
   return null
+}
+
+// Extract Place ID from Google Maps URL (format: !1s0x...!...)
+export function extractPlaceIdFromUrl(url: string): string | null {
+  // Match the Place ID pattern in Google Maps URLs
+  const placeIdMatch = url.match(/!1s(0x[a-f0-9]+:0x[a-f0-9]+)/)
+  if (placeIdMatch) {
+    return placeIdMatch[1]
+  }
+  return null
+}
+
+export function getGoogleMapsEmbedSrc(
+  url: string | null, 
+  lat: number, 
+  lng: number,
+  restaurantName?: string
+): string {
+  // First, try to extract Place ID from URL - this is the most reliable identifier
+  if (url) {
+    const placeId = extractPlaceIdFromUrl(url)
+    if (placeId) {
+      // Use place ID in CID format for embed
+      // Convert hex to decimal for CID
+      const cidMatch = placeId.match(/:0x([a-f0-9]+)$/)
+      if (cidMatch) {
+        const cid = BigInt('0x' + cidMatch[1]).toString()
+        return `https://maps.google.com/maps?cid=${cid}&z=17&output=embed`
+      }
+    }
+    
+    // Fallback to place name from URL
+    const placeName = extractPlaceFromUrl(url)
+    if (placeName) {
+      return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&ll=${lat},${lng}&z=17&output=embed`
+    }
+  }
+  
+  // If we have a restaurant name, use it with coordinates
+  if (restaurantName) {
+    const searchQuery = `${restaurantName} Macau`
+    return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&ll=${lat},${lng}&z=17&output=embed`
+  }
+  
+  // Fallback to coordinates only
+  return `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`
 }

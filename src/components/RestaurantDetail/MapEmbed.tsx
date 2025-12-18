@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { MapPin } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
-import { extractCoordsFromUrl, extractPlaceFromUrl } from '@/lib/mapUtils'
+import { getGoogleMapsEmbedSrc } from '@/lib/mapUtils'
 
 interface MapEmbedProps {
   restaurant: Restaurant
@@ -14,29 +14,12 @@ export function MapEmbed({ restaurant, lang }: MapEmbedProps) {
   const name = getLocalizedText(restaurant, 'name', lang)
 
   const getMapSrc = () => {
-    // If google_maps_url is available, try to parse it for best experience
-    if (restaurant.google_maps_url) {
-      const coords = extractCoordsFromUrl(restaurant.google_maps_url)
-      const placeName = extractPlaceFromUrl(restaurant.google_maps_url)
-
-      if (coords && placeName) {
-        // Best case: Coords + Name
-        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}+(${encodeURIComponent(placeName)})&z=15&output=embed`
-      }
-      
-      if (placeName) {
-        // Name only
-        return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=15&output=embed`
-      }
-      
-      if (coords) {
-        // Coords only
-        return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&z=15&output=embed`
-      }
-    }
-    
-    // Fallback to database coordinates
-    return `https://maps.google.com/maps?q=${restaurant.latitude},${restaurant.longitude}&z=16&output=embed`
+    return getGoogleMapsEmbedSrc(
+      restaurant.google_maps_url,
+      restaurant.latitude,
+      restaurant.longitude,
+      restaurant.name // Pass restaurant name for the map label
+    )
   }
 
   return (

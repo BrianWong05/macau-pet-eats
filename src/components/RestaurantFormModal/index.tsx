@@ -3,7 +3,7 @@ import { X, Loader, Upload, MapPin, Link as LinkIcon, Clock } from 'lucide-react
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
-import { extractCoordsFromUrl, extractPlaceFromUrl } from '@/lib/mapUtils'
+import { extractCoordsFromUrl, getGoogleMapsEmbedSrc } from '@/lib/mapUtils'
 import type { Restaurant, DayOfWeek, OpeningHours, DayHours, CuisineType } from '@/types/database'
 
 const DAYS_OF_WEEK: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -861,26 +861,12 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 style={{ border: 0 }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                src={(() => {
-                  if (!mapsUrl) return `https://maps.google.com/maps?q=${formData.latitude || 22.1937},${formData.longitude || 113.5399}&z=15&output=embed`
-                  
-                  const placeName = extractPlaceFromUrl(mapsUrl)
-                  const coords = extractCoordsFromUrl(mapsUrl)
-                  
-                  if (coords && placeName) {
-                    // Best case: We have both. Show pin at coords but labeled with name.
-                    return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}+(${encodeURIComponent(placeName)})&z=15&output=embed`
-                  } else if (placeName) {
-                    // Only name (search)
-                    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=15&output=embed`
-                  } else if (coords) {
-                     // Only coords (pin)
-                     return `https://maps.google.com/maps?q=${coords.lat},${coords.lng}&z=15&output=embed`
-                  } else {
-                     // Fallback to manual coords
-                     return `https://maps.google.com/maps?q=${formData.latitude || 22.1937},${formData.longitude || 113.5399}&z=15&output=embed`
-                  }
-                })()}
+                src={getGoogleMapsEmbedSrc(
+                  mapsUrl, 
+                  formData.latitude || 22.1937, 
+                  formData.longitude || 113.5399,
+                  formData.name // Pass restaurant name for nice map label
+                )}
               />
             </div>
           </div>
