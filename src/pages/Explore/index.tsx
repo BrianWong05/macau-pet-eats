@@ -182,20 +182,21 @@ export function Explore() {
                   >
                     {t('explore.filters.all')}
                   </button>
-                  {cuisineTypes.map((cuisine) => (
+                  {cuisineTypes.map((ct) => (
                     <button
-                      key={cuisine}
-                      onClick={() => setCuisineFilter(cuisine)}
+                      key={ct.id}
+                      onClick={() => setCuisineFilter(ct.name)}
                       className={`
                         px-3 py-1.5 rounded-full text-sm font-medium
                         transition-all
-                        ${cuisineFilter === cuisine
+                        ${cuisineFilter === ct.name
                           ? 'bg-secondary-500 text-white'
                           : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                         }
                       `}
                     >
-                      {cuisine}
+                      {lang === 'zh' ? (ct.name_zh || ct.name) : 
+                       lang === 'pt' ? (ct.name_pt || ct.name) : ct.name}
                     </button>
                   ))}
                 </div>

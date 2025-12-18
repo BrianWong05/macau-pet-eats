@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { Restaurant, PetPolicy } from '@/types/database'
+import type { Restaurant, PetPolicy, CuisineType } from '@/types/database'
 
 interface UseRestaurantsOptions {
   searchQuery?: string
@@ -14,13 +14,14 @@ interface UseRestaurantsReturn {
   isLoading: boolean
   error: string | null
   refetch: () => Promise<void>
-  cuisineTypes: string[]
+  cuisineTypes: CuisineType[]
 }
 
 export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaurantsReturn {
   const { searchQuery = '', petPolicyFilter = null, cuisineFilter = null } = options
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -66,6 +67,18 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
     }
   }, [searchQuery, petPolicyFilter, cuisineFilter])
 
+  // Fetch cuisine types from database
+  useEffect(() => {
+    const fetchCuisineTypes = async () => {
+      const { data } = await supabase
+        .from('cuisine_types')
+        .select('*')
+        .order('sort_order', { ascending: true })
+      if (data) setCuisineTypes(data)
+    }
+    fetchCuisineTypes()
+  }, [])
+
   useEffect(() => {
     fetchRestaurants()
   }, [fetchRestaurants])
@@ -73,12 +86,6 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
   // Get featured restaurants (first 6)
   const featuredRestaurants = useMemo(() => {
     return restaurants.slice(0, 6)
-  }, [restaurants])
-
-  // Get unique cuisine types
-  const cuisineTypes = useMemo(() => {
-    const types = new Set(restaurants.map((r) => r.cuisine_type))
-    return Array.from(types).sort()
   }, [restaurants])
 
   return {

@@ -202,8 +202,8 @@ export function Home() {
           {/* View All Button */}
           {!searchQuery && featuredRestaurants.length > 0 && (
             <div className="text-center mt-12">
-              <a
-                href="/explore"
+              <Link
+                to="/explore"
                 className="
                   inline-flex items-center gap-2 px-8 py-4
                   bg-primary-500 hover:bg-primary-600
@@ -215,7 +215,7 @@ export function Home() {
               >
                 <MapPin className="w-5 h-5" />
                 {t('home.exploreButton')}
-              </a>
+              </Link>
             </div>
           )}
         </div>
@@ -233,13 +233,13 @@ export function Home() {
           <p className="text-lg text-neutral-600 mb-8 max-w-2xl mx-auto">
             {t('home.cta.subtitle')}
           </p>
-          <a
-            href="/submit"
+          <Link
+            to="/submit"
             className="inline-flex items-center gap-2 px-8 py-4 bg-neutral-900 text-white font-bold text-lg rounded-xl hover:bg-neutral-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             <Upload className="w-5 h-5" />
             {t('home.cta.button')}
-          </a>
+          </Link>
         </div>
       </section>
 
