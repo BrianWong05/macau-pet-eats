@@ -77,7 +77,8 @@
       "uploadPhoto": "Carregar Foto (opcional)",
       "clickToUpload": "Clique para carregar uma foto",
       "uploadHint": "Suporta JPG, PNG, GIF (máx 5MB)",
-      "selectFile": "Selecionar Ficheiro"
+      "selectFile": "Selecionar Ficheiro",
+      "optional": "Opcional"
     },
     "submitButton": "Enviar Recomendação",
     "successTitle": "Obrigado pela sua sugestão!",

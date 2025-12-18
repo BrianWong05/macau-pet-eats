@@ -64,7 +64,12 @@ export function Submit() {
     pet_policy: 'patio_only',
     cuisine_type: '',
     contact_info: '',
-    image_url: ''
+    image_url: '',
+    social_media: {
+      facebook: '',
+      instagram: '',
+      website: ''
+    }
   })
 
   const handleInputChange = (
@@ -234,12 +239,11 @@ export function Submit() {
           {/* Description */}
           <div className="bg-white rounded-2xl shadow-card p-6">
             <label htmlFor="description" className="block text-sm font-medium text-neutral-700 mb-2">
-              {t('submit.form.description')} *
+              {t('submit.form.description')} ({t('submit.form.optional')})
             </label>
             <textarea
               id="description"
               name="description"
-              required
               rows={4}
               value={formData.description}
               onChange={handleInputChange}
@@ -314,18 +318,56 @@ export function Submit() {
           {/* Contact Info */}
           <div className="bg-white rounded-2xl shadow-card p-6">
             <label htmlFor="contact_info" className="block text-sm font-medium text-neutral-700 mb-2">
-              {t('submit.form.contactInfo')} *
+              {t('submit.form.contactInfo')} ({t('submit.form.optional')})
             </label>
             <input
               type="text"
               id="contact_info"
               name="contact_info"
-              required
               value={formData.contact_info}
               onChange={handleInputChange}
               placeholder={t('submit.form.contactInfoPlaceholder')}
               className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
             />
+          </div>
+
+          {/* Social Media (Optional) */}
+          <div className="bg-white rounded-2xl shadow-card p-6">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              {t('restaurant.socialMedia.title')} ({t('submit.form.optional') || 'Optional'})
+            </label>
+            <div className="grid md:grid-cols-3 gap-4">
+              <input
+                type="url"
+                value={formData.social_media?.facebook || ''}
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  social_media: { ...prev.social_media, facebook: e.target.value || '' }
+                }))}
+                placeholder="Facebook URL"
+                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
+              />
+              <input
+                type="url"
+                value={formData.social_media?.instagram || ''}
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  social_media: { ...prev.social_media, instagram: e.target.value || '' }
+                }))}
+                placeholder="Instagram URL"
+                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
+              />
+              <input
+                type="url"
+                value={formData.social_media?.website || ''}
+                onChange={(e) => setFormData(prev => ({ 
+                  ...prev, 
+                  social_media: { ...prev.social_media, website: e.target.value || '' }
+                }))}
+                placeholder="Website URL"
+                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
+              />
+            </div>
           </div>
 
           {/* Photo Upload */}

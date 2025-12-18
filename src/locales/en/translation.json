@@ -77,7 +77,8 @@
       "uploadPhoto": "Upload Photo (optional)",
       "clickToUpload": "Click to upload a photo",
       "uploadHint": "Supports JPG, PNG, GIF (max 5MB)",
-      "selectFile": "Select File"
+      "selectFile": "Select File",
+      "optional": "Optional"
     },
     "submitButton": "Submit Recommendation",
     "successTitle": "Thank you for your submission!",

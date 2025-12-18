@@ -172,5 +172,6 @@ export interface RestaurantSubmission {
   cuisine_type_pt?: string
   image_url?: string
   contact_info: string
+  social_media?: SocialMedia
 }
 

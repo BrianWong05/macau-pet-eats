@@ -77,7 +77,8 @@
       "uploadPhoto": "上傳照片（選填）",
       "clickToUpload": "點擊上傳照片",
       "uploadHint": "支援 JPG, PNG, GIF（最大 5MB）",
-      "selectFile": "選擇檔案"
+      "selectFile": "選擇檔案",
+      "optional": "選填"
     },
     "submitButton": "提交推薦",
     "successTitle": "感謝您的推薦！",
