@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { X, Loader, Upload, MapPin, Link as LinkIcon, Clock } from 'lucide-react'
+import { X, Loader, Upload, MapPin, Link as LinkIcon, Clock, FileText } from 'lucide-react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
@@ -50,6 +50,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   // Menu Image State (Keep simple for now unless requested)
   const [menuFiles, setMenuFiles] = useState<File[]>([])
   const [menuPreviews, setMenuPreviews] = useState<string[]>([])
+  const [menuUrlInput, setMenuUrlInput] = useState('')
   const menuInputRef = useRef<HTMLInputElement>(null)
 
   // Fetch cuisine types from database
@@ -237,8 +238,14 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     const files = Array.from(e.target.files || [])
     if (files.length > 0) {
       const validFiles = files.filter(file => {
-        if (file.size > 2 * 1024 * 1024) {
-          toast.error(`Image ${file.name} is too large (max 2MB)`)
+        // Allow images and PDFs
+        const isValidType = file.type.startsWith('image/') || file.type === 'application/pdf'
+        if (!isValidType) {
+          toast.error(`File ${file.name} is not a supported format (images or PDF)`)
+          return false
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(`File ${file.name} is too large (max 5MB)`)
           return false
         }
         return true
@@ -249,11 +256,16 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
       setMenuFiles(prev => [...prev, ...validFiles])
 
       validFiles.forEach(file => {
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          setMenuPreviews(prev => [...prev, reader.result as string])
+        if (file.type === 'application/pdf') {
+          // For PDF, use a placeholder data URL indicating it's a PDF
+          setMenuPreviews(prev => [...prev, 'PDF:' + file.name])
+        } else {
+          const reader = new FileReader()
+          reader.onloadend = () => {
+            setMenuPreviews(prev => [...prev, reader.result as string])
+          }
+          reader.readAsDataURL(file)
         }
-        reader.readAsDataURL(file)
       })
     }
   }
@@ -275,6 +287,23 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     if (menuInputRef.current) {
       menuInputRef.current.value = ''
     }
+  }
+
+  const handleAddMenuUrl = () => {
+    const url = menuUrlInput.trim()
+    if (!url) return
+    
+    // Basic URL validation
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      toast.error('Please enter a valid URL starting with http:// or https://')
+      return
+    }
+    
+    // Add to form data and previews
+    const newMenuImages = [...(formData.menu_images || []), url]
+    setFormData(prev => ({ ...prev, menu_images: newMenuImages }))
+    setMenuPreviews(prev => [...prev, url])
+    setMenuUrlInput('')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -984,11 +1013,22 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {menuPreviews.map((preview, index) => (
                   <div key={index} className="relative group">
-                    <img
-                      src={preview}
-                      alt={`Menu ${index}`}
-                      className="w-full h-32 object-cover rounded-xl border border-neutral-200"
-                    />
+                    {preview.startsWith('PDF:') || preview.endsWith('.pdf') ? (
+                      // PDF preview - show icon and filename
+                      <div className="w-full h-32 rounded-xl border border-neutral-200 bg-neutral-50 flex flex-col items-center justify-center">
+                        <FileText size={32} className="text-red-500 mb-2" />
+                        <span className="text-xs text-neutral-600 truncate max-w-full px-2">
+                          {preview.startsWith('PDF:') ? preview.slice(4) : 'PDF Menu'}
+                        </span>
+                      </div>
+                    ) : (
+                      // Image preview
+                      <img
+                        src={preview}
+                        alt={`Menu ${index}`}
+                        className="w-full h-32 object-cover rounded-xl border border-neutral-200"
+                      />
+                    )}
                     <button
                       type="button"
                       onClick={() => removeMenu(index)}
@@ -1032,11 +1072,29 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             <input
               ref={menuInputRef}
               type="file"
-              accept="image/*"
+              accept="image/*,.pdf,application/pdf"
               multiple
               onChange={handleMenuChange}
               className="hidden"
             />
+            
+            {/* Menu URL Input */}
+            <div className="flex gap-2 mt-4">
+              <input
+                type="url"
+                value={menuUrlInput}
+                onChange={(e) => setMenuUrlInput(e.target.value)}
+                placeholder="Enter PDF or image URL (e.g., https://...)"
+                className="flex-1 px-4 py-2 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all text-sm"
+              />
+              <button
+                type="button"
+                onClick={handleAddMenuUrl}
+                className="px-4 py-2 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors text-sm font-medium"
+              >
+                Add Link
+              </button>
+            </div>
           </div>
 
           {error && (
