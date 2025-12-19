@@ -29,7 +29,7 @@ export function ReportList({
   onCheck,
   onEdit
 }: ReportListProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'restaurant'])
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -44,13 +44,13 @@ export function ReportList({
 
   const getFieldLabel = (field: string) => {
     const labels: Record<string, string> = {
-      pet_policy: t('restaurant.reportModal.fields.pet_policy'),
-      contact_info: t('restaurant.reportModal.fields.contact_info'),
-      address: t('restaurant.reportModal.fields.address'),
-      cuisine_type: t('restaurant.reportModal.fields.cuisine_type'),
-      image: t('restaurant.reportModal.fields.image') || '相片',
-      menu: t('restaurant.reportModal.fields.menu') || '菜單',
-      other: t('restaurant.reportModal.fields.other')
+      pet_policy: t('restaurant:reportModal.fields.pet_policy'),
+      contact_info: t('restaurant:reportModal.fields.contact_info'),
+      address: t('restaurant:reportModal.fields.address'),
+      cuisine_type: t('restaurant:reportModal.fields.cuisine_type'),
+      image: t('restaurant:reportModal.fields.image') || '相片',
+      menu: t('restaurant:reportModal.fields.menu') || '菜單',
+      other: t('restaurant:reportModal.fields.other')
     }
     return labels[field] || field
   }
@@ -109,7 +109,7 @@ export function ReportList({
   if (reports.length === 0) {
     return (
       <div className="text-center py-12 text-neutral-500">
-        {t('admin.reports.empty')}
+        {t('admin:reports.empty')}
       </div>
     )
   }
@@ -150,11 +150,11 @@ export function ReportList({
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-neutral-500">{t('admin.reports.fieldLabel')}:</span>
+                  <span className="text-neutral-500">{t('admin:reports.fieldLabel')}:</span>
                   <span className="ml-2 font-medium">{getFieldLabel(report.field_name)}</span>
                 </div>
                 <div>
-                  <span className="text-neutral-500">{t('admin.reports.suggestedValue')}:</span>
+                  <span className="text-neutral-500">{t('admin:reports.suggestedValue')}:</span>
                   {renderValue(report)}
                 </div>
               </div>
@@ -177,7 +177,7 @@ export function ReportList({
                   disabled={processingId === report.id}
                   className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-neutral-300 text-white rounded-lg font-medium transition-colors"
                 >
-                  {processingId === report.id ? '...' : t('admin.reports.approve')}
+                  {processingId === report.id ? '...' : t('admin:reports.approve')}
                 </button>
                 <button
                   onClick={() => onEdit(report)}
@@ -185,7 +185,7 @@ export function ReportList({
                   className="px-4 py-2 bg-amber-500 hover:bg-amber-600 disabled:bg-neutral-300 text-white rounded-lg font-medium transition-colors flex items-center gap-1"
                 >
                   <Pencil size={16} />
-                  {t('admin.reports.edit') || '編輯'}
+                  {t('admin:reports.edit') || '編輯'}
                 </button>
                 <button
                   onClick={() => onCheck(report.id)}
@@ -193,14 +193,14 @@ export function ReportList({
                   className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-neutral-300 text-white rounded-lg font-medium transition-colors flex items-center gap-1"
                 >
                   <Check size={16} />
-                  {processingId === report.id ? '...' : t('admin.reports.check')}
+                  {processingId === report.id ? '...' : t('admin:reports.check')}
                 </button>
                 <button
                   onClick={() => onReject(report.id)}
                   disabled={processingId === report.id}
                   className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-neutral-300 text-white rounded-lg font-medium transition-colors"
                 >
-                  {processingId === report.id ? '...' : t('admin.reports.reject')}
+                  {processingId === report.id ? '...' : t('admin:reports.reject')}
                 </button>
               </div>
             )}

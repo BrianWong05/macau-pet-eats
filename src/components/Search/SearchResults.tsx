@@ -25,7 +25,7 @@ export function SearchResults({
   clearFilters,
   hasActiveFilters
 }: SearchResultsProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['search', 'common'])
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(12)
 
@@ -52,11 +52,11 @@ export function SearchResults({
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">
-            {t('search.title')}
+            {t('search:title')}
           </h1>
           {!isLoading && (
             <p className="text-neutral-500 mt-1">
-              {t('search.results', { count: restaurants.length })}
+              {t('search:results', { count: restaurants.length })}
             </p>
           )}
         </div>
@@ -65,7 +65,7 @@ export function SearchResults({
         {!isLoading && restaurants.length > 0 && (
           <div className="flex items-center gap-2">
             <label htmlFor="page-size" className="text-sm text-neutral-500">
-              {t('search.perPage') || 'Per page'}:
+              {t('search:perPage') || 'Per page'}:
             </label>
             <select
               id="page-size"
@@ -114,10 +114,10 @@ export function SearchResults({
             <PawPrint className="w-10 h-10 text-neutral-400" />
           </div>
           <h3 className="text-xl font-semibold text-neutral-700 mb-2">
-            {t('search.noResults')}
+            {t('search:noResults')}
           </h3>
           <p className="text-neutral-500 mb-6 max-w-md mx-auto">
-            {t('search.noResultsHint')}
+            {t('search:noResultsHint')}
           </p>
           {(searchQuery || hasActiveFilters) && (
             <button
@@ -128,7 +128,7 @@ export function SearchResults({
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors"
             >
               <X size={18} />
-              {t('search.clearFilters')}
+              {t('search:clearFilters')}
             </button>
           )}
         </div>

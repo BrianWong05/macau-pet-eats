@@ -11,7 +11,7 @@ interface ReviewCardProps {
 }
 
 export function ReviewCard({ review, isOwner = false, onEdit, onDelete }: ReviewCardProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(undefined, {
@@ -32,7 +32,7 @@ export function ReviewCard({ review, isOwner = false, onEdit, onDelete }: Review
           </div>
           <div>
             <p className="font-medium text-neutral-900">
-              {review.user_email || t('reviews.anonymous')}
+              {review.user_email || t('restaurant:reviews.anonymous')}
             </p>
             <p className="text-xs text-neutral-500">{formatDate(review.created_at)}</p>
           </div>
@@ -55,7 +55,7 @@ export function ReviewCard({ review, isOwner = false, onEdit, onDelete }: Review
               className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-primary-600 transition-colors"
             >
               <Edit2 size={14} />
-              {t('common.edit')}
+              {t('common:edit')}
             </button>
           )}
           {onDelete && (
@@ -64,7 +64,7 @@ export function ReviewCard({ review, isOwner = false, onEdit, onDelete }: Review
               className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-red-600 transition-colors"
             >
               <Trash2 size={14} />
-              {t('common.delete')}
+              {t('common:delete')}
             </button>
           )}
         </div>

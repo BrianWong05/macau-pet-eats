@@ -14,7 +14,7 @@ interface UseReviewsReturn {
   error: string | null
   hasUserReviewed: boolean
   userReview: Review | null
-  submitReview: (rating: number, comment: string) => Promise<{ error: string | null }>
+  submitReview: (rating: number, comment: string, imageFile?: File | null) => Promise<{ error: string | null }>
   updateReview: (reviewId: string, rating: number, comment: string) => Promise<{ error: string | null }>
   deleteReview: (reviewId: string) => Promise<{ error: string | null }>
   refetch: () => Promise<void>
@@ -66,7 +66,7 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
   const userReview = user ? reviews.find(r => r.user_id === user.id) || null : null
   const hasUserReviewed = !!userReview
 
-  const submitReview = async (reviewRating: number, comment: string) => {
+  const submitReview = async (reviewRating: number, comment: string, imageFile?: File | null) => {
     if (!user) {
       return { error: 'You must be logged in to submit a review' }
     }
@@ -76,11 +76,32 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
     }
 
     try {
+      let imageUrl = null
+
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop()
+        const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+        const filePath = `${user.id}/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('review-images')
+          .upload(filePath, imageFile)
+
+        if (uploadError) throw uploadError
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('review-images')
+          .getPublicUrl(filePath)
+
+        imageUrl = publicUrl
+      }
+
       const reviewData = {
         restaurant_id: restaurantId,
         user_id: user.id,
         rating: reviewRating,
-        comment: comment || null
+        comment: comment || null,
+        image_url: imageUrl
       }
       
       const { error: insertError } = await supabase

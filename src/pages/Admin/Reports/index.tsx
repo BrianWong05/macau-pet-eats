@@ -12,7 +12,7 @@ import { Pagination } from '@/components/Pagination'
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
 
 export function AdminReports() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'search', 'common'])
   const { user } = useAuth()
   const [reports, setReports] = useState<ReportWithRestaurant[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -136,12 +136,12 @@ export function AdminReports() {
       
       if (error) throw error
       
-      toast.success(t('admin.reports.editSuccess') || '已更新')
+      toast.success(t('admin:reports.editSuccess') || '已更新')
       setEditingReport(null)
       fetchReports()
     } catch (err) {
       console.error('Edit error:', err)
-      toast.error(t('admin.reports.editError') || '更新失敗')
+      toast.error(t('admin:reports.editError') || '更新失敗')
     } finally {
       setProcessingId(null)
     }
@@ -206,12 +206,12 @@ export function AdminReports() {
         .eq('id', report.id)
 
       if (reportError) throw reportError
-
-      toast.success(t('admin.reports.approveSuccess'))
+ 
+      toast.success(t('admin:reports.approveSuccess'))
       fetchReports()
     } catch (err) {
       console.error('Approve error:', err)
-      toast.error(t('admin.reports.approveError'))
+      toast.error(t('admin:reports.approveError'))
     } finally {
       setProcessingId(null)
     }
@@ -231,12 +231,12 @@ export function AdminReports() {
         .eq('id', reportId)
 
       if (error) throw error
-
-      toast.success(t('admin.reports.rejectSuccess'))
+ 
+      toast.success(t('admin:reports.rejectSuccess'))
       fetchReports()
     } catch (err) {
       console.error('Reject error:', err)
-      toast.error(t('admin.reports.rejectError'))
+      toast.error(t('admin:reports.rejectError'))
     } finally {
       setProcessingId(null)
     }
@@ -292,12 +292,12 @@ export function AdminReports() {
         .eq('id', reportId)
 
       if (error) throw error
-
-      toast.success(t('admin.reports.checkSuccess'))
+ 
+      toast.success(t('admin:reports.checkSuccess'))
       fetchReports()
     } catch (err) {
       console.error('Check error:', err)
-      toast.error(t('admin.reports.checkError'))
+      toast.error(t('admin:reports.checkError'))
     } finally {
       setProcessingId(null)
     }
@@ -308,23 +308,23 @@ export function AdminReports() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-neutral-900 flex items-center gap-3">
           <Flag className="text-primary-500" />
-          {t('admin.reports.title')}
+          {t('admin:reports.title')}
         </h1>
       </div>
-
+ 
       <ReportFilter 
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
       />
-
+ 
       {/* Per-page selector */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-neutral-500">
-          {t('search.results', { count: reports.length })}
+          {t('search:results', { count: reports.length })}
         </p>
         <div className="flex items-center gap-2">
           <label htmlFor="reports-page-size" className="text-sm text-neutral-500">
-            {t('search.perPage')}:
+            {t('search:perPage')}:
           </label>
           <select
             id="reports-page-size"
@@ -361,7 +361,7 @@ export function AdminReports() {
           <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-100 flex items-center justify-between">
               <h2 className="text-xl font-bold text-neutral-900">
-                {t('admin.reports.editTitle') || '編輯回報'}
+                {t('admin:reports.editTitle') || '編輯回報'}
               </h2>
               <button
                 onClick={() => setEditingReport(null)}
@@ -374,15 +374,15 @@ export function AdminReports() {
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">
-                  {t('admin.reports.fieldLabel')}: {editingReport.field_name}
+                  {t('admin:reports.fieldLabel')}: {editingReport.field_name}
                 </label>
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">
                   {(editingReport.field_name === 'image' || editingReport.field_name === 'menu') 
-                    ? (t('admin.reports.images') || '圖片')
-                    : t('admin.reports.suggestedValue')}
+                    ? (t('admin:reports.images') || '圖片')
+                    : t('admin:reports.suggestedValue')}
                 </label>
                 
                 {!(editingReport.field_name === 'image' || editingReport.field_name === 'menu') && (
@@ -416,7 +416,7 @@ export function AdminReports() {
                                 type="button"
                                 onClick={() => window.open(cleanUrl, '_blank')}
                                 className="p-1 bg-white/20 hover:bg-white/40 text-white rounded-full transition-colors"
-                                title={t('common.view') || '查看'}
+                                title={t('common:view') || '查看'}
                               >
                                 <ExternalLink size={14} />
                               </button>
@@ -431,7 +431,7 @@ export function AdminReports() {
                                   setEditValue(newUrls.join(','))
                                 }}
                                 className="p-1 bg-red-500/80 hover:bg-red-500 text-white rounded-full transition-colors"
-                                title={t('common.delete') || '刪除'}
+                                title={t('common:delete') || '刪除'}
                               >
                                 <X size={14} />
                               </button>
@@ -450,14 +450,14 @@ export function AdminReports() {
                   onClick={() => setEditingReport(null)}
                   className="px-4 py-2 text-neutral-600 hover:bg-neutral-50 rounded-lg font-medium transition-colors"
                 >
-                  {t('common.cancel')}
+                  {t('common:cancel')}
                 </button>
                 <button
                   onClick={handleSaveEdit}
                   disabled={processingId === editingReport.id}
                   className="px-4 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors disabled:opacity-50"
                 >
-                  {processingId === editingReport.id ? '...' : t('common.save') || '保存'}
+                  {processingId === editingReport.id ? '...' : t('common:save') || '保存'}
                 </button>
               </div>
             </div>
@@ -471,7 +471,7 @@ export function AdminReports() {
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
             <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-neutral-900">
-                {t('admin.comment.title') || 'Add Comment'}
+                {t('admin:comment.title') || 'Add Comment'}
               </h3>
               <button
                 onClick={() => setPendingAction(null)}
@@ -483,12 +483,12 @@ export function AdminReports() {
             <div className="p-5 space-y-4">
               <div>
                 <p className="text-sm text-neutral-600 mb-2">
-                  {t('admin.comment.hint') || 'Add a comment for the user (optional)'}
+                  {t('admin:comment.hint') || 'Add a comment for the user (optional)'}
                 </p>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder={t('admin.comment.placeholder') || 'Enter your response...'}
+                  placeholder={t('admin:comment.placeholder') || 'Enter your response...'}
                   rows={3}
                   className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                   autoFocus
@@ -499,17 +499,17 @@ export function AdminReports() {
                   onClick={() => setPendingAction(null)}
                   className="flex-1 px-4 py-2 border border-neutral-200 rounded-xl font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
                 >
-                  {t('common.cancel')}
+                  {t('common:cancel')}
                 </button>
                 <button
                   onClick={confirmAction}
                   className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors"
                 >
                   {pendingAction.type === 'approve' 
-                    ? t('admin.reports.approve')
+                    ? t('admin:reports.approve')
                     : pendingAction.type === 'check' 
-                      ? t('admin.reports.check') 
-                      : t('admin.reports.reject')}
+                      ? t('admin:reports.check') 
+                      : t('admin:reports.reject')}
                 </button>
               </div>
             </div>

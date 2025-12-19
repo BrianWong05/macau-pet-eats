@@ -17,16 +17,16 @@ import { useTranslation } from 'react-i18next'
 export function AdminLayout() {
   const { signOut } = useAuth()
   const location = useLocation()
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'auth'])
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const navItems = [
-    { path: '/admin', icon: BarChart, label: t('admin.sidebar.dashboard') },
-    { path: '/admin/restaurants', icon: Store, label: t('admin.sidebar.restaurants') },
-    { path: '/admin/cuisine-types', icon: Utensils, label: t('admin.cuisineTypes.title') },
-    { path: '/admin/pet-policies', icon: PawPrint, label: t('admin.petPolicies.title') || 'Pet Policies' },
-    { path: '/admin/reports', icon: Flag, label: t('admin.reports.title') },
-    { path: '/admin/feedback', icon: MessageSquare, label: t('admin.feedback.title') || 'Feedback' },
+    { path: '/admin', icon: BarChart, label: t('admin:sidebar.dashboard') },
+    { path: '/admin/restaurants', icon: Store, label: t('admin:sidebar.restaurants') },
+    { path: '/admin/cuisine-types', icon: Utensils, label: t('admin:cuisineTypes.title') },
+    { path: '/admin/pet-policies', icon: PawPrint, label: t('admin:petPolicies.title') || 'Pet Policies' },
+    { path: '/admin/reports', icon: Flag, label: t('admin:reports.title') },
+    { path: '/admin/feedback', icon: MessageSquare, label: t('admin:feedback.title') || 'Feedback' },
   ]
 
   return (
@@ -82,7 +82,7 @@ export function AdminLayout() {
             className="flex items-center gap-3 px-4 py-3 w-full text-left text-neutral-600 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition-colors"
           >
             <LogOut size={20} />
-            {t('auth.signOut')}
+            {t('auth:signOut')}
           </button>
         </div>
       </aside>

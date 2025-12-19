@@ -27,7 +27,7 @@ export function FilterPanel({
   clearFilters,
   hasActiveFilters
 }: FilterPanelProps) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation(['explore', 'common', 'search'])
   const lang = i18n.language as 'zh' | 'en' | 'pt'
   const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
 
@@ -53,7 +53,7 @@ export function FilterPanel({
         {setLocationFilter && (
           <div>
             <label className="text-sm font-medium text-neutral-700 mb-2 block">
-              {t('explore.filters.location') || '地區'}
+              {t('explore:filters.location') || '地區'}
             </label>
             <div className="flex flex-wrap gap-2">
               <button
@@ -66,7 +66,7 @@ export function FilterPanel({
                   }
                 `}
               >
-                {t('explore.filters.all')}
+                {t('explore:filters.all')}
               </button>
               {LOCATION_AREAS.map((location) => (
                 <button
@@ -90,7 +90,7 @@ export function FilterPanel({
         {/* Pet Policy Filter */}
         <div>
           <label className="text-sm font-medium text-neutral-700 mb-2 block">
-            {t('explore.filters.petPolicy')}
+            {t('explore:filters.petPolicy')}
           </label>
           <div className="flex flex-wrap gap-2">
             <button
@@ -127,7 +127,7 @@ export function FilterPanel({
         {cuisineTypes.length > 0 && (
           <div>
             <label className="text-sm font-medium text-neutral-700 mb-2 block">
-              {t('explore.filters.cuisine')} {cuisineFilters.length > 0 && `(${cuisineFilters.length})`}
+              {t('explore:filters.cuisine')} {cuisineFilters.length > 0 && `(${cuisineFilters.length})`}
             </label>
             <div className="flex flex-wrap gap-2">
               <button
@@ -143,7 +143,7 @@ export function FilterPanel({
                   }
                 `}
               >
-                {t('explore.filters.all')}
+                {t('explore:filters.all')}
               </button>
               {cuisineTypes.map((ct) => {
                 const isSelected = cuisineFilters.includes(ct.name)
@@ -175,7 +175,7 @@ export function FilterPanel({
                   }
                 `}
               >
-                {t('common.other') || '其他'}
+                {t('common:other') || '其他'}
               </button>
             </div>
           </div>
@@ -188,7 +188,7 @@ export function FilterPanel({
             className="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700"
           >
             <X size={14} />
-            {t('search.clearFilters')}
+            {t('search:clearFilters')}
           </button>
         )}
       </div>

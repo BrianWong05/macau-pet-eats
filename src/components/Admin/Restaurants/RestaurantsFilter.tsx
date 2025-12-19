@@ -16,7 +16,7 @@ export function RestaurantsFilter({
   filterStatus, 
   setFilterStatus 
 }: RestaurantsFilterProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'common'])
   const statuses: FilterStatus[] = ['all', 'pending', 'approved']
 
   return (
@@ -25,7 +25,7 @@ export function RestaurantsFilter({
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 w-5 h-5" />
         <input
           type="text"
-          placeholder={t('admin.restaurants.searchPlaceholder')}
+          placeholder={t('common:search')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -42,7 +42,7 @@ export function RestaurantsFilter({
                 : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'
             }`}
           >
-            {t(`admin.restaurants.filters.${status}`)}
+            {t(`admin:restaurants.filters.${status}`)}
           </button>
         ))}
       </div>

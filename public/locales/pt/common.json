@@ -1,0 +1,90 @@
+{
+  "appName": "Macau Pet-Friendly Eats",
+  "loading": "A carregar...",
+  "error": "Erro",
+  "search": "Pesquisar",
+  "viewAll": "Ver Tudo",
+  "learnMore": "Saber Mais",
+  "getDirections": "Obter Direções",
+  "submit": "Enviar",
+  "cancel": "Cancelar",
+  "close": "Fechar",
+  "other": "Outros",
+  "requiredField": "(obrigatório)",
+  "upload": "Carregar",
+  "link": "Ligação",
+  "uploading": "A carregar...",
+  "clickToUpload": "Clique para carregar",
+  "uploadImageOrPdf": "Carregar imagem ou PDF",
+  "uploadError": "Falha no carregamento",
+  "save": "Guardar",
+  "delete": "Apagar",
+  "view": "Ver",
+  "edit": "Editar",
+  "adminComment": "Resposta do Admin",
+  "nav": {
+    "home": "Início",
+    "explore": "Explorar Mapa",
+    "submit": "Sugerir Local"
+  },
+  "footer": {
+    "copyright": "© 2025 Macau Pet Eats. Feito com amor por amantes de animais."
+  },
+  "allRightsReserved": "Todos os direitos reservados.",
+  "errors": {
+    "loadingRestaurants": "Falha ao carregar restaurantes",
+    "missingSupabase": "Variáveis de ambiente Supabase em falta. Por favor defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no ficheiro .env."
+  },
+  "language": {
+    "zh": "繁體中文",
+    "en": "English",
+    "pt": "Português"
+  },
+  "cuisineTypes": {
+    "portuguese": "Português",
+    "cantonese": "Cantonês",
+    "fusion": "Fusão",
+    "international": "Internacional",
+    "seafood": "Mariscos",
+    "brunch": "Brunch",
+    "japanese": "Japonês",
+    "italian": "Italiano",
+    "thai": "Tailandês",
+    "macanese": "Macaense",
+    "chinese": "Chinês",
+    "american": "Americano",
+    "cafe": "Café",
+    "bar": "Bar",
+    "dessert": "Sobremesa",
+    "other": "Outro"
+  },
+  "petPolicy": {
+    "indoors_allowed": "Interior Permitido",
+    "patio_only": "Apenas Terraço",
+    "small_pets_only": "Apenas Animais Pequenos",
+    "all_pets_welcome": "Todos os Animais Bem-vindos",
+    "dogs_only": "Apenas Cães",
+    "cats_only": "Apenas Gatos",
+    "medium_dogs_allowed": "Cães Médios Permitidos"
+  },
+  "openingHours": {
+    "title": "Horário de Funcionamento",
+    "closed": "Fechado",
+    "open": "Aberto",
+    "openNow": "Aberto Agora",
+    "closedNow": "Fechado Agora",
+    "everyday": "Todos os dias",
+    "applyToWeekdays": "→ Dias úteis",
+    "applyToWeekend": "→ Fim de semana",
+    "applyToAll": "→ Todos",
+    "days": {
+      "monday": "Segunda-feira",
+      "tuesday": "Terça-feira",
+      "wednesday": "Quarta-feira",
+      "thursday": "Quinta-feira",
+      "friday": "Sexta-feira",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    }
+  }
+}

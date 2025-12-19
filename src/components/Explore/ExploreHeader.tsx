@@ -16,7 +16,7 @@ export function ExploreHeader({
   setShowFilters,
   hasActiveFilters
 }: ExploreHeaderProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['explore', 'restaurant', 'common'])
 
   return (
     <header className="bg-white border-b border-neutral-200 px-4 py-3 flex items-center justify-between shrink-0 z-20">
@@ -24,16 +24,16 @@ export function ExploreHeader({
         <Link
           to="/"
           className="p-2 hover:bg-neutral-100 rounded-xl transition-colors"
-          aria-label={t('restaurant.backToList')}
+          aria-label={t('restaurant:backToList')}
         >
           <ArrowLeft size={20} className="text-neutral-600" />
         </Link>
         <div>
           <h1 className="text-lg font-semibold text-neutral-900">
-            {t('explore.title')}
+            {t('explore:title')}
           </h1>
           <p className="text-sm text-neutral-500 hidden sm:block">
-            {t('explore.results', { count: filteredCount })}
+            {t('explore:results', { count: filteredCount })}
           </p>
         </div>
       </div>
@@ -52,7 +52,7 @@ export function ExploreHeader({
           `}
         >
           <Filter size={16} />
-          <span className="hidden sm:inline">{t('explore.filters.petPolicy')}</span>
+          <span className="hidden sm:inline">{t('explore:filters.petPolicy')}</span>
           {hasActiveFilters && (
             <span className="w-2 h-2 bg-primary-500 rounded-full" />
           )}
@@ -62,7 +62,8 @@ export function ExploreHeader({
           className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
         >
           <Upload size={16} />
-          <span className="hidden sm:inline">{t('nav.submit')}</span>
+          <span className="hidden sm:inline">{t('common:nav.submit')}</span>
+        </Link>
         </Link>
         <LanguageSwitcher />
       </div>

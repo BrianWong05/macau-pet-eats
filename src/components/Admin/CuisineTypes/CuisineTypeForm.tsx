@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Save, X } from 'lucide-react'
 
 interface CuisineTypeFormProps {
@@ -8,26 +9,27 @@ interface CuisineTypeFormProps {
 }
 
 export function CuisineTypeForm({ newForm, setNewForm, onAdd, onCancel }: CuisineTypeFormProps) {
+  const { t } = useTranslation(['admin'])
   return (
     <div className="bg-white rounded-xl shadow-card p-4 animate-fade-in">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <input
           type="text"
-          placeholder="Name (key)"
+          placeholder={t('admin:cuisineTypes.form.key')}
           value={newForm.name}
           onChange={(e) => setNewForm({ ...newForm, name: e.target.value })}
           className="px-3 py-2 border border-neutral-200 rounded-lg"
         />
         <input
           type="text"
-          placeholder="中文名稱"
+          placeholder={t('admin:cuisineTypes.form.nameZh')}
           value={newForm.name_zh}
           onChange={(e) => setNewForm({ ...newForm, name_zh: e.target.value })}
           className="px-3 py-2 border border-neutral-200 rounded-lg"
         />
         <input
           type="text"
-          placeholder="Nome PT"
+          placeholder={t('admin:cuisineTypes.form.namePt')}
           value={newForm.name_pt}
           onChange={(e) => setNewForm({ ...newForm, name_pt: e.target.value })}
           className="px-3 py-2 border border-neutral-200 rounded-lg"

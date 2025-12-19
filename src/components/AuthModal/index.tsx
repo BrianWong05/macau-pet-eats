@@ -11,7 +11,7 @@ interface AuthModalProps {
 type AuthMode = 'login' | 'signup'
 
 export function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['auth', 'common'])
   const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth()
   
   const [mode, setMode] = useState<AuthMode>('login')
@@ -74,7 +74,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-full transition-colors"
-          aria-label={t('common.close')}
+          aria-label={t('common:close')}
         >
           <X size={20} />
         </button>
@@ -82,10 +82,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         {/* Header */}
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-neutral-900">
-            {mode === 'login' ? t('auth.loginTitle') : t('auth.signupTitle')}
+            {mode === 'login' ? t('auth:loginTitle') : t('auth:signupTitle')}
           </h2>
           <p className="text-neutral-500 mt-1">
-            {mode === 'login' ? t('auth.loginSubtitle') : t('auth.signupSubtitle')}
+            {mode === 'login' ? t('auth:loginSubtitle') : t('auth:signupSubtitle')}
           </p>
         </div>
 
@@ -121,20 +121,20 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          <span>{t('auth.continueWithGoogle')}</span>
+          <span>{t('auth:continueWithGoogle')}</span>
         </button>
 
         {/* Divider */}
         <div className="flex items-center gap-4 my-6">
           <div className="flex-1 h-px bg-neutral-200" />
-          <span className="text-sm text-neutral-400">{t('auth.or')}</span>
+          <span className="text-sm text-neutral-400">{t('auth:or')}</span>
           <div className="flex-1 h-px bg-neutral-200" />
         </div>
 
         {/* Email Form */}
         <form onSubmit={handleEmailSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="sr-only">{t('auth.email')}</label>
+            <label htmlFor="email" className="sr-only">{t('auth:email')}</label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
@@ -142,7 +142,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('auth.emailPlaceholder')}
+                placeholder={t('auth:emailPlaceholder')}
                 required
                 className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
               />
@@ -150,7 +150,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           </div>
 
           <div>
-            <label htmlFor="password" className="sr-only">{t('auth.password')}</label>
+            <label htmlFor="password" className="sr-only">{t('auth:password')}</label>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
               <input
@@ -158,7 +158,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={t('auth.passwordPlaceholder')}
+                placeholder={t('auth:passwordPlaceholder')}
                 required
                 minLength={6}
                 className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
@@ -172,20 +172,20 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             className="w-full py-3 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 text-white font-semibold rounded-xl transition-colors"
           >
             {isLoading 
-              ? t('common.loading')
-              : mode === 'login' ? t('auth.loginButton') : t('auth.signupButton')
+              ? t('common:loading')
+              : mode === 'login' ? t('auth:loginButton') : t('auth:signupButton')
             }
           </button>
         </form>
 
         {/* Switch mode */}
         <p className="text-center mt-6 text-sm text-neutral-600">
-          {mode === 'login' ? t('auth.noAccount') : t('auth.hasAccount')}{' '}
+          {mode === 'login' ? t('auth:noAccount') : t('auth:hasAccount')}{' '}
           <button
             onClick={() => switchMode(mode === 'login' ? 'signup' : 'login')}
             className="text-primary-600 hover:text-primary-700 font-medium"
           >
-            {mode === 'login' ? t('auth.signupLink') : t('auth.loginLink')}
+            {mode === 'login' ? t('auth:signupLink') : t('auth:loginLink')}
           </button>
         </p>
       </div>

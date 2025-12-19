@@ -18,7 +18,7 @@ export function RestaurantList({
   onSelectRestaurant,
   lang
 }: RestaurantListProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['explore'])
 
   return (
     <div className="w-full md:w-96 lg:w-[420px] bg-white border-r border-neutral-200 overflow-y-auto shrink-0">
@@ -31,7 +31,7 @@ export function RestaurantList({
       ) : filteredRestaurants.length === 0 ? (
         <div className="p-8 text-center text-neutral-500">
           <MapPin className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-          <p>{t('explore.noResults')}</p>
+          <p>{t('explore:noResults')}</p>
         </div>
       ) : (
         <div className="divide-y divide-neutral-100">

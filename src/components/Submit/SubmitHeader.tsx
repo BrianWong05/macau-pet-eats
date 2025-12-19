@@ -8,7 +8,7 @@ interface SubmitHeaderProps {
 }
 
 export function SubmitHeader({ isScrolled }: SubmitHeaderProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['submit', 'restaurant'])
 
   return (
     <header 
@@ -22,16 +22,16 @@ export function SubmitHeader({ isScrolled }: SubmitHeaderProps) {
           <Link
             to="/"
             className="p-2 hover:bg-neutral-100 rounded-xl transition-colors"
-            aria-label={t('restaurant.backToList')}
+            aria-label={t('restaurant:backToList')}
           >
             <ArrowLeft size={20} className="text-neutral-600" />
           </Link>
           <div>
             <h1 className="text-lg font-semibold text-neutral-900">
-              {t('submit.title')}
+              {t('submit:title')}
             </h1>
             <p className="text-sm text-neutral-500 hidden sm:block">
-              {t('submit.subtitle')}
+              {t('submit:subtitle')}
             </p>
           </div>
         </div>

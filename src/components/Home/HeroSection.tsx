@@ -8,7 +8,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ count }: HeroSectionProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['home', 'common'])
 
   return (
     <section className="relative bg-gradient-to-br from-primary-50 via-white to-secondary-50 overflow-hidden">
@@ -24,20 +24,20 @@ export function HeroSection({ count }: HeroSectionProps) {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-soft mb-8">
             <PawPrint className="w-5 h-5 text-primary-500" />
             <span className="text-sm font-medium text-neutral-700">
-              {t('home.badge')}
+              {t('home:badge')}
             </span>
             <Sparkles className="w-4 h-4 text-primary-400" />
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 leading-tight">
-            {t('home.headline')}{' '}
-            <span className="text-gradient">{t('home.headlineHighlight')}</span>
+            {t('home:headline')}{' '}
+            <span className="text-gradient">{t('home:headlineHighlight')}</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg sm:text-xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            {t('home.subheadline')}
+            {t('home:subheadline')}
           </p>
 
           {/* Search Bar - Hidden on mobile, shown on sm and up */}
@@ -59,7 +59,7 @@ export function HeroSection({ count }: HeroSectionProps) {
               "
             >
               <Search className="w-5 h-5" />
-              {t('common.viewAll')}
+              {t('common:viewAll')}
             </Link>
           </div>
 
@@ -69,12 +69,12 @@ export function HeroSection({ count }: HeroSectionProps) {
               <MapPin className="w-5 h-5 text-primary-500" />
               <span className="font-medium">
                 {count ? `${count} ` : '50+ '}
-                {t('home.stats.locationsSuffix')}
+                {t('home:stats.locationsSuffix')}
               </span>
             </div>
             <div className="flex items-center gap-2 text-neutral-600">
               <PawPrint className="w-5 h-5 text-secondary-500" />
-              <span className="font-medium">{t('home.stats.allPets')}</span>
+              <span className="font-medium">{t('home:stats.allPets')}</span>
             </div>
           </div>
         </div>

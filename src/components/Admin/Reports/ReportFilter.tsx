@@ -8,7 +8,7 @@ interface ReportFilterProps {
 }
 
 export function ReportFilter({ filterStatus, setFilterStatus }: ReportFilterProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin'])
   const statuses: FilterStatus[] = ['pending', 'approved', 'rejected', 'all']
 
   return (
@@ -23,7 +23,7 @@ export function ReportFilter({ filterStatus, setFilterStatus }: ReportFilterProp
               : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
           }`}
         >
-          {t(`admin.reports.status.${status}`)}
+          {t(`admin:reports.status.${status}`)}
         </button>
       ))}
     </div>

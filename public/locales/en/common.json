@@ -1,0 +1,90 @@
+{
+  "appName": "Macau Pet-Friendly Eats",
+  "loading": "Loading...",
+  "error": "Error",
+  "search": "Search",
+  "viewAll": "View All",
+  "learnMore": "Learn More",
+  "getDirections": "Get Directions",
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "close": "Close",
+  "other": "Other",
+  "requiredField": "(required)",
+  "upload": "Upload",
+  "link": "Link",
+  "uploading": "Uploading...",
+  "clickToUpload": "Click to upload",
+  "uploadImageOrPdf": "Upload image or PDF",
+  "uploadError": "Upload failed",
+  "save": "Save",
+  "delete": "Delete",
+  "view": "View",
+  "edit": "Edit",
+  "adminComment": "Admin Response",
+  "nav": {
+    "home": "Home",
+    "explore": "Explore Map",
+    "submit": "Submit a Spot"
+  },
+  "footer": {
+    "copyright": "© 2025 Macau Pet-Friendly Eats. Made with 🐾 for pet lovers."
+  },
+  "allRightsReserved": "All rights reserved.",
+  "errors": {
+    "loadingRestaurants": "Failed to load restaurants",
+    "missingSupabase": "Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
+  },
+  "language": {
+    "zh": "繁體中文",
+    "en": "English",
+    "pt": "Português"
+  },
+  "cuisineTypes": {
+    "portuguese": "Portuguese",
+    "cantonese": "Cantonese",
+    "fusion": "Fusion",
+    "international": "International",
+    "seafood": "Seafood",
+    "brunch": "Brunch",
+    "japanese": "Japanese",
+    "italian": "Italian",
+    "thai": "Thai",
+    "macanese": "Macanese",
+    "chinese": "Chinese",
+    "american": "American",
+    "cafe": "Café",
+    "bar": "Bar",
+    "dessert": "Dessert",
+    "other": "Other"
+  },
+  "petPolicy": {
+    "indoors_allowed": "Indoors Allowed",
+    "patio_only": "Patio Only",
+    "small_pets_only": "Small Pets Only",
+    "all_pets_welcome": "All Pets Welcome",
+    "dogs_only": "Dogs Only",
+    "cats_only": "Cats Only",
+    "medium_dogs_allowed": "Medium Dogs Allowed"
+  },
+  "openingHours": {
+    "title": "Opening Hours",
+    "closed": "Closed",
+    "open": "Open",
+    "openNow": "Open Now",
+    "closedNow": "Closed Now",
+    "everyday": "Every day",
+    "applyToWeekdays": "→ Weekdays",
+    "applyToWeekend": "→ Weekend",
+    "applyToAll": "→ All",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  }
+}

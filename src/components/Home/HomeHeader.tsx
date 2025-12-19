@@ -10,7 +10,7 @@ interface HomeHeaderProps {
 }
 
 export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['common', 'profile', 'auth'])
   const { user, username, signOut } = useAuth()
 
   return (
@@ -29,7 +29,7 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
             className={`w-10 h-10 rounded-xl transition-all ${isScrolled ? '' : 'shadow-sm'}`}
           />
           <span className={`font-bold text-lg hidden sm:block ${isScrolled ? 'text-neutral-900' : 'text-neutral-900'}`}>
-            {t('common.appName')}
+            {t('common:appName')}
           </span>
         </div>
 
@@ -42,14 +42,14 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
               <Link
                 to="/profile"
                 className={`p-2 rounded-full shadow-sm hover:shadow-md transition-all ${isScrolled ? 'bg-white text-neutral-600 hover:text-primary-600' : 'bg-white/80 backdrop-blur-sm text-neutral-600 hover:text-primary-600'}`}
-                title={t('profile.title') || 'Profile'}
+                title={t('profile:title') || 'Profile'}
               >
                 <User size={20} />
               </Link>
               <button
                 onClick={() => signOut()}
                 className={`p-2 rounded-full shadow-sm hover:shadow-md transition-all ${isScrolled ? 'bg-white text-neutral-600 hover:text-red-600' : 'bg-white/80 backdrop-blur-sm text-neutral-600 hover:text-red-600'}`}
-                title={t('auth.logout') || 'Logout'}
+                title={t('auth:logout') || 'Logout'}
               >
                 <LogOut size={20} />
               </button>
@@ -60,7 +60,7 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
               className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all font-medium ${isScrolled ? 'bg-white text-neutral-700' : 'bg-white/80 backdrop-blur-sm text-neutral-700'}`}
             >
               <User size={18} />
-              <span>{t('auth.login') || 'Login'}</span>
+              <span>{t('auth:login') || 'Login'}</span>
             </button>
           )}
           <Link
@@ -68,7 +68,7 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
             className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow-md transition-all font-medium ${isScrolled ? 'bg-white text-neutral-700' : 'bg-white/80 backdrop-blur-sm text-neutral-700'}`}
           >
             <Upload size={18} />
-            <span className="hidden sm:inline">{t('nav.submit')}</span>
+            <span className="hidden sm:inline">{t('common:nav.submit')}</span>
           </Link>
           <div className={isScrolled ? '' : 'bg-white/80 backdrop-blur-sm rounded-lg'}>
             <LanguageSwitcher />

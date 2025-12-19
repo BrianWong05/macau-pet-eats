@@ -9,7 +9,7 @@ interface OpeningHoursProps {
 }
 
 export function OpeningHours({ restaurant }: OpeningHoursProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
 
   if (!restaurant.opening_hours) return null
 
@@ -34,22 +34,22 @@ export function OpeningHours({ restaurant }: OpeningHoursProps) {
   
   const getDayLabel = (days: DayOfWeek[]) => {
     if (days.length === 1) {
-      return t(`openingHours.days.${days[0]}`)
+      return t(`common:openingHours.days.${days[0]}`)
     }
     if (days.length === 7) {
-      return t('openingHours.everyday') || 'Every day'
+      return t('common:openingHours.everyday') || 'Every day'
     }
-    const first = t(`openingHours.days.${days[0]}`)
-    const last = t(`openingHours.days.${days[days.length - 1]}`)
+    const first = t(`common:openingHours.days.${days[0]}`)
+    const last = t(`common:openingHours.days.${days[days.length - 1]}`)
     return `${first.substring(0, 3)} - ${last.substring(0, 3)}`
   }
 
   return (
     <div className="mt-6 bg-white rounded-2xl shadow-card p-6">
-      <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
         <Clock className="w-5 h-5 text-primary-500" />
-        {t('openingHours.title')}
-      </h3>
+        {t('common:openingHours.title')}
+      </h2>
       <div className="space-y-2">
         {groups.map((group, index) => (
           <div key={index} className="flex justify-between text-sm py-1 border-b border-neutral-100 last:border-0">
@@ -59,7 +59,7 @@ export function OpeningHours({ restaurant }: OpeningHoursProps) {
             <span className={group.hours ? 'text-neutral-600' : 'text-neutral-400'}>
               {group.hours 
                 ? `${group.hours.open} - ${group.hours.close}`
-                : t('openingHours.closed')
+                : t('common:openingHours.closed')
               }
             </span>
           </div>

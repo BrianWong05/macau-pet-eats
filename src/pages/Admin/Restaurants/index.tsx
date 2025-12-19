@@ -13,7 +13,7 @@ import { Pagination } from '@/components/Pagination'
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
 
 export function AdminRestaurants() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'search', 'common'])
   const [searchParams, setSearchParams] = useSearchParams()
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -106,7 +106,7 @@ export function AdminRestaurants() {
       .eq('id', id)
 
     if (!error) {
-      toast.success(status === 'approved' ? t('admin.restaurants.actions.approveSuccess') : t('admin.restaurants.actions.rejectSuccess'))
+      toast.success(status === 'approved' ? t('admin:restaurants.actions.approveSuccess') : t('admin:restaurants.actions.rejectSuccess'))
       fetchRestaurants()
     }
   }
@@ -145,8 +145,8 @@ export function AdminRestaurants() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">{t('admin.restaurants.title')}</h1>
-          <p className="text-neutral-500 mt-1">{t('admin.restaurants.subtitle')}</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('admin:restaurants.title')}</h1>
+          <p className="text-neutral-500 mt-1">{t('admin:restaurants.subtitle')}</p>
         </div>
         <button
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
@@ -156,7 +156,7 @@ export function AdminRestaurants() {
           }}
         >
           <Plus size={20} />
-          {t('admin.restaurants.addRestaurant')}
+          {t('admin:restaurants.addRestaurant')}
         </button>
       </div>
 
@@ -170,11 +170,11 @@ export function AdminRestaurants() {
       {/* Per-page selector */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-neutral-500">
-          {t('search.results', { count: filteredRestaurants.length })}
+          {t('search:results', { count: filteredRestaurants.length })}
         </p>
         <div className="flex items-center gap-2">
           <label htmlFor="admin-page-size" className="text-sm text-neutral-500">
-            {t('search.perPage')}:
+            {t('search:perPage')}:
           </label>
           <select
             id="admin-page-size"
@@ -223,7 +223,7 @@ export function AdminRestaurants() {
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
             <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-neutral-900">
-                {t('admin.comment.title') || 'Add Comment'}
+                {t('admin:comment.title') || 'Add Comment'}
               </h3>
               <button
                 onClick={() => setPendingAction(null)}
@@ -235,15 +235,15 @@ export function AdminRestaurants() {
             <div className="p-5 space-y-4">
               <div>
                 <p className="text-sm text-neutral-600 mb-1">
-                  {pendingAction.type === 'approve' ? t('admin.restaurants.actions.approve') : t('admin.restaurants.actions.reject')}: <strong>{pendingAction.restaurantName}</strong>
+                  {pendingAction.type === 'approve' ? t('admin:restaurants.actions.approve') : t('admin:restaurants.actions.reject')}: <strong>{pendingAction.restaurantName}</strong>
                 </p>
                 <p className="text-sm text-neutral-500 mb-2">
-                  {t('admin.comment.hint') || 'Add a comment for the user (optional)'}
+                  {t('admin:comment.hint') || 'Add a comment for the user (optional)'}
                 </p>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder={t('admin.comment.placeholder') || 'Enter your response...'}
+                  placeholder={t('admin:comment.placeholder') || 'Enter your response...'}
                   rows={3}
                   className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                   autoFocus
@@ -254,7 +254,7 @@ export function AdminRestaurants() {
                   onClick={() => setPendingAction(null)}
                   className="flex-1 px-4 py-2 border border-neutral-200 rounded-xl font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
                 >
-                  {t('common.cancel')}
+                  {t('common:cancel')}
                 </button>
                 <button
                   onClick={confirmAction}
@@ -264,7 +264,7 @@ export function AdminRestaurants() {
                       : 'bg-red-500 hover:bg-red-600'
                   }`}
                 >
-                  {pendingAction.type === 'approve' ? t('admin.restaurants.actions.approve') : t('admin.restaurants.actions.reject')}
+                  {pendingAction.type === 'approve' ? t('admin:restaurants.actions.approve') : t('admin:restaurants.actions.reject')}
                 </button>
               </div>
             </div>

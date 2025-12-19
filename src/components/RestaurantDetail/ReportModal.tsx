@@ -12,7 +12,7 @@ interface ReportModalProps {
 }
 
 export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportModalProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
   const [reportField, setReportField] = useState('')
   const [reportValue, setReportValue] = useState('')
   const [reportReason, setReportReason] = useState('')
@@ -66,7 +66,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
       setUploadedFiles(prev => [...prev, ...newUrls])
     } catch (err) {
       console.error('Upload error:', err)
-      alert(t('common.uploadError') || 'Upload failed')
+      alert(t('common:uploadError') || 'Upload failed')
     } finally {
       setUploading(false)
       if (fileInputRef.current) fileInputRef.current.value = ''
@@ -124,10 +124,10 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
       setReportReason('')
       setUploadedFiles([])
       setMenuLink('')
-      toast.success(t('restaurant.reportModal.success'))
+      toast.success(t('restaurant:reportModal.success'))
     } catch (err) {
       console.error('Report submission error:', err)
-      toast.error(t('restaurant.reportModal.error'))
+      toast.error(t('restaurant:reportModal.error'))
     } finally {
       setReportLoading(false)
     }
@@ -138,11 +138,12 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
       <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-neutral-100 flex items-center justify-between sticky top-0 bg-white">
           <h2 className="text-xl font-bold text-neutral-900">
-            {t('restaurant.reportModal.title')}
+            {t('restaurant:reportModal.title')}
           </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+            aria-label={t('common:close')}
           >
             <X size={20} className="text-neutral-500" />
           </button>
@@ -151,7 +152,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
         <form onSubmit={handleSubmitReport} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">
-              {t('restaurant.reportModal.fieldLabel')}
+              {t('restaurant:reportModal.fieldLabel')}
             </label>
             <select
               value={reportField}
@@ -162,18 +163,18 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                 setReportValue('')
               }}
               required
-              onInvalid={e => (e.target as HTMLSelectElement).setCustomValidity(t('restaurant.reportModal.selectField'))}
+              onInvalid={e => (e.target as HTMLSelectElement).setCustomValidity(t('restaurant:reportModal.selectField'))}
               onInput={e => (e.target as HTMLSelectElement).setCustomValidity('')}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
-              <option value="">{t('restaurant.reportModal.selectField')}</option>
-              <option value="pet_policy">{t('restaurant.reportModal.fields.pet_policy')}</option>
-              <option value="contact_info">{t('restaurant.reportModal.fields.contact_info')}</option>
-              <option value="address">{t('restaurant.reportModal.fields.address')}</option>
-              <option value="cuisine_type">{t('restaurant.reportModal.fields.cuisine_type')}</option>
-              <option value="image">{t('restaurant.reportModal.fields.image') || '相片'}</option>
-              <option value="menu">{t('restaurant.reportModal.fields.menu') || '菜單'}</option>
-              <option value="other">{t('restaurant.reportModal.fields.other')}</option>
+              <option value="">{t('restaurant:reportModal.selectField')}</option>
+              <option value="pet_policy">{t('restaurant:reportModal.fields.pet_policy')}</option>
+              <option value="contact_info">{t('restaurant:reportModal.fields.contact_info')}</option>
+              <option value="address">{t('restaurant:reportModal.fields.address')}</option>
+              <option value="cuisine_type">{t('restaurant:reportModal.fields.cuisine_type')}</option>
+              <option value="image">{t('restaurant:reportModal.fields.image') || '相片'}</option>
+              <option value="menu">{t('restaurant:reportModal.fields.menu') || '菜單'}</option>
+              <option value="other">{t('restaurant:reportModal.fields.other')}</option>
             </select>
           </div>
 
@@ -182,7 +183,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 <ImageIcon size={16} className="inline mr-1" />
-                {t('restaurant.reportModal.uploadImages') || '相片'}
+                {t('restaurant:reportModal.uploadImages') || '相片'}
               </label>
 
               {/* Toggle: Upload vs Link */}
@@ -197,7 +198,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   }`}
                 >
                   <Upload size={14} />
-                  {t('common.upload') || '上傳'}
+                  {t('common:upload') || '上傳'}
                 </button>
                 <button
                   type="button"
@@ -209,7 +210,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   }`}
                 >
                   <LinkIcon size={14} />
-                  {t('common.link') || '連結'}
+                  {t('common:link') || '連結'}
                 </button>
               </div>
               
@@ -231,7 +232,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   >
                     <Upload size={20} className="text-neutral-500" />
                     <span className="text-neutral-600">
-                      {uploading ? (t('common.uploading') || '上傳中...') : (t('common.clickToUpload') || '點擊上傳')}
+                      {uploading ? (t('common:uploading') || '上傳中...') : (t('common:clickToUpload') || '點擊上傳')}
                     </span>
                   </label>
 
@@ -271,7 +272,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 <FileText size={16} className="inline mr-1" />
-                {t('restaurant.reportModal.menuUpload') || '菜單'}
+                {t('restaurant:reportModal.menuUpload') || '菜單'}
               </label>
               
               {/* Toggle: Upload vs Link */}
@@ -286,7 +287,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   }`}
                 >
                   <Upload size={14} />
-                  {t('common.upload') || '上傳'}
+                  {t('common:upload') || '上傳'}
                 </button>
                 <button
                   type="button"
@@ -298,9 +299,19 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   }`}
                 >
                   <LinkIcon size={14} />
-                  {t('common.link') || '連結'}
+                  {t('common:link') || '連結'}
                 </button>
               </div>
+
+              {menuType === 'link' && (
+                <input
+                  type="url"
+                  value={menuLink}
+                  onChange={(e) => setMenuLink(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              )}
 
               {menuType === 'upload' && (
                 <>
@@ -320,7 +331,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   >
                     <Upload size={20} className="text-neutral-500" />
                     <span className="text-neutral-600">
-                      {uploading ? (t('common.uploading') || '上傳中...') : (t('common.uploadImageOrPdf') || '上傳圖片或 PDF')}
+                      {uploading ? (t('common:uploading') || '上傳中...') : (t('common:uploadImageOrPdf') || '上傳圖片或 PDF')}
                     </span>
                   </label>
 
@@ -347,16 +358,6 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
                   )}
                 </>
               )}
-
-              {menuType === 'link' && (
-                <input
-                  type="url"
-                  value={menuLink}
-                  onChange={(e) => setMenuLink(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              )}
             </div>
           )}
 
@@ -364,13 +365,13 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
           {!isFileField && (
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('restaurant.reportModal.suggestedValue')}
+                {t('restaurant:reportModal.suggestedValue')}
               </label>
               <textarea
                 value={reportValue}
                 onChange={(e) => setReportValue(e.target.value)}
                 required
-                onInvalid={e => (e.target as HTMLTextAreaElement).setCustomValidity(t('restaurant.reportModal.validation.required'))}
+                onInvalid={e => (e.target as HTMLTextAreaElement).setCustomValidity(t('restaurant:reportModal.validation.required'))}
                 onInput={e => (e.target as HTMLTextAreaElement).setCustomValidity('')}
                 rows={3}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -380,14 +381,14 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">
-              {t('restaurant.reportModal.reason')}
+              {t('restaurant:reportModal.reason')}
             </label>
             <textarea
               value={reportReason}
               onChange={(e) => setReportReason(e.target.value)}
-              placeholder={t('restaurant.reportModal.reasonPlaceholder')}
+              placeholder={t('restaurant:reportModal.reasonPlaceholder')}
               rows={2}
-              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
@@ -397,14 +398,14 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
               onClick={onClose}
               className="px-4 py-2 text-neutral-600 hover:bg-neutral-50 rounded-lg font-medium transition-colors"
             >
-              {t('common.cancel')}
+              {t('common:cancel')}
             </button>
             <button
               type="submit"
               disabled={reportLoading || uploading}
               className="px-4 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors disabled:opacity-50"
             >
-              {reportLoading ? t('common.loading') : t('common.submit')}
+              {reportLoading ? t('common:loading') : t('common:submit')}
             </button>
           </div>
         </form>

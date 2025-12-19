@@ -14,7 +14,7 @@ interface ActionButtonsProps {
 }
 
 export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRequired, isAdmin }: ActionButtonsProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common', 'profile'])
   const { user } = useAuth()
   const { isFavorited, toggleFavorite } = useFavorites()
   
@@ -25,16 +25,16 @@ export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRe
       if (onAuthRequired) {
         onAuthRequired()
       } else {
-        toast.error(t('common.loginRequired'))
+        toast.error(t('common:loginRequired'))
       }
       return
     }
     
     try {
       await toggleFavorite(restaurant.id)
-      toast.success(isFav ? t('favorites.removed') : t('favorites.added'))
+      toast.success(isFav ? t('profile:favorites.removed') : t('profile:favorites.added'))
     } catch {
-      toast.error(t('common.error'))
+      toast.error(t('common:error'))
     }
   }
 
@@ -61,7 +61,7 @@ export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRe
         }`}
       >
         <Heart size={20} className={isFav ? 'fill-red-500' : ''} />
-        {isFav ? t('favorites.saved') : t('favorites.save')}
+        {isFav ? t('profile:favorites.saved') : t('profile:favorites.save')}
       </button>
       
       <a
@@ -71,7 +71,7 @@ export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRe
         className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
       >
         <Navigation size={20} />
-        {t('restaurant.getDirections')}
+        {t('restaurant:getDirections')}
       </a>
       
       {restaurant.contact_info && (
@@ -80,7 +80,7 @@ export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRe
           className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-neutral-200 hover:border-primary-300 text-neutral-700 font-semibold rounded-xl shadow-soft hover:shadow-lg transition-all"
         >
           <Phone size={20} />
-          {t('restaurant.callNow')}
+          {t('restaurant:callNow')}
         </a>
       )}
       
@@ -89,7 +89,7 @@ export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRe
         className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-white border-2 border-neutral-200 hover:border-amber-300 text-neutral-700 font-semibold rounded-xl shadow-soft hover:shadow-lg transition-all"
       >
         <Flag size={20} />
-        {t('restaurant.reportUpdate')}
+        {t('restaurant:reportUpdate')}
       </button>
 
       {isAdmin && (
@@ -97,7 +97,7 @@ export function ActionButtons({ restaurant, onReportClick, onEditClick, onAuthRe
           onClick={onEditClick}
           className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-neutral-800 hover:bg-neutral-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
         >
-          {t('common.edit') || 'Edit'}
+          {t('common:edit') || 'Edit'}
         </button>
       )}
     </div>

@@ -1,0 +1,139 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "totalRestaurants": "Total Restaurants",
+    "activeListings": "Active Listings",
+    "pendingApproval": "Pending Approval",
+    "totalReviews": "Total Reviews",
+    "updateReports": "Update Reports"
+  },
+  "restaurants": {
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "filters": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved"
+    },
+    "title": "Manage Restaurants",
+    "table": {
+      "headers": {
+        "restaurant": "Restaurant",
+        "status": "Status",
+        "petPolicy": "Pet Policy",
+        "submitted": "Submitted",
+        "actions": "Actions"
+      },
+      "noRestaurants": "No restaurants found"
+    }
+  },
+  "comment": {
+    "title": "Add Comment",
+    "hint": "Add a comment for the user (optional)",
+    "placeholder": "Enter your response..."
+  },
+  "modal": {
+    "labels": {
+      "nameEn": "Name (English)",
+      "nameZh": "Name (Chinese)",
+      "namePt": "Name (Portuguese)",
+      "cuisineType": "Cuisine Type",
+      "petPolicy": "Pet Policy",
+      "status": "Status",
+      "descriptionEn": "Description (English)",
+      "descriptionZh": "Description (Chinese)",
+      "descriptionPt": "Description (Portuguese)",
+      "addressEn": "Address (English)",
+      "addressZh": "Address (Chinese)",
+      "addressPt": "Address (Portuguese)",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "imageUrl": "Images",
+      "contactInfo": "Contact Phone",
+      "location": "Location"
+    },
+    "placeholders": {
+      "selectCuisine": "Select cuisine",
+      "description": "Describe this restaurant...",
+      "address": "Enter address",
+      "imageUrl": "https://...",
+      "imageUrlPlaceholder": "Enter image URL (e.g., https://...)",
+      "menuUrlPlaceholder": "Enter PDF or image URL (e.g., https://...)"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "create": "Create Restaurant",
+      "addLink": "Add Link",
+      "addMore": "Add More",
+      "uploadPhotos": "Upload Photos",
+      "uploadMenu": "Upload menu images"
+    }
+  },
+  "reports": {
+    "title": "Update Reports",
+    "empty": "No reports found",
+    "fieldLabel": "Field",
+    "suggestedValue": "Suggested Value",
+    "images": "Images",
+    "approve": "Approve",
+    "reject": "Reject",
+    "check": "Check",
+    "approveSuccess": "Report approved and changes applied",
+    "approveError": "Failed to approve report",
+    "rejectSuccess": "Report rejected",
+    "rejectError": "Failed to reject report",
+    "checkSuccess": "Report marked as reviewed",
+    "checkError": "Failed to mark report as reviewed",
+    "edit": "Edit",
+    "editTitle": "Edit Report",
+    "editSuccess": "Report updated",
+    "editError": "Failed to update report",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "all": "All"
+    }
+  },
+  "cuisineTypes": {
+    "title": "Cuisine Types",
+    "subtitle": "Manage cuisine type options",
+    "add": "Add Type",
+    "empty": "No cuisine types found",
+    "form": {
+      "key": "Name (Key)",
+      "nameZh": "Chinese Name",
+      "namePt": "Portuguese Name"
+    },
+    "table": {
+      "headers": {
+        "key": "Key",
+        "nameZh": "Chinese",
+        "namePt": "Portuguese",
+        "actions": "Actions"
+      }
+    }
+  },
+  "petPolicies": {
+    "title": "Pet Policies",
+    "subtitle": "Manage pet policy options",
+    "add": "Add Policy",
+    "orderChanged": "Order has changed. Click \"Save Order\" to save."
+  },
+  "feedback": {
+    "title": "User Feedback",
+    "subtitle": "View and manage user feedback",
+    "empty": "No feedback yet",
+    "statusUpdated": "Status updated",
+    "status": {
+      "all": "All",
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "resolved": "Resolved"
+    }
+  }
+}

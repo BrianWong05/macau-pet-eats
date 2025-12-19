@@ -19,40 +19,40 @@ import { useNavigate } from 'react-router-dom'
 // ... existing imports
 
 export function StatsGrid({ stats, isLoading }: StatsGridProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin'])
   const navigate = useNavigate()
 
   const statCards = [
     {
-      label: t('admin.dashboard.totalRestaurants') || 'Total Restaurants',
+      label: t('admin:dashboard.totalRestaurants') || 'Total Restaurants',
       value: stats.totalRestaurants,
       icon: Store,
       color: 'bg-blue-500',
       path: '/admin/restaurants'
     },
     {
-      label: t('admin.dashboard.activeListings') || 'Active Listings',
+      label: t('admin:dashboard.activeListings') || 'Active Listings',
       value: stats.activeRestaurants,
       icon: CheckCircle,
       color: 'bg-green-500',
       path: '/admin/restaurants'
     },
     {
-      label: t('admin.dashboard.pendingApproval') || 'Pending Approval',
+      label: t('admin:dashboard.pendingApproval') || 'Pending Approval',
       value: stats.pendingRestaurants,
       icon: Clock,
       color: 'bg-amber-500',
       path: '/admin/restaurants'
     },
     {
-      label: t('admin.dashboard.updateReports') || 'Update Reports',
+      label: t('admin:dashboard.updateReports') || 'Update Reports',
       value: stats.pendingReports,
       icon: FileText,
       color: 'bg-orange-500',
       path: '/admin/reports'
     },
     {
-      label: t('admin.dashboard.totalReviews') || 'Total Reviews',
+      label: t('admin:dashboard.totalReviews') || 'Total Reviews',
       value: stats.totalReviews,
       icon: Users,
       color: 'bg-purple-500',

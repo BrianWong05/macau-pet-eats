@@ -9,7 +9,7 @@ interface InfoCardProps {
 }
 
 export function InfoCard({ restaurant, lang }: InfoCardProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
   const description = getLocalizedText(restaurant, 'description', lang)
   const address = getLocalizedText(restaurant, 'address', lang)
 
@@ -50,7 +50,7 @@ export function InfoCard({ restaurant, lang }: InfoCardProps) {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-neutral-900 mb-1">
-                {t('restaurant.address')}
+                {t('restaurant:address')}
               </h3>
               <p className="text-neutral-600 mb-3">{address}</p>
               <a
@@ -59,7 +59,7 @@ export function InfoCard({ restaurant, lang }: InfoCardProps) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-primary-600 hover:text-primary-700 font-medium text-sm"
               >
-                {t('restaurant.openInMaps')}
+                {t('restaurant:openInMaps')}
                 <ExternalLink size={14} />
               </a>
             </div>
@@ -74,7 +74,7 @@ export function InfoCard({ restaurant, lang }: InfoCardProps) {
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-neutral-900 mb-1">
-                  {t('restaurant.contact')}
+                  {t('restaurant:contact')}
                 </h3>
                 <a
                   href={getPhoneLink()}

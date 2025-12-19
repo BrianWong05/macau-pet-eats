@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Edit, Save, Trash2, X, GripVertical } from 'lucide-react'
 import type { CuisineType } from '@/types/database'
 
@@ -27,6 +28,7 @@ export function CuisineTypeTable({
   onDelete,
   onReorder
 }: CuisineTypeTableProps) {
+  const { t } = useTranslation(['admin', 'common'])
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
 
@@ -73,18 +75,18 @@ export function CuisineTypeTable({
   return (
     <div className="bg-white rounded-xl shadow-card overflow-hidden">
       {isLoading ? (
-        <div className="p-8 text-center text-neutral-500">Loading...</div>
+        <div className="p-8 text-center text-neutral-500">{t('common:loading')}</div>
       ) : cuisineTypes.length === 0 ? (
-        <div className="p-8 text-center text-neutral-500">No cuisine types</div>
+        <div className="p-8 text-center text-neutral-500">{t('admin:cuisineTypes.empty')}</div>
       ) : (
         <table className="w-full">
           <thead className="bg-neutral-50">
             <tr>
               <th className="px-2 py-3 text-left text-sm font-medium text-neutral-600 w-10"></th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">Key</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">中文</th>
-              <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">PT</th>
-              <th className="px-4 py-3 text-right text-sm font-medium text-neutral-600">Actions</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">{t('admin:cuisineTypes.table.headers.key')}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">{t('admin:cuisineTypes.table.headers.nameZh')}</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">{t('admin:cuisineTypes.table.headers.namePt')}</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-neutral-600">{t('admin:cuisineTypes.table.headers.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">

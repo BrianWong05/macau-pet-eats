@@ -56,7 +56,7 @@ export interface Restaurant {
   updated_at: string
   
   // Index signature for dynamic access
-  [key: string]: string | number | null | string[] | OpeningHours | SocialMedia | null
+  [key: string]: string | number | null | string[] | OpeningHours | SocialMedia | undefined
 }
 
 // Opening hours type
@@ -149,6 +149,7 @@ export interface Review {
   user_id: string
   rating: 1 | 2 | 3 | 4 | 5
   comment: string | null
+  image_url: string | null
   created_at: string
   updated_at: string
   // Joined data (optional, populated when fetching with user info)

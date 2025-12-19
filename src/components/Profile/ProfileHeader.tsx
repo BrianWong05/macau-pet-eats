@@ -5,7 +5,7 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useAuth } from '@/contexts/AuthContext'
 
 export function ProfileHeader() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['profile', 'restaurant', 'auth', 'common'])
   const { user, username, signOut } = useAuth()
   const navigate = useNavigate()
 
@@ -15,13 +15,13 @@ export function ProfileHeader() {
         <button
           onClick={() => navigate(-1)}
           className="p-2 hover:bg-neutral-100 rounded-xl transition-colors"
-          aria-label={t('restaurant.backToList')}
+          aria-label={t('restaurant:backToList')}
         >
           <ArrowLeft size={20} className="text-neutral-600" />
         </button>
         <div>
           <h1 className="text-lg font-semibold text-neutral-900">
-            {username || t('profile.title')}
+            {username || t('profile:title')}
           </h1>
           {user?.email && (
             <p className="text-sm text-neutral-500 hidden sm:block">
@@ -37,14 +37,14 @@ export function ProfileHeader() {
             <Link
               to="/profile"
               className="p-2 hover:bg-neutral-100 rounded-xl transition-colors text-primary-600"
-              title={t('profile.title')}
+              title={t('profile:title')}
             >
               <User size={20} />
             </Link>
             <button
               onClick={() => signOut()}
               className="p-2 hover:bg-neutral-100 rounded-xl transition-colors text-neutral-600 hover:text-red-600"
-              title={t('auth.logout') || 'Logout'}
+              title={t('auth:logout') || 'Logout'}
             >
               <LogOut size={20} />
             </button>
@@ -55,7 +55,7 @@ export function ProfileHeader() {
           className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
         >
           <Upload size={16} />
-          <span className="hidden sm:inline">{t('nav.submit')}</span>
+          <span className="hidden sm:inline">{t('common:nav.submit')}</span>
         </Link>
         <LanguageSwitcher />
       </div>

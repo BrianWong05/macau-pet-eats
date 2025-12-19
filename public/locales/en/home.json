@@ -1,0 +1,28 @@
+{
+  "badge": "Macau's #1 Pet-Friendly Dining Guide",
+  "headline": "Find the Best Places to Dine with Your",
+  "headlineHighlight": "Furry Friend",
+  "subheadline": "Discover pet-friendly restaurants, cafés, and bars across Macau. From cozy patios to fully indoor-friendly spots.",
+  "searchPlaceholder": "Search by restaurant name or cuisine...",
+  "stats": {
+    "locationsSuffix": "Locations",
+    "allPets": "All Pet Types Welcome"
+  },
+  "featured": {
+    "title": "Featured Restaurants",
+    "subtitle": "Hand-picked spots where you and your pet are always welcome",
+    "searchTitle": "Search Results",
+    "searchSubtitle": "Showing results for \"{{query}}\""
+  },
+  "noResults": {
+    "title": "No restaurants found",
+    "searchHint": "Try adjusting your search terms",
+    "defaultHint": "Check back soon for new additions!"
+  },
+  "exploreButton": "Explore All on Map",
+  "cta": {
+    "title": "Discovered a new pet friendly restaurant?",
+    "subtitle": "Help us build the most complete guide to pet-friendly dining in Macau!",
+    "button": "Recommend it"
+  }
+}

@@ -1,33 +1,50 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-
-import zhTranslation from '@/locales/zh/translation.json'
-import enTranslation from '@/locales/en/translation.json'
-import ptTranslation from '@/locales/pt/translation.json'
-
-const resources = {
-  zh: { translation: zhTranslation },
-  en: { translation: enTranslation },
-  pt: { translation: ptTranslation },
-}
+import HttpBackend from 'i18next-http-backend'
 
 i18n
+  .use(HttpBackend)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources,
-    fallbackLng: 'zh', // Traditional Chinese as default
-    lng: 'zh', // Default language
+    fallbackLng: 'zh',
+    supportedLngs: ['zh', 'en', 'pt'],
+    
+    // Load 'common' namespace by default (buttons, nav, errors)
+    defaultNS: 'common',
+    
+    // All available namespaces (loaded on-demand)
+    ns: [
+      'common',
+      'home',
+      'explore',
+      'search',
+      'restaurant',
+      'submit',
+      'profile',
+      'admin',
+      'auth',
+      'feedback'
+    ],
+    
+    backend: {
+      // Load from public/locales/{lng}/{namespace}.json
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    },
     
     interpolation: {
-      escapeValue: false, // React already escapes values
+      escapeValue: false, // React already escapes
     },
     
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
       lookupLocalStorage: 'macau-pet-eats-lang',
+    },
+    
+    react: {
+      useSuspense: true, // Use Suspense for loading states
     },
   })
 

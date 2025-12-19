@@ -1,0 +1,10 @@
+{
+  "title": "Search Restaurants",
+  "placeholder": "Search by name, cuisine type...",
+  "results": "Found {{count}} restaurants",
+  "noResults": "No restaurants found",
+  "noResultsHint": "Try different keywords or adjust your filters",
+  "clearFilters": "Clear filters",
+  "filter": "Filter",
+  "perPage": "Per page"
+}

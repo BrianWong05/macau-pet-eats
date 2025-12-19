@@ -29,7 +29,7 @@ const sizeColors = {
 }
 
 export function PetProfileCard({ pet, onEdit, onDelete }: PetProfileCardProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['common'])
   const IconComponent = petIcons[pet.type as keyof typeof petIcons] || petIcons.other
 
   return (
@@ -76,7 +76,7 @@ export function PetProfileCard({ pet, onEdit, onDelete }: PetProfileCardProps) {
                 className="flex-1 inline-flex items-center justify-center gap-1 py-1.5 text-sm text-neutral-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
               >
                 <Edit2 size={14} />
-                {t('common.edit')}
+                {t('common:edit')}
               </button>
             )}
             {onDelete && (
@@ -85,7 +85,7 @@ export function PetProfileCard({ pet, onEdit, onDelete }: PetProfileCardProps) {
                 className="flex-1 inline-flex items-center justify-center gap-1 py-1.5 text-sm text-neutral-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               >
                 <Trash2 size={14} />
-                {t('common.delete')}
+                {t('common:delete')}
               </button>
             )}
           </div>

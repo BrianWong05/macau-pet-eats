@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Facebook, Instagram, Globe } from 'lucide-react'
+import { Facebook, Instagram, Globe, Share2 } from 'lucide-react'
 import type { Restaurant, SocialMedia } from '@/types/database'
 
 interface SocialMediaSectionProps {
@@ -7,7 +7,7 @@ interface SocialMediaSectionProps {
 }
 
 export function SocialMediaSection({ restaurant }: SocialMediaSectionProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
 
   if (!restaurant.social_media || !Object.values(restaurant.social_media as SocialMedia).some(v => v)) {
     return null
@@ -15,9 +15,10 @@ export function SocialMediaSection({ restaurant }: SocialMediaSectionProps) {
 
   return (
     <div className="mt-4 bg-white rounded-2xl shadow-card p-6">
-      <h3 className="font-semibold text-neutral-900 mb-4">
-        {t('restaurant.socialMedia.title')}
-      </h3>
+      <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+        <Share2 className="w-5 h-5 text-primary-500" />
+        {t('restaurant:socialMedia.title')}
+      </h2>
       <div className="flex gap-4">
         {(restaurant.social_media as SocialMedia).facebook && (
           <a
@@ -49,7 +50,7 @@ export function SocialMediaSection({ restaurant }: SocialMediaSectionProps) {
             className="flex items-center gap-2 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 transition-colors"
           >
             <Globe size={18} />
-            <span className="text-sm font-medium">{t('restaurant.socialMedia.website')}</span>
+            <span className="text-sm font-medium">{t('restaurant:socialMedia.website')}</span>
           </a>
         )}
       </div>

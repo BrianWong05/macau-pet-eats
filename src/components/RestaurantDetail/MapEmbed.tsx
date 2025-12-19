@@ -10,7 +10,7 @@ interface MapEmbedProps {
 }
 
 export function MapEmbed({ restaurant, lang }: MapEmbedProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
   const name = getLocalizedText(restaurant, 'name', lang)
 
   const getMapSrc = () => {
@@ -25,10 +25,10 @@ export function MapEmbed({ restaurant, lang }: MapEmbedProps) {
 
   return (
     <div className="mt-8 bg-white rounded-2xl shadow-card p-6">
-      <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
         <MapPin className="w-5 h-5 text-primary-500" />
-        {t('restaurant.location')}
-      </h3>
+        {t('restaurant:location')}
+      </h2>
       <div className="aspect-video rounded-xl overflow-hidden bg-neutral-100">
         <iframe
           title={`${name} location`}

@@ -17,7 +17,7 @@ const FEEDBACK_TYPES = [
 ] as const
 
 export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['feedback', 'common'])
   const { user } = useAuth()
   const [type, setType] = useState<'bug' | 'feature' | 'general'>('general')
   const [message, setMessage] = useState('')
@@ -44,14 +44,14 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
       if (error) throw error
 
-      toast.success(t('feedback.success') || 'Thanks for your feedback!')
+      toast.success(t('feedback:success') || 'Thanks for your feedback!')
       setMessage('')
       setEmail('')
       setType('general')
       onClose()
     } catch (err) {
       console.error('Feedback submission error:', err)
-      toast.error(t('feedback.error') || 'Failed to submit feedback')
+      toast.error(t('feedback:error') || 'Failed to submit feedback')
     } finally {
       setLoading(false)
     }
@@ -62,7 +62,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       <div className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-neutral-100 flex items-center justify-between sticky top-0 bg-white">
           <h2 className="text-xl font-bold text-neutral-900">
-            {t('feedback.title') || 'Send Feedback'}
+            {t('feedback:title') || 'Send Feedback'}
           </h2>
           <button
             onClick={onClose}
@@ -76,7 +76,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           {/* Type Selection */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              {t('feedback.typeLabel') || 'What type of feedback?'}
+              {t('feedback:typeLabel') || 'What type of feedback?'}
             </label>
             <div className="grid grid-cols-3 gap-2">
               {FEEDBACK_TYPES.map((ft) => (
@@ -94,7 +94,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     <ft.icon size={18} />
                   </div>
                   <span className="text-xs font-medium text-neutral-700">
-                    {t(`feedback.types.${ft.value}`) || ft.value}
+                    {t(`feedback:types.${ft.value}`) || ft.value}
                   </span>
                 </button>
               ))}
@@ -104,14 +104,14 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           {/* Message */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">
-              {t('feedback.messageLabel') || 'Your message'}
+              {t('feedback:messageLabel') || 'Your message'}
             </label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
               rows={4}
-              placeholder={t('feedback.messagePlaceholder') || 'Tell us what you think...'}
+              placeholder={t('feedback:messagePlaceholder') || 'Tell us what you think...'}
               className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
             />
           </div>
@@ -120,7 +120,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           {!user && (
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('feedback.emailLabel') || 'Email (optional)'}
+                {t('feedback:emailLabel') || 'Email (optional)'}
               </label>
               <input
                 type="email"
@@ -130,7 +130,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <p className="text-xs text-neutral-500 mt-1">
-                {t('feedback.emailHint') || "We'll only use this to follow up on your feedback"}
+                {t('feedback:emailHint') || "We'll only use this to follow up on your feedback"}
               </p>
             </div>
           )}
@@ -142,7 +142,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             className="w-full py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <Send size={18} />
-            {loading ? (t('common.loading') || 'Sending...') : (t('feedback.submit') || 'Send Feedback')}
+            {loading ? (t('common:loading') || 'Sending...') : (t('feedback:submit') || 'Send Feedback')}
           </button>
         </form>
       </div>

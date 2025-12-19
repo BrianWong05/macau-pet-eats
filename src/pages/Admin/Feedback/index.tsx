@@ -42,7 +42,7 @@ const STATUS_COLORS = {
 const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
 
 export function AdminFeedback() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'search', 'common'])
   const [feedback, setFeedback] = useState<Feedback[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'reviewed' | 'resolved'>('all')
@@ -96,7 +96,7 @@ export function AdminFeedback() {
       .eq('id', id)
 
     if (!error) {
-      toast.success(t('admin.feedback.statusUpdated') || 'Status updated')
+      toast.success(t('admin:feedback.statusUpdated') || 'Status updated')
       fetchFeedback()
     } else {
       toast.error('Failed to update status')
@@ -120,8 +120,8 @@ export function AdminFeedback() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">{t('admin.feedback.title') || 'User Feedback'}</h1>
-          <p className="text-neutral-500 mt-1">{t('admin.feedback.subtitle') || 'View and manage user feedback'}</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('admin:feedback.title') || 'User Feedback'}</h1>
+          <p className="text-neutral-500 mt-1">{t('admin:feedback.subtitle') || 'View and manage user feedback'}</p>
         </div>
       </div>
 
@@ -137,7 +137,7 @@ export function AdminFeedback() {
                 : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
             }`}
           >
-            {t(`admin.feedback.status.${status}`) || status}
+            {t(`admin:feedback.status.${status}`) || status}
           </button>
         ))}
       </div>
@@ -145,11 +145,11 @@ export function AdminFeedback() {
       {/* Per-page selector */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-neutral-500">
-          {t('search.results', { count: feedback.length })}
+          {t('search:results', { count: feedback.length })}
         </p>
         <div className="flex items-center gap-2">
           <label htmlFor="feedback-page-size" className="text-sm text-neutral-500">
-            {t('search.perPage')}:
+            {t('search:perPage')}:
           </label>
           <select
             id="feedback-page-size"
@@ -170,7 +170,7 @@ export function AdminFeedback() {
           <div className="text-center py-12 text-neutral-500">Loading...</div>
         ) : feedback.length === 0 ? (
           <div className="text-center py-12 text-neutral-500">
-            {t('admin.feedback.empty') || 'No feedback yet'}
+            {t('admin:feedback.empty') || 'No feedback yet'}
           </div>
         ) : (
           paginatedFeedback.map((item) => {
@@ -185,7 +185,7 @@ export function AdminFeedback() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <span className={`px-2 py-0.5 rounded text-xs font-medium ${STATUS_COLORS[item.status]}`}>
-                          {t(`admin.feedback.status.${item.status}`) || item.status}
+                          {t(`admin:feedback.status.${item.status}`) || item.status}
                         </span>
                         <span className="text-xs text-neutral-400">
                           {new Date(item.created_at).toLocaleString()}
@@ -254,7 +254,7 @@ export function AdminFeedback() {
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
             <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-neutral-900">
-                {t('admin.comment.title') || 'Add Comment'}
+                {t('admin:comment.title') || 'Add Comment'}
               </h3>
               <button
                 onClick={() => setPendingAction(null)}
@@ -266,12 +266,12 @@ export function AdminFeedback() {
             <div className="p-5 space-y-4">
               <div>
                 <p className="text-sm text-neutral-600 mb-2">
-                  {t('admin.comment.hint') || 'Add a comment for the user (optional)'}
+                  {t('admin:comment.hint') || 'Add a comment for the user (optional)'}
                 </p>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder={t('admin.comment.placeholder') || 'Enter your response...'}
+                  placeholder={t('admin:comment.placeholder') || 'Enter your response...'}
                   rows={3}
                   className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                 />
@@ -281,13 +281,13 @@ export function AdminFeedback() {
                   onClick={() => setPendingAction(null)}
                   className="flex-1 px-4 py-2 border border-neutral-200 rounded-xl font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
                 >
-                  {t('common.cancel')}
+                  {t('common:cancel')}
                 </button>
                 <button
                   onClick={confirmStatusChange}
                   className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors"
                 >
-                  {t('common.submit')}
+                  {t('common:submit')}
                 </button>
               </div>
             </div>

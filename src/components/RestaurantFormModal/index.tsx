@@ -24,7 +24,7 @@ import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation(['admin', 'common', 'submit', 'restaurant', 'explore'])
   const lang = i18n.language as 'en' | 'zh' | 'pt'
   const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
   const [loading, setLoading] = useState(false)
@@ -324,7 +324,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
 
     try {
       if (!formData.cuisine_type || formData.cuisine_type.length === 0) {
-        toast.error(t('submit.form.selectAtLeastOne') || 'Please select at least one cuisine type')
+        toast.error(t('submit:form.selectAtLeastOne') || 'Please select at least one cuisine type')
         setLoading(false)
         return
       }
@@ -468,7 +468,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.nameZh')}</label>
+                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common:requiredField')}</span>{t('admin:modal.labels.nameZh')}</label>
                 <input
                   type="text"
                   required
@@ -478,7 +478,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.nameEn')}</label>
+                <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.nameEn')}</label>
                 <input
                   type="text"
                   value={formData.name || ''}
@@ -487,7 +487,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.namePt')}</label>
+                <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.namePt')}</label>
                 <input
                   type="text"
                   value={formData.name_pt || ''}
@@ -499,7 +499,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.cuisineType')}</label>
+                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common:requiredField')}</span>{t('admin:modal.labels.cuisineType')}</label>
                 <div className="grid grid-cols-2 xs:grid-cols-3 gap-2">
                   {cuisineTypes.filter(ct => ct.name !== 'Other').map((ct: CuisineType) => {
                     const name = i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
@@ -552,7 +552,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                       }
                     `}
                   >
-                    {t('common.other') || 'Other'}
+                    {t('common:other') || 'Other'}
                   </button>
                 </div>
                 {((formData.cuisine_type as string[]) || []).includes('Other') && (
@@ -561,14 +561,14 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                     required
                     value={(formData as any).cuisine_type_other || ''}
                     onChange={(e) => setFormData(prev => ({ ...prev, cuisine_type_other: e.target.value }))}
-                    placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify'}
+                    placeholder={t('submit:form.otherCuisinePlaceholder') || 'Please specify'}
                     className="w-full mt-2 px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                   />
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.petPolicy')}</label>
+                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common:requiredField')}</span>{t('admin:modal.labels.petPolicy')}</label>
                 <select
                   required
                   value={formData.pet_policy || 'patio_only'}
@@ -591,20 +591,20 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.status')}</label>
+                <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.status')}</label>
                 <select
                   value={formData.status || 'pending'}
                   onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
                   className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 >
-                  <option value="pending">{t('admin.restaurants.status.pending')}</option>
-                  <option value="approved">{t('admin.restaurants.status.approved')}</option>
-                  <option value="rejected">{t('admin.restaurants.status.rejected')}</option>
+                  <option value="pending">{t('admin:restaurants.status.pending')}</option>
+                  <option value="approved">{t('admin:restaurants.status.approved')}</option>
+                  <option value="rejected">{t('admin:restaurants.status.rejected')}</option>
                 </select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('explore.filters.location') || '地區'}</label>
+                <label className="text-sm font-medium text-neutral-700">{t('explore:filters.location') || '地區'}</label>
                 <select
                   value={formData.location || '澳門'}
                   onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
@@ -620,74 +620,74 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.descriptionZh')}</label>
+              <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common:requiredField')}</span>{t('admin:modal.labels.descriptionZh')}</label>
               <textarea
                 required
                 rows={3}
                 value={formData.description_zh || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, description_zh: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.description') + ' (中文)'}
+                placeholder={t('admin:modal.placeholders.description') + ' (中文)'}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionEn')}</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.descriptionEn')}</label>
               <textarea
                 rows={3}
                 value={formData.description || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.description')}
+                placeholder={t('admin:modal.placeholders.description')}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionPt')}</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.descriptionPt')}</label>
               <textarea
                 rows={3}
                 value={formData.description_pt || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, description_pt: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.description') + ' (葡文)'}
+                placeholder={t('admin:modal.placeholders.description') + ' (葡文)'}
               />
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.addressZh')}</label>
+              <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common:requiredField')}</span>{t('admin:modal.labels.addressZh')}</label>
               <input
                 type="text"
                 required
                 value={formData.address_zh || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, address_zh: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.address') + ' (中文)'}
+                placeholder={t('admin:modal.placeholders.address') + ' (中文)'}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressEn')}</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.addressEn')}</label>
               <input
                 type="text"
                 value={formData.address || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.address')}
+                placeholder={t('admin:modal.placeholders.address')}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressPt')}</label>
+              <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.addressPt')}</label>
               <input
                 type="text"
                 value={formData.address_pt || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, address_pt: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.address') + ' (葡文)'}
+                placeholder={t('admin:modal.placeholders.address') + ' (葡文)'}
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.contactInfo')}</label>
+            <label className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.contactInfo')}</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <span className="text-neutral-500 font-medium">+853</span>
@@ -708,11 +708,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           {/* Social Media */}
           <div className="space-y-3">
             <label className="text-sm font-medium text-neutral-700">
-              {t('restaurant.socialMedia.title')}
+              {t('restaurant:socialMedia.title')}
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="space-y-1">
-                <label className="text-xs text-neutral-500">{t('restaurant.socialMedia.facebook')}</label>
+                <label className="text-xs text-neutral-500">{t('restaurant:socialMedia.facebook')}</label>
                 <input
                   type="url"
                   value={(formData.social_media as {facebook?: string})?.facebook || ''}
@@ -725,7 +725,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs text-neutral-500">{t('restaurant.socialMedia.instagram')}</label>
+                <label className="text-xs text-neutral-500">{t('restaurant:socialMedia.instagram')}</label>
                 <input
                   type="url"
                   value={(formData.social_media as {instagram?: string})?.instagram || ''}
@@ -738,7 +738,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs text-neutral-500">{t('restaurant.socialMedia.website')}</label>
+                <label className="text-xs text-neutral-500">{t('restaurant:socialMedia.website')}</label>
                 <input
                   type="url"
                   value={(formData.social_media as {website?: string})?.website || ''}
@@ -757,7 +757,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           <div className="space-y-3">
             <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
               <Clock size={16} className="text-primary-500" />
-              {t('openingHours.title')}
+              {t('common:openingHours.title')}
             </label>
             <div className="space-y-2">
               {DAYS_OF_WEEK.map((day) => {
@@ -767,7 +767,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 return (
                   <div key={day} className="flex items-center gap-3">
                     <div className="w-24 text-sm text-neutral-600">
-                      {t(`openingHours.days.${day}`)}
+                      {t(`common:openingHours.days.${day}`)}
                     </div>
                     <label className="flex items-center gap-2">
                       <input
@@ -822,7 +822,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                             }}
                             className="px-2 py-0.5 text-xs bg-neutral-100 hover:bg-neutral-200 text-neutral-600 rounded transition-colors"
                           >
-                            {t('openingHours.applyToWeekdays')}
+                            {t('common:openingHours.applyToWeekdays')}
                           </button>
                           <button
                             type="button"
@@ -836,7 +836,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                             }}
                             className="px-2 py-0.5 text-xs bg-neutral-100 hover:bg-neutral-200 text-neutral-600 rounded transition-colors"
                           >
-                            {t('openingHours.applyToWeekend')}
+                            {t('common:openingHours.applyToWeekend')}
                           </button>
                           <button
                             type="button"
@@ -849,12 +849,12 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                             }}
                             className="px-2 py-0.5 text-xs bg-primary-100 hover:bg-primary-200 text-primary-600 rounded transition-colors"
                           >
-                            {t('openingHours.applyToAll')}
+                            {t('common:openingHours.applyToAll')}
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <span className="text-sm text-neutral-400">{t('openingHours.closed')}</span>
+                      <span className="text-sm text-neutral-400">{t('common:openingHours.closed')}</span>
                     )}
                   </div>
                 )
@@ -866,7 +866,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-neutral-700 flex items-center gap-2">
                 <MapPin size={16} className="text-primary-500" />
-                {t('admin.modal.labels.location')} *
+                {t('admin:modal.labels.location')} *
               </label>
               <span className="text-xs text-neutral-500">
                 {formData.latitude?.toFixed(6)}, {formData.longitude?.toFixed(6)}
@@ -938,7 +938,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.imageUrl')}</h3>
+            <h3 className="text-sm font-medium text-neutral-700">{t('admin:modal.labels.imageUrl')}</h3>
             
             <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-4">
               {imageItems.map((item, index) => (
@@ -1017,7 +1017,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   <Upload size={20} className="text-neutral-400" />
                 </div>
                 <span className="text-xs font-medium text-neutral-600 text-center px-2">
-                  {imageItems.length === 0 ? 'Upload Photos' : 'Add More'}
+                  {imageItems.length === 0 ? t('admin:modal.buttons.uploadPhotos') : t('admin:modal.buttons.addMore')}
                 </span>
               </div>
             </div>
@@ -1046,7 +1046,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 type="url"
                 value={galleryUrlInput}
                 onChange={(e) => setGalleryUrlInput(e.target.value)}
-                placeholder="Enter image URL (e.g., https://...)"
+                placeholder={t('admin:modal.placeholders.imageUrlPlaceholder')}
                 className="flex-1 px-4 py-2 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all text-sm"
               />
               <button
@@ -1054,14 +1054,14 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 onClick={handleAddGalleryUrl}
                 className="px-4 py-2 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors text-sm font-medium"
               >
-                Add Link
+                {t('admin:modal.buttons.addLink')}
               </button>
             </div>
           </div>
 
           {/* Menu Images Upload */}
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-neutral-700">{t('restaurant.menu')}</h3>
+            <h3 className="text-sm font-medium text-neutral-700">{t('restaurant:menu')}</h3>
             
             {menuPreviews.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -1102,7 +1102,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   "
                 >
                   <Upload size={20} className="text-neutral-400 mb-2" />
-                  <span className="text-sm text-neutral-500">Add More</span>
+                  <span className="text-sm text-neutral-500">{t('admin:modal.buttons.addMore')}</span>
                 </div>
               </div>
             ) : (
@@ -1118,7 +1118,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               >
                 <div className="flex flex-col items-center gap-2">
                   <Upload size={24} className="text-neutral-400" />
-                  <p className="text-sm text-neutral-600">Upload menu images</p>
+                  <p className="text-sm text-neutral-600">{t('admin:modal.buttons.uploadMenu')}</p>
                 </div>
               </div>
             )}
@@ -1138,7 +1138,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 type="url"
                 value={menuUrlInput}
                 onChange={(e) => setMenuUrlInput(e.target.value)}
-                placeholder="Enter PDF or image URL (e.g., https://...)"
+                placeholder={t('admin:modal.placeholders.menuUrlPlaceholder')}
                 className="flex-1 px-4 py-2 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all text-sm"
               />
               <button
@@ -1146,7 +1146,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                 onClick={handleAddMenuUrl}
                 className="px-4 py-2 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors text-sm font-medium"
               >
-                Add Link
+                {t('admin:modal.buttons.addLink')}
               </button>
             </div>
           </div>
@@ -1163,7 +1163,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               onClick={onClose}
               className="px-6 py-2 text-neutral-600 font-medium hover:bg-neutral-50 rounded-xl transition-colors"
             >
-              {t('admin.modal.buttons.cancel')}
+              {t('admin:modal.buttons.cancel')}
             </button>
             <button
               type="submit"
@@ -1171,7 +1171,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               className="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 text-white font-medium rounded-xl transition-colors flex items-center gap-2"
             >
               {loading && <Loader size={18} className="animate-spin" />}
-              {restaurant ? t('admin.modal.buttons.save') : t('admin.modal.buttons.create')}
+              {restaurant ? t('admin:modal.buttons.save') : t('admin:modal.buttons.create')}
             </button>
           </div>
         </form>

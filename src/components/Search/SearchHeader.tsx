@@ -20,7 +20,7 @@ export function SearchHeader({
   setShowFilters,
   hasActiveFilters
 }: SearchHeaderProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['search', 'restaurant', 'common'])
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-4">
@@ -29,7 +29,7 @@ export function SearchHeader({
         <Link
           to="/"
           className="p-2 hover:bg-neutral-100 rounded-xl transition-colors shrink-0"
-          aria-label={t('restaurant.backToList')}
+          aria-label={t('restaurant:backToList')}
         >
           <ArrowLeft size={20} className="text-neutral-600" />
         </Link>
@@ -43,7 +43,7 @@ export function SearchHeader({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t('search.placeholder')}
+            placeholder={t('search:placeholder')}
             autoFocus
             className="
               w-full pl-12 pr-12 py-3
@@ -60,7 +60,7 @@ export function SearchHeader({
             <button
               onClick={handleClearSearch}
               className="absolute inset-y-0 right-0 pr-4 flex items-center text-neutral-400 hover:text-neutral-600 transition-colors"
-              aria-label={t('common.close')}
+              aria-label={t('common:close')}
             >
               <X className="h-5 w-5" />
             </button>
@@ -81,7 +81,7 @@ export function SearchHeader({
           `}
         >
           <Filter size={18} />
-          <span className="hidden sm:inline">{t('search.filter')}</span>
+          <span className="hidden sm:inline">{t('search:filter')}</span>
           {hasActiveFilters && (
             <span className="w-2 h-2 bg-primary-500 rounded-full" />
           )}

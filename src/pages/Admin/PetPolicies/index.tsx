@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'
 import type { PetPolicyType } from '@/types/database'
 
 export function AdminPetPolicies() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'common'])
   const [petPolicies, setPetPolicies] = useState<PetPolicyType[]>([])
   const [originalOrder, setOriginalOrder] = useState<PetPolicyType[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -175,8 +175,8 @@ export function AdminPetPolicies() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">{t('admin.petPolicies.title') || 'Pet Policies'}</h1>
-          <p className="text-neutral-500">{t('admin.petPolicies.subtitle') || 'Manage pet policy options'}</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('admin:petPolicies.title') || 'Pet Policies'}</h1>
+          <p className="text-neutral-500">{t('admin:petPolicies.subtitle') || 'Manage pet policy options'}</p>
         </div>
         <div className="flex items-center gap-2">
           {hasOrderChanged && (
@@ -185,7 +185,7 @@ export function AdminPetPolicies() {
                 onClick={handleCancelReorder}
                 className="px-4 py-2 text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
               >
-                {t('common.cancel') || 'Cancel'}
+                {t('common:cancel') || 'Cancel'}
               </button>
               <button
                 onClick={handleSaveOrder}
@@ -193,7 +193,7 @@ export function AdminPetPolicies() {
                 className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white rounded-xl transition-colors"
               >
                 <Save size={18} />
-                {isSaving ? '...' : t('common.save') || 'Save Order'}
+                {isSaving ? '...' : t('common:save') || 'Save Order'}
               </button>
             </>
           )}
@@ -203,7 +203,7 @@ export function AdminPetPolicies() {
               className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-colors"
             >
               <Plus size={18} />
-              {t('admin.petPolicies.add') || 'Add Policy'}
+              {t('admin:petPolicies.add') || 'Add Policy'}
             </button>
           )}
         </div>
@@ -211,7 +211,7 @@ export function AdminPetPolicies() {
 
       {hasOrderChanged && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-amber-700 text-sm">
-          ⚠️ {t('admin.petPolicies.orderChanged') || 'Order has changed. Click "Save Order" to save.'}
+          ⚠️ {t('admin:petPolicies.orderChanged') || 'Order has changed. Click "Save Order" to save.'}
         </div>
       )}
 
@@ -246,13 +246,13 @@ export function AdminPetPolicies() {
               onClick={() => { setIsAdding(false); setNewForm({ name: '', name_zh: '', name_pt: '' }) }}
               className="px-4 py-2 text-neutral-600 hover:bg-neutral-100 rounded-lg"
             >
-              {t('common.cancel') || 'Cancel'}
+              {t('common:cancel') || 'Cancel'}
             </button>
             <button
               onClick={handleAdd}
               className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg"
             >
-              {t('common.save') || 'Add'}
+              {t('common:save') || 'Add'}
             </button>
           </div>
         </div>

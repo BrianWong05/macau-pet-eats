@@ -19,7 +19,7 @@ export function ReviewForm({
   isEditing = false,
   isLoading = false
 }: ReviewFormProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
   const [rating, setRating] = useState(initialRating)
   const [comment, setComment] = useState(initialComment)
   const [submitting, setSubmitting] = useState(false)
@@ -28,7 +28,7 @@ export function ReviewForm({
     e.preventDefault()
 
     if (rating === 0) {
-      toast.error(t('reviews.ratingRequired'))
+      toast.error(t('restaurant:reviews.ratingRequired'))
       return
     }
 
@@ -39,9 +39,9 @@ export function ReviewForm({
         setRating(0)
         setComment('')
       }
-      toast.success(isEditing ? t('reviews.updated') : t('reviews.submitted'))
+      toast.success(isEditing ? t('restaurant:reviews.updated') : t('restaurant:reviews.submitted'))
     } catch {
-      toast.error(t('common.error'))
+      toast.error(t('common:error'))
     } finally {
       setSubmitting(false)
     }
@@ -53,7 +53,7 @@ export function ReviewForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <label className="block text-sm font-medium text-neutral-700">
-          {t('reviews.yourRating')}
+          {t('restaurant:reviews.yourRating')}
         </label>
         <StarRating
           rating={rating}
@@ -65,13 +65,13 @@ export function ReviewForm({
 
       <div className="space-y-2">
         <label htmlFor="review-comment" className="block text-sm font-medium text-neutral-700">
-          {t('reviews.yourReview')}
+          {t('restaurant:reviews.yourReview')}
         </label>
         <textarea
           id="review-comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder={t('reviews.commentPlaceholder')}
+          placeholder={t('restaurant:reviews.commentPlaceholder')}
           disabled={isDisabled}
           rows={4}
           className="w-full px-4 py-3 border border-neutral-200 rounded-xl resize-none
@@ -90,10 +90,10 @@ export function ReviewForm({
       >
         <Send size={18} />
         {submitting 
-          ? t('common.submitting') 
+          ? t('common:submitting') 
           : isEditing 
-            ? t('reviews.updateReview') 
-            : t('reviews.submitReview')
+            ? t('restaurant:reviews.updateReview') 
+            : t('restaurant:reviews.submitReview')
         }
       </button>
     </form>

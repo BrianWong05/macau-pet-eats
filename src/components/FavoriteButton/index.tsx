@@ -26,7 +26,7 @@ export function FavoriteButton({
   className = '',
   onAuthRequired
 }: FavoriteButtonProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['profile', 'common'])
   const { user } = useAuth()
   const { isFavorited, toggleFavorite } = useFavorites()
   const [isLoading, setIsLoading] = useState(false)
@@ -42,7 +42,7 @@ export function FavoriteButton({
       if (onAuthRequired) {
         onAuthRequired()
       } else {
-        toast.error(t('common.loginRequired'))
+        toast.error(t('common:loginRequired'))
       }
       return
     }
@@ -50,9 +50,9 @@ export function FavoriteButton({
     setIsLoading(true)
     try {
       await toggleFavorite(restaurantId)
-      toast.success(isFav ? t('favorites.removed') : t('favorites.added'))
+      toast.success(isFav ? t('profile:favorites.removed') : t('profile:favorites.added'))
     } catch {
-      toast.error(t('common.error'))
+      toast.error(t('common:error'))
     } finally {
       setIsLoading(false)
     }
@@ -72,7 +72,7 @@ export function FavoriteButton({
         disabled:opacity-50 disabled:cursor-not-allowed
         ${className}
       `}
-      aria-label={isFav ? t('favorites.remove') : t('favorites.add')}
+      aria-label={isFav ? t('profile:favorites.remove') : t('profile:favorites.add')}
     >
       <Heart
         size={iconSize}
@@ -84,7 +84,7 @@ export function FavoriteButton({
       />
       {showLabel && (
         <span className="text-sm font-medium pr-1">
-          {isFav ? t('favorites.saved') : t('favorites.save')}
+          {isFav ? t('profile:favorites.saved') : t('profile:favorites.save')}
         </span>
       )}
     </button>

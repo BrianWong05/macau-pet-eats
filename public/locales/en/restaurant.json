@@ -1,0 +1,67 @@
+{
+  "cuisine": "Cuisine",
+  "address": "Address",
+  "contact": "Contact",
+  "getDirections": "Get Directions",
+  "callNow": "Call Now",
+  "backToList": "Back to List",
+  "location": "Location",
+  "openInMaps": "Open in Google Maps",
+  "photos": "Photos",
+  "menu": "Menu",
+  "viewMenu": "View Menu",
+  "socialMedia": {
+    "title": "Social Media",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "website": "Website"
+  },
+  "reportUpdate": "Report Update",
+  "reportModal": {
+    "title": "Report an Update",
+    "subtitle": "Help us keep information accurate",
+    "fieldLabel": "Field to update",
+    "selectField": "Select a field",
+    "field": "What needs updating?",
+    "suggestedValue": "Correct information",
+    "reason": "Additional notes (optional)",
+    "reasonPlaceholder": "Why is this information incorrect?",
+    "submit": "Submit Report",
+    "success": "Report submitted! Thank you for helping.",
+    "error": "Failed to submit report. Please try again.",
+    "validation": {
+      "required": "This field is required"
+    },
+    "fields": {
+      "pet_policy": "Pet Policy",
+      "contact_info": "Contact Number",
+      "address": "Address",
+      "cuisine_type": "Cuisine Type",
+      "image": "Photos",
+      "menu": "Menu",
+      "other": "Other"
+    },
+    "uploadImages": "Upload Photos",
+    "menuUpload": "Menu"
+  },
+  "gallery": {
+    "title": "Photos"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "writeReview": "Write a Review",
+    "yourRating": "Your Rating",
+    "yourReview": "Your Review",
+    "reviewPlaceholder": "Share your experience with your pet...",
+    "addPhoto": "Add Photo",
+    "uploadPhoto": "Upload Photo",
+    "takePhoto": "Take Photo",
+    "removePhoto": "Remove Photo",
+    "photoHint": "Optional: Add a photo",
+    "submitReview": "Submit Review",
+    "noReviews": "No reviews yet",
+    "noReviewsHint": "Be the first to review this restaurant!",
+    "loginToReview": "Log in to review",
+    "deleteReview": "Delete Review"
+  }
+}

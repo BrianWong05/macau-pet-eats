@@ -8,7 +8,7 @@ import { CuisineTypeForm } from '@/components/Admin/CuisineTypes/CuisineTypeForm
 import { CuisineTypeTable } from '@/components/Admin/CuisineTypes/CuisineTypeTable'
 
 export function AdminCuisineTypes() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin'])
   const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
   const [originalOrder, setOriginalOrder] = useState<CuisineType[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -168,8 +168,8 @@ export function AdminCuisineTypes() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">{t('admin.cuisineTypes.title')}</h1>
-          <p className="text-neutral-500">{t('admin.cuisineTypes.subtitle')}</p>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('admin:cuisineTypes.title')}</h1>
+          <p className="text-neutral-500">{t('admin:cuisineTypes.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
           {hasOrderChanged && (
@@ -196,7 +196,7 @@ export function AdminCuisineTypes() {
               className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-colors"
             >
               <Plus size={18} />
-              {t('admin.cuisineTypes.add')}
+              {t('admin:cuisineTypes.add')}
             </button>
           )}
         </div>

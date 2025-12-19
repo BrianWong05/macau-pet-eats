@@ -1,0 +1,165 @@
+{
+  "sidebar": {
+    "dashboard": "儀表板",
+    "restaurants": "餐廳管理",
+    "signOut": "登出"
+  },
+  "dashboard": {
+    "title": "概覽",
+    "totalRestaurants": "餐廳總數",
+    "activeListings": "已上架",
+    "pendingApproval": "待審核",
+    "totalReviews": "評論總數",
+    "updateReports": "更新回報"
+  },
+  "comment": {
+    "title": "新增回覆",
+    "hint": "新增給用戶的回覆 (選填)",
+    "placeholder": "輸入您的回覆..."
+  },
+  "restaurants": {
+    "title": "餐廳列表",
+    "subtitle": "管理餐廳與審核",
+    "addRestaurant": "新增餐廳",
+    "searchPlaceholder": "搜尋餐廳...",
+    "filters": {
+      "all": "全部",
+      "pending": "待審核",
+      "approved": "已批准"
+    },
+    "table": {
+      "headers": {
+        "restaurant": "餐廳",
+        "status": "狀態",
+        "petPolicy": "寵物政策",
+        "submitted": "提交時間",
+        "actions": "操作"
+      },
+      "noRestaurants": "找不到餐廳"
+    },
+    "status": {
+      "pending": "待審核",
+      "approved": "已批准",
+      "rejected": "已拒絕"
+    },
+    "actions": {
+      "approve": "批准",
+      "reject": "拒絕",
+      "edit": "編輯",
+      "delete": "刪除",
+      "confirmDelete": "確定要刪除此餐廳嗎？",
+      "deleteSuccess": "餐廳刪除成功",
+      "approveSuccess": "已批准餐廳",
+      "rejectSuccess": "已拒絕餐廳"
+    }
+  },
+  "modal": {
+    "addTitle": "新增餐廳",
+    "editTitle": "編輯餐廳",
+    "labels": {
+      "name": "名稱",
+      "nameEn": "名稱 (英文)",
+      "nameZh": "名稱 (中文)",
+      "namePt": "名稱 (葡文)",
+      "cuisineType": "菜式類型",
+      "petPolicy": "寵物政策",
+      "status": "狀態",
+      "description": "描述",
+      "descriptionEn": "描述 (英文)",
+      "descriptionZh": "描述 (中文)",
+      "descriptionPt": "描述 (葡文)",
+      "address": "地址",
+      "addressEn": "地址 (英文)",
+      "addressZh": "地址 (中文)",
+      "addressPt": "地址 (葡文)",
+      "latitude": "緯度",
+      "longitude": "經度",
+      "imageUrl": "圖片網址",
+      "contactInfo": "聯絡電話",
+      "location": "位置"
+    },
+    "placeholders": {
+      "selectCuisine": "選擇菜式",
+      "description": "描述這間餐廳...",
+      "address": "輸入地址",
+      "imageUrl": "https://...",
+      "imageUrlPlaceholder": "輸入圖片網址 (例如 https://...)",
+      "menuUrlPlaceholder": "輸入 PDF 或圖片網址 (例如 https://...)"
+    },
+    "buttons": {
+      "cancel": "取消",
+      "save": "儲存變更",
+      "create": "建立餐廳",
+      "addLink": "加入連結",
+      "addMore": "加入更多",
+      "uploadPhotos": "上傳相片",
+      "uploadMenu": "上傳菜單圖片"
+    },
+    "messages": {
+      "updateSuccess": "餐廳更新成功",
+      "createSuccess": "餐廳建立成功",
+      "error": "發生錯誤"
+    }
+  },
+  "reports": {
+    "title": "更新回報",
+    "empty": "沒有回報記錄",
+    "fieldLabel": "欄位",
+    "suggestedValue": "建議值",
+    "images": "圖片",
+    "approve": "批准",
+    "reject": "拒絕",
+    "check": "確認",
+    "approveSuccess": "回報已批准並套用更新",
+    "approveError": "批准失敗",
+    "checkSuccess": "回報已確認",
+    "checkError": "確認失敗",
+    "edit": "編輯",
+    "editTitle": "編輯回報",
+    "editSuccess": "回報已更新",
+    "editError": "更新失敗",
+    "status": {
+      "pending": "待處理",
+      "approved": "已批准",
+      "rejected": "已拒絕",
+      "all": "全部"
+    }
+  },
+  "cuisineTypes": {
+    "title": "菜式類型",
+    "subtitle": "管理菜式類型選項",
+    "add": "新增類型",
+    "empty": "沒有菜式類型",
+    "form": {
+      "key": "名稱 (Key)",
+      "nameZh": "中文名稱",
+      "namePt": "葡文名稱"
+    },
+    "table": {
+      "headers": {
+        "key": "Key",
+        "nameZh": "中文",
+        "namePt": "葡文",
+        "actions": "操作"
+      }
+    }
+  },
+  "petPolicies": {
+    "title": "寵物政策",
+    "subtitle": "管理寵物政策選項",
+    "add": "新增政策",
+    "orderChanged": "順序已更改，請點擊「保存順序」以保存更改"
+  },
+  "feedback": {
+    "title": "用戶反饋",
+    "subtitle": "查看和管理用戶反饋",
+    "empty": "暫無反饋",
+    "statusUpdated": "狀態已更新",
+    "status": {
+      "all": "全部",
+      "pending": "待處理",
+      "reviewed": "已查看",
+      "resolved": "已解決"
+    }
+  }
+}

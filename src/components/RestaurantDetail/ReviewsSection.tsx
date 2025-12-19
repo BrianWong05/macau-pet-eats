@@ -6,12 +6,11 @@ import { useAuth } from '@/contexts/AuthContext'
 
 interface ReviewsSectionProps {
   restaurantId: string
-  lang: 'zh' | 'en' | 'pt'
   onAuthRequired: () => void
 }
 
-export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSectionProps) {
-  const { t } = useTranslation()
+export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionProps) {
+  const { t } = useTranslation(['restaurant', 'common', 'auth', 'profile'])
   const { user } = useAuth()
   
   const { reviews, isLoading: reviewsLoading, submitReview, deleteReview } = useReviews({ 
@@ -39,7 +38,7 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
     const file = e.target.files?.[0]
     if (file) {
       if (file.size > 2 * 1024 * 1024) { // 2MB limit
-        setReviewError(t('submit.form.uploadHint'))
+        setReviewError(t('submit:form.uploadHint') || 'Max 2MB')
         return
       }
       setImageFile(file)
@@ -83,17 +82,16 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
   return (
     <div className="mt-8 bg-white rounded-2xl shadow-card p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="font-semibold text-neutral-900 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-primary-500" />
-          {t('reviews.title')}
-          <span className="text-neutral-400 font-normal">({reviews.length})</span>
-        </h3>
+          {t('restaurant:reviews.title', { count: reviews.length })}
+        </h2>
         <button
           onClick={handleWriteReview}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
         >
           <Star size={16} />
-          {t('reviews.writeReview')}
+          {t('restaurant:reviews.writeReview')}
         </button>
       </div>
 
@@ -102,7 +100,7 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
         <form onSubmit={handleSubmitReview} className="mb-6 p-4 bg-neutral-50 rounded-xl">
           <div className="mb-4">
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              {t('reviews.yourRating')}
+              {t('restaurant:reviews.yourRating')}
             </label>
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -123,13 +121,13 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
           
           <div className="mb-4">
             <label htmlFor="comment" className="block text-sm font-medium text-neutral-700 mb-2">
-              {t('reviews.yourReview')}
+              {t('restaurant:reviews.yourReview')}
             </label>
             <textarea
               id="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder={t('reviews.reviewPlaceholder')}
+              placeholder={t('restaurant:reviews.reviewPlaceholder')}
               rows={3}
               required
               className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all resize-none"
@@ -139,14 +137,14 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
           {/* Photo Upload */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-neutral-700 mb-2">
-              {t('reviews.addPhoto')}
+              {t('restaurant:reviews.addPhoto')}
             </label>
             
             {!imagePreview ? (
               <div className="flex gap-2">
                 <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
                   <ImageIcon size={18} />
-                  {t('reviews.uploadPhoto')}
+                  {t('restaurant:reviews.uploadPhoto')}
                   <input
                     type="file"
                     accept="image/*"
@@ -156,7 +154,7 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
                 </label>
                 <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
                   <Camera size={18} />
-                  {t('reviews.takePhoto')}
+                  {t('restaurant:reviews.takePhoto')}
                   <input
                     type="file"
                     accept="image/*"
@@ -177,14 +175,14 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
                   type="button"
                   onClick={removeImage}
                   className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md text-neutral-500 hover:text-red-500 transition-colors"
-                  aria-label={t('reviews.removePhoto')}
+                  aria-label={t('restaurant:reviews.removePhoto')}
                 >
                   <X size={16} />
                 </button>
               </div>
             )}
             <p className="mt-1 text-xs text-neutral-400">
-              {t('reviews.photoHint')}
+              {t('restaurant:reviews.photoHint')}
             </p>
           </div>
 
@@ -198,14 +196,14 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
               disabled={isSubmitting}
               className="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-300 text-white font-medium rounded-xl transition-colors"
             >
-              {isSubmitting ? t('common.loading') : t('reviews.submitReview')}
+              {isSubmitting ? t('common:loading') : t('restaurant:reviews.submitReview')}
             </button>
             <button
               type="button"
               onClick={() => setShowReviewForm(false)}
               className="px-6 py-2 bg-neutral-200 hover:bg-neutral-300 text-neutral-700 font-medium rounded-xl transition-colors"
             >
-              {t('common.cancel')}
+              {t('common:cancel')}
             </button>
           </div>
         </form>
@@ -221,7 +219,15 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
       ) : reviews.length === 0 ? (
         <div className="text-center py-8 text-neutral-500">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-neutral-300" />
-          <p>{t('reviews.noReviews')}</p>
+          <p>{t('restaurant:reviews.noReviews')}</p>
+          {!user && (
+            <button
+              onClick={handleWriteReview}
+              className="text-primary-600 font-medium hover:text-primary-700 transition-colors mt-2"
+            >
+              {t('restaurant:reviews.loginToReview')}
+            </button>
+          )}
         </div>
       ) : (
         <div className="space-y-4">
@@ -243,15 +249,19 @@ export function ReviewsSection({ restaurantId, lang, onAuthRequired }: ReviewsSe
                       ))}
                     </div>
                     <p className="text-xs text-neutral-400">
-                      {new Date(review.created_at).toLocaleDateString(lang)}
+                      {new Date(review.created_at).toLocaleDateString(navigator.language)}
                     </p>
                   </div>
                 </div>
-                {user?.id === review.user_id && (
+                {review.user_id === user?.id && (
                   <button
-                    onClick={() => handleDeleteReview(review.id)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    aria-label={t('reviews.deleteReview')}
+                    onClick={() => {
+                      if (confirm(t('common:confirmDelete'))) {
+                        handleDeleteReview(review.id)
+                      }
+                    }}
+                    className="p-1 text-neutral-400 hover:text-red-500 transition-colors rounded-full hover:bg-neutral-100"
+                    title={t('common:delete')}
                   >
                     <Trash2 size={16} />
                   </button>

@@ -10,7 +10,7 @@ interface SearchBarProps {
 export function SearchBar({
   initialValue = '',
 }: SearchBarProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['common', 'home'])
   const navigate = useNavigate()
   const [value, setValue] = useState(initialValue)
 
@@ -48,7 +48,7 @@ export function SearchBar({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={t('home.searchPlaceholder')}
+          placeholder={t('home:searchPlaceholder')}
           className="
             w-full pl-12 pr-12 py-4
             text-lg
@@ -71,7 +71,7 @@ export function SearchBar({
               text-neutral-400 hover:text-neutral-600
               transition-colors
             "
-            aria-label={t('common.close')}
+            aria-label={t('common:close')}
           >
             <X className="h-5 w-5" />
           </button>
@@ -92,10 +92,10 @@ export function SearchBar({
           focus:outline-none focus:ring-4 focus:ring-primary-200
           active:scale-95
         "
-        aria-label={t('common.viewAll')}
+        aria-label={t('common:viewAll')}
       >
         <List className="h-5 w-5 sm:mr-2" />
-        <span className="hidden sm:inline">{t('common.viewAll')}</span>
+        <span className="hidden sm:inline">{t('common:viewAll')}</span>
       </button>
     </div>
   )

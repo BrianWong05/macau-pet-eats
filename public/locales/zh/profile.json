@@ -1,0 +1,79 @@
+{
+  "title": "個人資料",
+  "loginRequired": "請登入查看個人資料",
+  "tabs": {
+    "pets": "我的寵物",
+    "favorites": "已收藏餐廳",
+    "contributions": "我的投稿",
+    "feedback": "我的意見",
+    "reports": "我的回報"
+  },
+  "username": "用戶名稱",
+  "usernamePlaceholder": "輸入您的用戶名稱",
+  "setUsername": "設定用戶名稱",
+  "editUsername": "編輯用戶名稱",
+  "usernameRequired": "請輸入用戶名稱",
+  "usernameUpdated": "用戶名稱已更新",
+  "avatarUpdated": "頭像已更新",
+  "avatarTooLarge": "圖片須小於 2MB",
+  "changePhoto": "更換頭像",
+  "favorites": {
+    "title": "我的收藏",
+    "add": "加入收藏",
+    "added": "已加入收藏",
+    "remove": "移除收藏",
+    "removed": "已移除收藏",
+    "save": "收藏",
+    "saved": "已收藏",
+    "noFavorites": "暫無收藏",
+    "noFavoritesHint": "點擊餐廳上的愛心圖示來收藏"
+  },
+  "pets": {
+    "title": "我的寵物",
+    "addPet": "新增寵物",
+    "editPet": "編輯寵物",
+    "deletePet": "刪除寵物",
+    "deleteConfirm": "確定要刪除此寵物嗎？",
+    "name": "寵物名稱",
+    "namePlaceholder": "輸入寵物名稱",
+    "type": "寵物類型",
+    "size": "體型",
+    "breed": "品種",
+    "breedPlaceholder": "選填：輸入品種",
+    "types": {
+      "dog": "狗",
+      "cat": "貓",
+      "bird": "鳥",
+      "rabbit": "兔子",
+      "other": "其他"
+    },
+    "sizes": {
+      "small": "小型（< 10kg）",
+      "medium": "中型（10-25kg）",
+      "large": "大型（> 25kg）"
+    },
+    "noPets": "暫無寵物",
+    "noPetsHint": "新增您心愛的毛孩，幫助您找到最合適的餐廳",
+    "added": "寵物已新增！",
+    "updated": "寵物已更新！",
+    "deleted": "寵物已刪除"
+  },
+  "reviews": {
+    "title": "評價",
+    "writeReview": "撰寫評價",
+    "updateReview": "更新評價",
+    "yourReview": "您的評價",
+    "rating": "評分",
+    "comment": "留言",
+    "commentPlaceholder": "分享您的用餐體驗...",
+    "submitReview": "提交評價",
+    "deleteReview": "刪除評價",
+    "noReviews": "暫無評價",
+    "noReviewsHint": "成為第一個評價的人！",
+    "reviewCount": "{{count}} 條評價",
+    "loginToReview": "登入以撰寫評價",
+    "added": "評價已新增",
+    "updated": "評價已更新",
+    "deleted": "評價已刪除"
+  }
+}

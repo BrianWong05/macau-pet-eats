@@ -1,0 +1,40 @@
+{
+  "title": "推薦餐廳",
+  "subtitle": "知道一間寵物友善餐廳？告訴我們！",
+  "form": {
+    "name": "餐廳名稱",
+    "namePlaceholder": "輸入餐廳名稱",
+    "description": "描述",
+    "descriptionPlaceholder": "描述這間餐廳的特色...",
+    "address": "地址",
+    "addressPlaceholder": "輸入餐廳地址",
+    "petPolicy": "寵物政策",
+    "cuisineType": "菜式類型",
+    "cuisineTypePlaceholder": "例如：葡國菜、粵菜、融合菜",
+    "contactInfo": "聯絡電話",
+    "contactInfoPlaceholder": "+853 xxxx xxxx",
+    "imageUrl": "圖片網址（選填）",
+    "imageUrlPlaceholder": "https://...",
+    "selectCuisine": "請選擇菜式",
+    "uploadPhoto": "上傳照片（選填）",
+    "clickToUpload": "點擊上傳照片",
+    "uploadHint": "支援 JPG, PNG, GIF（最大 5MB）",
+    "selectFile": "選擇檔案",
+    "optional": "選填",
+    "otherCuisinePlaceholder": "請輸入菜式類型",
+    "selectAtLeastOne": "請至少選擇一種菜式",
+    "maxPhotos": "(最多 5 張相片)"
+  },
+  "submitButton": "提交推薦",
+  "successTitle": "感謝您的推薦！",
+  "successMessage": "我們會審核您提交的資料，並盡快加入列表。",
+  "errorMessage": "提交失敗，請稍後再試。",
+  "backToHome": "返回首頁",
+  "noContributions": "您尚未投稿任何餐廳",
+  "noContributionsHint": "分享寵物友善餐廳，幫助其他寵物主人！",
+  "status": {
+    "pending": "審核中",
+    "approved": "已上線",
+    "rejected": "已拒絕"
+  }
+}

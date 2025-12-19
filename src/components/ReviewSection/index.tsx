@@ -15,7 +15,7 @@ interface ReviewSectionProps {
 }
 
 export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['restaurant', 'common'])
   const { user } = useAuth()
   const { 
     reviews, 
@@ -47,11 +47,11 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
   }
 
   const handleDelete = async (reviewId: string) => {
-    if (!confirm(t('reviews.deleteReview') + '?')) return
+    if (!confirm(t('restaurant:reviews.deleteReview') + '?')) return
     
     const { error } = await deleteReview(reviewId)
     if (!error) {
-      toast.success(t('reviews.deleted'))
+      toast.success(t('restaurant:reviews.deleted'))
     }
   }
 
@@ -65,12 +65,12 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
       {/* Header with Rating Summary */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-bold text-neutral-900">{t('reviews.title')}</h2>
+          <h2 className="text-xl font-bold text-neutral-900">{t('restaurant:reviews.title')}</h2>
           {rating && (
             <div className="flex items-center gap-2">
               <StarRating rating={rating.average_rating} size="sm" />
               <span className="text-sm text-neutral-600">
-                {rating.average_rating.toFixed(1)} ({t('reviews.reviewCount', { count: rating.review_count })})
+                {rating.average_rating.toFixed(1)} ({t('restaurant:reviews.reviewCount', { count: rating.review_count })})
               </span>
             </div>
           )}
@@ -87,12 +87,12 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
               className="w-full flex items-center justify-center gap-2 py-3 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
             >
               <LogIn size={18} />
-              {t('reviews.loginToReview')}
+              {t('restaurant:reviews.loginToReview')}
             </button>
           ) : hasUserReviewed && !showForm ? (
             // User already reviewed - show their review with edit option
             <div className="space-y-3">
-              <p className="text-sm text-neutral-500">{t('reviews.yourReview')}:</p>
+              <p className="text-sm text-neutral-500">{t('restaurant:reviews.yourReview')}:</p>
               {userReview && (
                 <ReviewCard
                   review={userReview}
@@ -107,7 +107,7 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-medium text-neutral-900">
-                  {editingReview ? t('reviews.updateReview') : t('reviews.writeReview')}
+                  {editingReview ? t('restaurant:reviews.updateReview') : t('restaurant:reviews.writeReview')}
                 </h3>
                 <button
                   onClick={() => {
@@ -116,7 +116,7 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
                   }}
                   className="text-sm text-neutral-500 hover:text-neutral-700"
                 >
-                  {t('common.cancel')}
+                  {t('common:cancel')}
                 </button>
               </div>
               <ReviewForm
@@ -133,7 +133,7 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
               className="w-full flex items-center justify-center gap-2 py-3 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
             >
               <MessageSquare size={18} />
-              {t('reviews.writeReview')}
+              {t('restaurant:reviews.writeReview')}
             </button>
           )}
         </div>
@@ -149,8 +149,8 @@ export function ReviewSection({ restaurantId, onAuthRequired }: ReviewSectionPro
       ) : reviews.length === 0 ? (
         <div className="text-center py-8 bg-white rounded-xl border border-neutral-200">
           <MessageSquare size={40} className="mx-auto text-neutral-300 mb-3" />
-          <p className="text-neutral-600">{t('reviews.noReviews')}</p>
-          <p className="text-neutral-400 text-sm mt-1">{t('reviews.noReviewsHint')}</p>
+          <p className="text-neutral-600">{t('restaurant:reviews.noReviews')}</p>
+          <p className="text-neutral-400 text-sm mt-1">{t('restaurant:reviews.noReviewsHint')}</p>
         </div>
       ) : (
         <div className="space-y-4">

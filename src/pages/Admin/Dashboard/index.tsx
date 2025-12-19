@@ -26,7 +26,7 @@ const TYPE_COLORS = {
 }
 
 export function AdminDashboard() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['admin', 'common'])
   const navigate = useNavigate()
   const [stats, setStats] = useState({
     totalRestaurants: 0,
@@ -81,7 +81,7 @@ export function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-neutral-900 mb-8">{t('admin.dashboard.title')}</h1>
+      <h1 className="text-2xl font-bold text-neutral-900 mb-8">{t('admin:dashboard.title')}</h1>
       
       <StatsGrid stats={stats} isLoading={isLoading} />
 
@@ -89,10 +89,10 @@ export function AdminDashboard() {
       <div className="mt-8 bg-white rounded-2xl border border-neutral-200 overflow-hidden">
         <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
           <div>
-            <h2 className="font-semibold text-neutral-900">{t('admin.feedback.title') || 'User Feedback'}</h2>
+            <h2 className="font-semibold text-neutral-900">{t('admin:feedback.title') || 'User Feedback'}</h2>
             {feedbackCount > 0 && (
               <p className="text-sm text-neutral-500 mt-0.5">
-                {feedbackCount} {t('admin.feedback.status.pending') || 'pending'}
+                {feedbackCount} {t('admin:feedback.status.pending') || 'pending'}
               </p>
             )}
           </div>
@@ -100,14 +100,14 @@ export function AdminDashboard() {
             onClick={() => navigate('/admin/feedback')}
             className="text-sm text-primary-500 hover:text-primary-600 font-medium flex items-center gap-1"
           >
-            {t('common.viewAll') || 'View All'}
+            {t('common:viewAll') || 'View All'}
             <ArrowRight size={16} />
           </button>
         </div>
 
         {feedbackItems.length === 0 ? (
           <div className="p-8 text-center text-neutral-400">
-            {t('admin.feedback.empty') || 'No feedback yet'}
+            {t('admin:feedback.empty') || 'No feedback yet'}
           </div>
         ) : (
           <div className="divide-y divide-neutral-100">

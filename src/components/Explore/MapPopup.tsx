@@ -9,7 +9,7 @@ interface RestaurantPopupProps {
 }
 
 export function MapPopup({ restaurant, lang }: RestaurantPopupProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['explore'])
   const name = getLocalizedText(restaurant, 'name', lang)
   const cuisineType = getLocalizedText(restaurant, 'cuisine_type', lang)
 
@@ -26,7 +26,7 @@ export function MapPopup({ restaurant, lang }: RestaurantPopupProps) {
         to={`/restaurant/${restaurant.id}`}
         className="block w-full text-center px-3 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
       >
-        {t('explore.viewDetails')}
+        {t('explore:viewDetails')}
       </Link>
     </div>
   )

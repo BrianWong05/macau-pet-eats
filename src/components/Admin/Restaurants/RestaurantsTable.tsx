@@ -21,7 +21,7 @@ export function RestaurantsTable({
   onEdit, 
   onDelete 
 }: RestaurantsTableProps) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation(['admin', 'common'])
   const { getLocalizedName } = useCuisineTypes()
   const { getPetPolicyDisplayName } = usePetPolicies()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
@@ -42,9 +42,9 @@ export function RestaurantsTable({
     return (
       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${styles[status as keyof typeof styles] || styles.pending}`}>
         <Icon size={12} />
-        {status === 'pending' ? t('admin.restaurants.status.pending') :
-         status === 'approved' ? t('admin.restaurants.status.approved') :
-         status === 'rejected' ? t('admin.restaurants.status.rejected') : status}
+        {status === 'pending' ? t('admin:restaurants.status.pending') :
+         status === 'approved' ? t('admin:restaurants.status.approved') :
+         status === 'rejected' ? t('admin:restaurants.status.rejected') : status}
       </span>
     )
   }
@@ -55,11 +55,11 @@ export function RestaurantsTable({
         <table className="w-full">
           <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.restaurant')}</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.status')}</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.petPolicy')}</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.submitted')}</th>
-              <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin.restaurants.table.headers.actions')}</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin:restaurants.table.headers.restaurant')}</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin:restaurants.table.headers.status')}</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin:restaurants.table.headers.petPolicy')}</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin:restaurants.table.headers.submitted')}</th>
+              <th className="px-6 py-4 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('admin:restaurants.table.headers.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
@@ -74,7 +74,7 @@ export function RestaurantsTable({
             ) : restaurants.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-6 py-12 text-center text-neutral-500">
-                  {t('admin.restaurants.table.noRestaurants')}
+                  {t('admin:restaurants.table.noRestaurants')}
                 </td>
               </tr>
             ) : (

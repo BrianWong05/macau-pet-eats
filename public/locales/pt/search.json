@@ -1,0 +1,10 @@
+{
+  "title": "Pesquisar Restaurantes",
+  "placeholder": "Pesquisar por nome, tipo de cozinha...",
+  "results": "Encontrados {{count}} restaurantes",
+  "noResults": "Nenhum restaurante encontrado",
+  "noResultsHint": "Tente palavras-chave diferentes ou ajuste os filtros",
+  "clearFilters": "Limpar filtros",
+  "filter": "Filtrar",
+  "perPage": "Por página"
+}

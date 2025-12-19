@@ -112,17 +112,23 @@ export function RestaurantDetail() {
 
         <MapEmbed 
           restaurant={restaurant} 
-          lang={lang} 
+          lang={lang} // Keep lang for MapEmbed as I didn't verify if it was fully removed? Wait, Step 6290 MapEmbed diff showed I kept `lang` in the interface but used `lang` prop in `getLocalizedText`. 
+          // WAIT! In Step 6290, `MapEmbed` still takes `lang`. I only removed it from `PhotoGallery` and `ReviewsSection`.
+          // I must check MapEmbed again.
+          // MapEmbed Step 6290: 
+          // export function MapEmbed({ restaurant, lang }: MapEmbedProps) { ... }
+          // So MapEmbed NEEDS lang.
+          // PhotoGallery Step 6291: Removed lang.
+          // ReviewsSection Step 6292: Removed lang.
+          // So I only need to remove for PhotoGallery and ReviewsSection.
         />
 
         <PhotoGallery 
           restaurant={restaurant} 
-          lang={lang} 
         />
 
         <ReviewsSection 
           restaurantId={restaurant.id} 
-          lang={lang} 
           onAuthRequired={() => setShowAuthModal(true)} 
         />
       </div>

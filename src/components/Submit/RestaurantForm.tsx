@@ -31,7 +31,7 @@ export function RestaurantForm({
   imagePreviews,
   setImagePreviews
 }: RestaurantFormProps) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation(['submit', 'common', 'explore', 'restaurant'])
   const lang = i18n.language as 'en' | 'zh' | 'pt'
   const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -141,7 +141,7 @@ export function RestaurantForm({
             if (key === 'Other') {
                return (formData as any).cuisine_type_other || 'Other'
             }
-            return i18n.getFixedT(lang)(`cuisineTypes.${key.toLowerCase()}`)
+            return i18n.getFixedT(lang, 'common')(`cuisineTypes.${key.toLowerCase()}`)
           })
         }
         
@@ -184,14 +184,14 @@ export function RestaurantForm({
       {formState === 'error' && (
         <div className="flex items-center gap-3 p-4 bg-red-50 text-red-700 rounded-xl">
           <AlertCircle className="w-5 h-5 shrink-0" />
-          <span>{t('submit.errorMessage')}</span>
+          <span>{t('submit:errorMessage')}</span>
         </div>
       )}
 
       {/* Restaurant Name */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('submit.form.name')} *
+          {t('submit:form.name')} *
         </label>
         <input
           type="text"
@@ -200,7 +200,7 @@ export function RestaurantForm({
           required
           value={formData.name}
           onChange={handleInputChange}
-          placeholder={t('submit.form.namePlaceholder')}
+          placeholder={t('submit:form.namePlaceholder')}
           className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
         />
       </div>
@@ -208,7 +208,7 @@ export function RestaurantForm({
       {/* Description */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label htmlFor="description" className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('submit.form.description')} ({t('submit.form.optional')})
+          {t('submit:form.description')} ({t('submit:form.optional')})
         </label>
         <textarea
           id="description"
@@ -216,7 +216,7 @@ export function RestaurantForm({
           rows={4}
           value={formData.description}
           onChange={handleInputChange}
-          placeholder={t('submit.form.descriptionPlaceholder')}
+          placeholder={t('submit:form.descriptionPlaceholder')}
           className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all resize-none"
         />
       </div>
@@ -224,7 +224,7 @@ export function RestaurantForm({
       {/* Address */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label htmlFor="address" className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('submit.form.address')} *
+          {t('submit:form.address')} *
         </label>
         <input
           type="text"
@@ -233,7 +233,7 @@ export function RestaurantForm({
           required
           value={formData.address}
           onChange={handleInputChange}
-          placeholder={t('submit.form.addressPlaceholder')}
+          placeholder={t('submit:form.addressPlaceholder')}
           className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
         />
       </div>
@@ -241,7 +241,7 @@ export function RestaurantForm({
       {/* Location Area */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label htmlFor="location" className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('explore.filters.location') || '地區'} *
+          {t('explore:filters.location') || '地區'} *
         </label>
         <select
           id="location"
@@ -262,7 +262,7 @@ export function RestaurantForm({
         {/* Pet Policy */}
         <div className="bg-white rounded-2xl shadow-card p-6">
           <label htmlFor="pet_policy" className="block text-sm font-medium text-neutral-700 mb-2">
-            {t('submit.form.petPolicy')} *
+            {t('submit:form.petPolicy')} *
           </label>
           <select
             id="pet_policy"
@@ -295,7 +295,7 @@ export function RestaurantForm({
           }`}
         >
           <label htmlFor="cuisine_type" className="block text-sm font-medium text-neutral-700 mb-2">
-            {t('submit.form.cuisineType')} *
+            {t('submit:form.cuisineType')} *
           </label>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
@@ -346,7 +346,7 @@ export function RestaurantForm({
                   }
                 `}
               >
-                {t('common.other') || 'Other'}
+                {t('common:other') || 'Other'}
               </button>
             </div>
 
@@ -356,7 +356,7 @@ export function RestaurantForm({
                 name="cuisine_type_other"
                 value={(formData as any).cuisine_type_other || ''}
                 onChange={handleInputChange}
-                placeholder={t('submit.form.otherCuisinePlaceholder') || 'Please specify cuisine type'}
+                placeholder={t('submit:form.otherCuisinePlaceholder') || 'Please specify cuisine type'}
                 className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all"
               />
             )}
@@ -364,7 +364,7 @@ export function RestaurantForm({
             {/* Hidden input for validation if needed, or rely on state check on submit */}
             {(formData.cuisine_type || []).length === 0 && (
               <p className="text-sm text-red-500 mt-1">
-                {t('submit.form.selectAtLeastOne') || 'Please select at least one cuisine type'}
+                {t('submit:form.selectAtLeastOne') || 'Please select at least one cuisine type'}
               </p>
             )}
           </div>
@@ -374,7 +374,7 @@ export function RestaurantForm({
       {/* Contact Info */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label htmlFor="contact_info" className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('submit.form.contactInfo')} ({t('submit.form.optional')})
+          {t('submit:form.contactInfo')} ({t('submit:form.optional')})
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -399,7 +399,7 @@ export function RestaurantForm({
       {/* Social Media (Optional) */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('restaurant.socialMedia.title')} ({t('submit.form.optional') || 'Optional'})
+          {t('restaurant:socialMedia.title')} ({t('submit:form.optional') || 'Optional'})
         </label>
         <div className="grid md:grid-cols-3 gap-4">
           <input
@@ -438,7 +438,7 @@ export function RestaurantForm({
       {/* Photo Upload */}
       <div className="bg-white rounded-2xl shadow-card p-6">
         <label className="block text-sm font-medium text-neutral-700 mb-2">
-          {t('submit.form.uploadPhoto')} (Max 5 photos)
+          {t('submit:form.uploadPhoto')} <span className="text-neutral-500 font-normal ml-1">{t('submit:form.maxPhotos')}</span>
         </label>
         
         <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-4">
@@ -453,7 +453,7 @@ export function RestaurantForm({
                 type="button"
                 onClick={() => removeImage(index)}
                 className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-md"
-                aria-label={t('common.close')}
+                aria-label={t('common:close')}
               >
                 <X size={14} />
               </button>
@@ -476,7 +476,7 @@ export function RestaurantForm({
                 <Upload size={20} className="text-neutral-400" />
               </div>
               <span className="text-xs font-medium text-neutral-600 text-center px-2">
-                {imagePreviews.length === 0 ? t('submit.form.clickToUpload') : t('common.addMore')}
+                {imagePreviews.length === 0 ? t('submit:form.clickToUpload') : t('common:addMore')}
               </span>
             </div>
           )}
@@ -501,12 +501,12 @@ export function RestaurantForm({
         {formState === 'submitting' ? (
           <>
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            <span>{t('common.loading')}</span>
+            <span>{t('common:loading')}</span>
           </>
         ) : (
           <>
             <Send size={20} />
-            <span>{t('submit.submitButton')}</span>
+            <span>{t('submit:submitButton')}</span>
           </>
         )}
       </button>

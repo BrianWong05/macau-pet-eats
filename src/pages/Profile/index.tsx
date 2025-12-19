@@ -18,7 +18,7 @@ type TabType = 'pets' | 'favorites' | 'contributions' | 'feedback' | 'reports'
 
 // Inline UsernameEditor component
 function UsernameEditor() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['profile', 'common'])
   const { username, updateUsername } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [newUsername, setNewUsername] = useState(username || '')
@@ -26,7 +26,7 @@ function UsernameEditor() {
 
   const handleSave = async () => {
     if (!newUsername.trim()) {
-      toast.error(t('profile.usernameRequired'))
+      toast.error(t('profile:usernameRequired'))
       return
     }
     
@@ -35,9 +35,9 @@ function UsernameEditor() {
     setIsSaving(false)
     
     if (error) {
-      toast.error(t('common.error'))
+      toast.error(t('common:error'))
     } else {
-      toast.success(t('profile.usernameUpdated'))
+      toast.success(t('profile:usernameUpdated'))
       setIsEditing(false)
     }
   }
@@ -50,7 +50,7 @@ function UsernameEditor() {
           value={newUsername}
           onChange={(e) => setNewUsername(e.target.value)}
           className="text-xl font-bold text-neutral-900 border-b-2 border-primary-500 bg-transparent outline-none px-1"
-          placeholder={t('profile.usernamePlaceholder')}
+          placeholder={t('profile:usernamePlaceholder')}
           autoFocus
         />
         <button
@@ -76,12 +76,12 @@ function UsernameEditor() {
   return (
     <div className="flex items-center gap-2">
       <h2 className="text-xl font-bold text-neutral-900">
-        {username || t('profile.setUsername')}
+        {username || t('profile:setUsername')}
       </h2>
       <button
         onClick={() => setIsEditing(true)}
         className="p-1 text-neutral-400 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-colors"
-        title={t('profile.editUsername')}
+        title={t('profile:editUsername')}
       >
         <Pencil size={16} />
       </button>
@@ -91,7 +91,7 @@ function UsernameEditor() {
 
 // Avatar Upload component
 function AvatarUpload() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['profile', 'common'])
   const { user, username, avatarUrl, updateAvatar } = useAuth()
   const [isUploading, setIsUploading] = useState(false)
 
@@ -101,13 +101,13 @@ function AvatarUpload() {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      toast.error(t('common.uploadError'))
+      toast.error(t('common:uploadError'))
       return
     }
 
     // Validate file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
-      toast.error(t('profile.avatarTooLarge'))
+      toast.error(t('profile:avatarTooLarge'))
       return
     }
 
@@ -116,9 +116,9 @@ function AvatarUpload() {
     setIsUploading(false)
 
     if (error) {
-      toast.error(t('common.error'))
+      toast.error(t('common:error'))
     } else {
-      toast.success(t('profile.avatarUpdated'))
+      toast.success(t('profile:avatarUpdated'))
     }
   }
 
@@ -164,14 +164,14 @@ function AvatarUpload() {
           disabled={isUploading}
         />
         <Camera size={14} />
-        {t('profile.changePhoto')}
+        {t('profile:changePhoto')}
       </label>
     </div>
   )
 }
 
 export function Profile() {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['profile', 'common', 'submit', 'feedback', 'auth'])
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<TabType>('pets')
   const { favorites, isLoading: favoritesLoading } = useFavorites()
@@ -290,14 +290,14 @@ export function Profile() {
 
   // Handle pet deletion
   const handleDeletePet = async (petId: string) => {
-    if (!confirm(t('pets.deleteConfirm'))) return
+    if (!confirm(t('profile:pets.deleteConfirm'))) return
     
     try {
       await deletePet(petId)
       setPets(prev => prev.filter(p => p.id !== petId))
-      toast.success(t('pets.deleted'))
+      toast.success(t('profile:pets.deleted'))
     } catch {
-      toast.error(t('common.error'))
+      toast.error(t('common:error'))
     }
   }
 
@@ -315,12 +315,12 @@ export function Profile() {
           <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto">
             <LogIn size={40} className="text-primary-500" />
           </div>
-          <h1 className="text-2xl font-bold text-neutral-900">{t('profile.loginRequired')}</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">{t('profile:loginRequired')}</h1>
           <button
             onClick={() => setShowAuthModal(true)}
             className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
           >
-            {t('auth.loginButton')}
+            {t('auth:loginButton')}
           </button>
         </div>
         
@@ -359,7 +359,7 @@ export function Profile() {
             }`}
           >
             <PawPrint size={18} />
-            {t('profile.tabs.pets')}
+            {t('profile:tabs.pets')}
           </button>
           <button
             onClick={() => setActiveTab('favorites')}
@@ -370,7 +370,7 @@ export function Profile() {
             }`}
           >
             <Heart size={18} />
-            {t('profile.tabs.favorites')}
+            {t('profile:tabs.favorites')}
           </button>
           <button
             onClick={() => setActiveTab('contributions')}
@@ -381,7 +381,7 @@ export function Profile() {
             }`}
           >
             <Store size={18} />
-            {t('profile.tabs.contributions')}
+            {t('profile:tabs.contributions')}
           </button>
           <button
             onClick={() => setActiveTab('feedback')}
@@ -392,7 +392,7 @@ export function Profile() {
             }`}
           >
             <MessageCircle size={18} />
-            {t('profile.tabs.feedback')}
+            {t('profile:tabs.feedback')}
           </button>
           <button
             onClick={() => setActiveTab('reports')}
@@ -403,7 +403,7 @@ export function Profile() {
             }`}
           >
             <AlertTriangle size={18} />
-            {t('profile.tabs.reports')}
+            {t('profile:tabs.reports')}
           </button>
         </div>
 
@@ -419,7 +419,7 @@ export function Profile() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
             >
               <Plus size={18} />
-              {t('pets.addPet')}
+              {t('profile:pets.addPet')}
             </button>
 
             {/* Pets Grid */}
@@ -432,8 +432,8 @@ export function Profile() {
             ) : pets.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
                 <PawPrint size={48} className="mx-auto text-neutral-300 mb-4" />
-                <p className="text-neutral-600 font-medium">{t('pets.noPets')}</p>
-                <p className="text-neutral-400 text-sm mt-1">{t('pets.noPetsHint')}</p>
+                <p className="text-neutral-600 font-medium">{t('profile:pets.noPets')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('profile:pets.noPetsHint')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -461,8 +461,8 @@ export function Profile() {
             ) : favorites.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
                 <Heart size={48} className="mx-auto text-neutral-300 mb-4" />
-                <p className="text-neutral-600 font-medium">{t('favorites.noFavorites')}</p>
-                <p className="text-neutral-400 text-sm mt-1">{t('favorites.noFavoritesHint')}</p>
+                <p className="text-neutral-600 font-medium">{t('profile:favorites.noFavorites')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('profile:favorites.noFavoritesHint')}</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -489,14 +489,14 @@ export function Profile() {
             ) : contributions.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
                 <Store size={48} className="mx-auto text-neutral-300 mb-4" />
-                <p className="text-neutral-600 font-medium">{t('submit.noContributions')}</p>
-                <p className="text-neutral-400 text-sm mt-1">{t('submit.noContributionsHint')}</p>
+                <p className="text-neutral-600 font-medium">{t('submit:noContributions')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('submit:noContributionsHint')}</p>
                 <Link
                   to="/submit"
                   className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
                 >
                   <Plus size={18} />
-                  {t('submit.title')}
+                  {t('submit:title')}
                 </Link>
               </div>
             ) : (
@@ -516,7 +516,7 @@ export function Profile() {
                       )}
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-neutral-900 truncate">
-                          {restaurant.name_zh || restaurant.name || t('common.unnamed')}
+                          {restaurant.name_zh || restaurant.name || t('common:unnamed')}
                         </h3>
                         <p className="text-sm text-neutral-500 truncate">
                           {restaurant.address_zh || restaurant.address}
@@ -531,16 +531,16 @@ export function Profile() {
                           : 'bg-yellow-100 text-yellow-700'
                       }`}>
                         {restaurant.status === 'approved' 
-                          ? t('submit.status.approved')
+                          ? t('submit:status.approved')
                           : restaurant.status === 'rejected'
-                          ? t('submit.status.rejected')
-                          : t('submit.status.pending')}
+                          ? t('submit:status.rejected')
+                          : t('submit:status.pending')}
                       </div>
                     </div>
                     {/* Admin Comment */}
                     {restaurant.admin_comment && (
                       <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common.adminComment')}</p>
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common:adminComment')}</p>
                         <p className="text-sm text-neutral-700">{restaurant.admin_comment}</p>
                       </div>
                     )}
@@ -563,8 +563,8 @@ export function Profile() {
             ) : feedbacks.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
                 <MessageCircle size={48} className="mx-auto text-neutral-300 mb-4" />
-                <p className="text-neutral-600 font-medium">{t('feedback.noFeedback')}</p>
-                <p className="text-neutral-400 text-sm mt-1">{t('feedback.noFeedbackHint')}</p>
+                <p className="text-neutral-600 font-medium">{t('feedback:noFeedback')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('feedback:noFeedbackHint')}</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -581,7 +581,7 @@ export function Profile() {
                             fb.type === 'feature' ? 'bg-amber-100 text-amber-700' :
                             'bg-blue-100 text-blue-700'
                           }`}>
-                            {t(`feedback.types.${fb.type}`)}
+                            {t(`feedback:types.${fb.type}`)}
                           </span>
                           <span className="text-xs text-neutral-400">
                             {new Date(fb.created_at).toLocaleDateString()}
@@ -598,13 +598,13 @@ export function Profile() {
                           ? 'bg-blue-100 text-blue-700'
                           : 'bg-yellow-100 text-yellow-700'
                       }`}>
-                        {t(`feedback.status.${fb.status}`)}
+                        {t(`feedback:status.${fb.status}`)}
                       </div>
                     </div>
                     {/* Admin Comment */}
                     {fb.admin_comment && (
                       <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common.adminComment')}</p>
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common:adminComment')}</p>
                         <p className="text-sm text-neutral-700">{fb.admin_comment}</p>
                       </div>
                     )}
@@ -627,8 +627,8 @@ export function Profile() {
             ) : reports.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
                 <AlertTriangle size={48} className="mx-auto text-neutral-300 mb-4" />
-                <p className="text-neutral-600 font-medium">{t('report.noReports')}</p>
-                <p className="text-neutral-400 text-sm mt-1">{t('report.noReportsHint')}</p>
+                <p className="text-neutral-600 font-medium">{t('feedback:report.noReports')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('feedback:report.noReportsHint')}</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -658,13 +658,13 @@ export function Profile() {
                           ? 'bg-red-100 text-red-700'
                           : 'bg-yellow-100 text-yellow-700'
                       }`}>
-                        {t(`report.status.${rpt.status}`)}
+                        {t(`feedback:report.status.${rpt.status}`)}
                       </div>
                     </div>
                     {/* Admin Comment */}
                     {rpt.admin_comment && (
                       <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common.adminComment')}</p>
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common:adminComment')}</p>
                         <p className="text-sm text-neutral-700">{rpt.admin_comment}</p>
                       </div>
                     )}
@@ -688,16 +688,16 @@ export function Profile() {
                 if (editingPet) {
                   const updated = await updatePet(editingPet.id, data)
                   setPets(prev => prev.map(p => p.id === editingPet.id ? updated : p))
-                  toast.success(t('pets.updated'))
+                  toast.success(t('profile:pets.updated'))
                 } else {
                   const newPet = await createPet(data as { name: string; type: string; size: PetSize; breed?: string | null })
                   setPets(prev => [newPet, ...prev])
-                  toast.success(t('pets.added'))
+                  toast.success(t('profile:pets.added'))
                 }
                 setShowPetModal(false)
                 setEditingPet(null)
               } catch {
-                toast.error(t('common.error'))
+                toast.error(t('common:error'))
               }
             }}
           />
@@ -715,7 +715,7 @@ interface PetFormModalProps {
 }
 
 function PetFormModal({ pet, onClose, onSave }: PetFormModalProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['profile', 'common'])
   const [name, setName] = useState(pet?.name || '')
   const [type, setType] = useState(pet?.type || 'dog')
   const [size, setSize] = useState<PetSize>(pet?.size || 'medium')
@@ -725,7 +725,7 @@ function PetFormModal({ pet, onClose, onSave }: PetFormModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim()) {
-      toast.error(t('pets.namePlaceholder'))
+      toast.error(t('profile:pets.namePlaceholder'))
       return
     }
     
@@ -738,18 +738,18 @@ function PetFormModal({ pet, onClose, onSave }: PetFormModalProps) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-6">
         <h2 className="text-xl font-bold text-neutral-900">
-          {pet ? t('pets.editPet') : t('pets.addPet')}
+          {pet ? t('profile:pets.editPet') : t('profile:pets.addPet')}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-neutral-700">{t('pets.name')}</label>
+            <label className="block text-sm font-medium text-neutral-700">{t('profile:pets.name')}</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t('pets.namePlaceholder')}
+              placeholder={t('profile:pets.namePlaceholder')}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
               required
             />
@@ -757,40 +757,40 @@ function PetFormModal({ pet, onClose, onSave }: PetFormModalProps) {
 
           {/* Type */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-neutral-700">{t('pets.type')}</label>
+            <label className="block text-sm font-medium text-neutral-700">{t('profile:pets.type')}</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
             >
               {PET_TYPES.map(t_type => (
-                <option key={t_type} value={t_type}>{t(`pets.types.${t_type}`)}</option>
+                <option key={t_type} value={t_type}>{t(`profile:pets.types.${t_type}`)}</option>
               ))}
             </select>
           </div>
 
           {/* Size */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-neutral-700">{t('pets.size')}</label>
+            <label className="block text-sm font-medium text-neutral-700">{t('profile:pets.size')}</label>
             <select
               value={size}
               onChange={(e) => setSize(e.target.value as PetSize)}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
             >
               {PET_SIZES.map(s => (
-                <option key={s.value} value={s.value}>{t(`pets.sizes.${s.value}`)}</option>
+                <option key={s.value} value={s.value}>{t(`profile:pets.sizes.${s.value}`)}</option>
               ))}
             </select>
           </div>
 
           {/* Breed */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-neutral-700">{t('pets.breed')}</label>
+            <label className="block text-sm font-medium text-neutral-700">{t('profile:pets.breed')}</label>
             <input
               type="text"
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
-              placeholder={t('pets.breedPlaceholder')}
+              placeholder={t('profile:pets.breedPlaceholder')}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -802,14 +802,14 @@ function PetFormModal({ pet, onClose, onSave }: PetFormModalProps) {
               onClick={onClose}
               className="flex-1 px-4 py-2 text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
             >
-              {t('common.cancel')}
+              {t('common:cancel')}
             </button>
             <button
               type="submit"
               disabled={saving}
               className="flex-1 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors disabled:opacity-50"
             >
-              {saving ? t('common.loading') : t('common.save')}
+              {saving ? t('common:loading') : t('common:save')}
             </button>
           </div>
         </form>
