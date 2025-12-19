@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+
 import { PawPrint, Heart, Plus, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
@@ -8,6 +8,7 @@ import { useFavorites } from '@/hooks/useFavorites'
 import { getUserPets, deletePet, createPet, updatePet, PET_TYPES, PET_SIZES } from '@/services/userPets'
 import { PetProfileCard } from '@/components/PetProfileCard'
 import { RestaurantCard } from '@/components/RestaurantCard'
+import { AuthModal } from '@/components/AuthModal'
 import type { UserPet, PetSize } from '@/types/database'
 
 type TabType = 'pets' | 'favorites'
@@ -15,7 +16,6 @@ type TabType = 'pets' | 'favorites'
 export function Profile() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabType>('pets')
   const { favorites, isLoading: favoritesLoading } = useFavorites()
   
@@ -24,6 +24,7 @@ export function Profile() {
   const [petsLoading, setPetsLoading] = useState(true)
   const [showPetModal, setShowPetModal] = useState(false)
   const [editingPet, setEditingPet] = useState<UserPet | null>(null)
+  const [showAuthModal, setShowAuthModal] = useState(false)
 
   // Fetch pets
   useEffect(() => {
@@ -72,12 +73,17 @@ export function Profile() {
           </div>
           <h1 className="text-2xl font-bold text-neutral-900">{t('profile.loginRequired')}</h1>
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => setShowAuthModal(true)}
             className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
           >
             {t('auth.loginButton')}
           </button>
         </div>
+        
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+        />
       </div>
     )
   }

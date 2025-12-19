@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react'
-import { HashRouter as Router, Routes, Route } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import { AuthProvider } from '@/contexts/AuthContext'
+import { AuthProvider, useAuth } from '@/contexts/AuthContext'
 import { CuisineTypesProvider } from '@/contexts/CuisineTypesContext'
 import { PetPoliciesProvider } from '@/contexts/PetPoliciesContext'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
@@ -52,6 +52,10 @@ function App() {
                     <Route path="feedback" element={<AdminFeedback />} />
                   </Route>
                 </Route>
+
+
+                {/* Catch all - Handle OAuth redirects or redirect to home */}
+                <Route path="*" element={<AuthCallback />} />
               </Routes>
             </Suspense>
             
@@ -62,6 +66,31 @@ function App() {
       </CuisineTypesProvider>
     </AuthProvider>
   )
+}
+
+function AuthCallback() {
+  const { user } = useAuth()
+  
+  // If user is already authenticated, redirect to home
+  if (user) {
+    return <Navigate to="/" replace />
+  }
+
+  // If URL contains auth params (access_token, etc.), show loading
+  // HashRouter treats the hash fragment as the path
+  const hash = window.location.hash
+  if (hash && (hash.includes('access_token') || hash.includes('error_description'))) {
+    return <LoadingScreen />
+  }
+
+  // Check the router location pathname as well just in case
+  const path = window.location.hash.slice(1) // remove #
+  if (path.startsWith('/access_token') || path.startsWith('access_token')) {
+     return <LoadingScreen />
+  }
+
+  // Otherwise, if it's just a random 404, redirect to home
+  return <Navigate to="/" replace />
 }
 
 export default App
