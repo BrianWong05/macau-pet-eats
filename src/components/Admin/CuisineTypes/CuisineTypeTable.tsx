@@ -1,4 +1,5 @@
-import { Edit, Save, Trash2, X } from 'lucide-react'
+import { useState } from 'react'
+import { Edit, Save, Trash2, X, GripVertical } from 'lucide-react'
 import type { CuisineType } from '@/types/database'
 
 interface CuisineTypeTableProps {
@@ -11,6 +12,7 @@ interface CuisineTypeTableProps {
   onSave: (id: string) => void
   onCancelEdit: () => void
   onDelete: (id: string) => void
+  onReorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function CuisineTypeTable({
@@ -22,8 +24,52 @@ export function CuisineTypeTable({
   onEdit,
   onSave,
   onCancelEdit,
-  onDelete
+  onDelete,
+  onReorder
 }: CuisineTypeTableProps) {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', index.toString())
+    // Add a slight delay to show the dragging state
+    setTimeout(() => {
+      const target = e.target as HTMLElement
+      target.closest('tr')?.classList.add('opacity-50')
+    }, 0)
+  }
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    const target = e.target as HTMLElement
+    target.closest('tr')?.classList.remove('opacity-50')
+    setDraggedIndex(null)
+    setDragOverIndex(null)
+  }
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (index !== draggedIndex) {
+      setDragOverIndex(index)
+    }
+  }
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null)
+  }
+
+  const handleDrop = (e: React.DragEvent, toIndex: number) => {
+    e.preventDefault()
+    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10)
+    if (fromIndex !== toIndex) {
+      onReorder(fromIndex, toIndex)
+    }
+    setDraggedIndex(null)
+    setDragOverIndex(null)
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-card overflow-hidden">
       {isLoading ? (
@@ -34,6 +80,7 @@ export function CuisineTypeTable({
         <table className="w-full">
           <thead className="bg-neutral-50">
             <tr>
+              <th className="px-2 py-3 text-left text-sm font-medium text-neutral-600 w-10"></th>
               <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">Key</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">中文</th>
               <th className="px-4 py-3 text-left text-sm font-medium text-neutral-600">PT</th>
@@ -41,10 +88,24 @@ export function CuisineTypeTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
-            {cuisineTypes.map((ct) => (
-              <tr key={ct.id} className="hover:bg-neutral-50">
+            {cuisineTypes.map((ct, index) => (
+              <tr 
+                key={ct.id} 
+                className={`hover:bg-neutral-50 transition-colors ${
+                  dragOverIndex === index ? 'bg-primary-50 border-t-2 border-primary-500' : ''
+                }`}
+                draggable={editingId !== ct.id}
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, index)}
+              >
                 {editingId === ct.id ? (
                   <>
+                    <td className="px-2 py-3">
+                      <span className="text-neutral-300"><GripVertical size={16} /></span>
+                    </td>
                     <td className="px-4 py-3">
                       <input
                         type="text"
@@ -86,6 +147,9 @@ export function CuisineTypeTable({
                   </>
                 ) : (
                   <>
+                    <td className="px-2 py-3 cursor-grab active:cursor-grabbing">
+                      <GripVertical size={16} className="text-neutral-400 hover:text-neutral-600" />
+                    </td>
                     <td className="px-4 py-3 text-sm text-neutral-900">{ct.name}</td>
                     <td className="px-4 py-3 text-sm text-neutral-600">{ct.name_zh || '-'}</td>
                     <td className="px-4 py-3 text-sm text-neutral-600">{ct.name_pt || '-'}</td>
