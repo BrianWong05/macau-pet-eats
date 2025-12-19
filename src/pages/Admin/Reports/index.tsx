@@ -27,6 +27,14 @@ export function AdminReports() {
   const [editingReport, setEditingReport] = useState<ReportWithRestaurant | null>(null)
   const [editValue, setEditValue] = useState('')
 
+  // Comment modal state
+  interface PendingAction {
+    type: 'approve' | 'reject' | 'check'
+    report: ReportWithRestaurant
+  }
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null)
+  const [comment, setComment] = useState('')
+
   const fetchReports = async () => {
     setIsLoading(true)
     let query = supabase
@@ -234,13 +242,50 @@ export function AdminReports() {
     }
   }
 
-  const handleCheck = async (reportId: string) => {
+  const openApproveModal = (report: ReportWithRestaurant) => {
+    setPendingAction({ type: 'approve', report })
+    setComment('')
+  }
+
+  const openRejectModal = (reportId: string) => {
+    const report = reports.find(r => r.id === reportId)
+    if (report) {
+      setPendingAction({ type: 'reject', report })
+      setComment('')
+    }
+  }
+
+  const openCheckModal = (reportId: string) => {
+    const report = reports.find(r => r.id === reportId)
+    if (report) {
+      setPendingAction({ type: 'check', report })
+      setComment('')
+    }
+  }
+
+  const confirmAction = async () => {
+    if (!pendingAction) return
+
+    if (pendingAction.type === 'approve') {
+      await handleApprove(pendingAction.report, comment || undefined)
+    } else if (pendingAction.type === 'reject') {
+      await handleReject(pendingAction.report.id, comment || undefined)
+    } else if (pendingAction.type === 'check') {
+      await handleCheck(pendingAction.report.id, comment || undefined)
+    }
+
+    setPendingAction(null)
+    setComment('')
+  }
+
+  const handleCheck = async (reportId: string, adminComment?: string) => {
     setProcessingId(reportId)
     try {
       const { error } = await supabase
         .from('restaurant_reports')
         .update({
           status: 'approved',
+          admin_comment: adminComment || null,
           reviewed_at: new Date().toISOString(),
           reviewed_by: user?.id
         } as never)
@@ -298,9 +343,9 @@ export function AdminReports() {
         reports={paginatedReports}
         isLoading={isLoading}
         processingId={processingId}
-        onApprove={handleApprove}
-        onReject={handleReject}
-        onCheck={handleCheck}
+        onApprove={openApproveModal}
+        onReject={openRejectModal}
+        onCheck={openCheckModal}
         onEdit={handleEdit}
       />
 
@@ -413,6 +458,58 @@ export function AdminReports() {
                   className="px-4 py-2 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-colors disabled:opacity-50"
                 >
                   {processingId === editingReport.id ? '...' : t('common.save') || '保存'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Comment Modal */}
+      {pendingAction && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
+            <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-neutral-900">
+                {t('admin.comment.title') || 'Add Comment'}
+              </h3>
+              <button
+                onClick={() => setPendingAction(null)}
+                className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+              >
+                <X size={18} className="text-neutral-500" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <p className="text-sm text-neutral-600 mb-2">
+                  {t('admin.comment.hint') || 'Add a comment for the user (optional)'}
+                </p>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder={t('admin.comment.placeholder') || 'Enter your response...'}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                  autoFocus
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setPendingAction(null)}
+                  className="flex-1 px-4 py-2 border border-neutral-200 rounded-xl font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  onClick={confirmAction}
+                  className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors"
+                >
+                  {pendingAction.type === 'approve' 
+                    ? t('admin.reports.approve')
+                    : pendingAction.type === 'check' 
+                      ? t('admin.reports.check') 
+                      : t('admin.reports.reject')}
                 </button>
               </div>
             </div>
