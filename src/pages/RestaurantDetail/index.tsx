@@ -87,7 +87,8 @@ export function RestaurantDetail() {
 
       <HeroImage 
         restaurant={restaurant} 
-        lang={lang} 
+        lang={lang}
+        onAuthRequired={() => setShowAuthModal(true)}
       />
 
       <div className="max-w-4xl mx-auto px-4 py-8">

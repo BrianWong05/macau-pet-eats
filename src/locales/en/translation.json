@@ -238,16 +238,24 @@
     "signOut": "Sign Out"
   },
   "reviews": {
-    "title": "Customer Reviews",
+    "title": "Reviews",
     "writeReview": "Write a Review",
-    "noReviews": "No reviews yet. Be the first to review!",
+    "noReviews": "No reviews yet",
+    "noReviewsHint": "Be the first to review this restaurant!",
     "yourRating": "Your Rating",
     "yourReview": "Your Review",
-    "reviewPlaceholder": "Share your dining experience with your pet...",
+    "commentPlaceholder": "Share your experience with your pet...",
     "submitReview": "Submit Review",
+    "updateReview": "Update Review",
     "loginToReview": "Log in to write a review",
     "deleteReview": "Delete Review",
-    "reviewSubmitted": "Review submitted successfully!",
+    "ratingRequired": "Please select a rating",
+    "submitted": "Review submitted!",
+    "updated": "Review updated!",
+    "deleted": "Review deleted",
+    "averageRating": "{{rating}} out of 5",
+    "reviewCount": "{{count}} reviews",
+    "anonymous": "Anonymous",
     "addPhoto": "Add Photo",
     "takePhoto": "Take Photo",
     "uploadPhoto": "Upload Photo",
@@ -367,5 +375,55 @@
     "submit": "Send Feedback",
     "success": "Thanks for your feedback!",
     "error": "Failed to submit feedback"
+  },
+  "favorites": {
+    "title": "My Saved Places",
+    "add": "Save",
+    "remove": "Remove from saved",
+    "added": "Added to favorites",
+    "removed": "Removed from favorites",
+    "save": "Save",
+    "saved": "Saved",
+    "noFavorites": "No saved places yet",
+    "noFavoritesHint": "Tap the heart icon on restaurants to save them here"
+  },
+  "pets": {
+    "title": "My Pets",
+    "addPet": "Add Pet",
+    "editPet": "Edit Pet",
+    "deletePet": "Delete Pet",
+    "deleteConfirm": "Are you sure you want to remove this pet?",
+    "name": "Pet Name",
+    "namePlaceholder": "Enter your pet's name",
+    "type": "Pet Type",
+    "size": "Size",
+    "breed": "Breed",
+    "breedPlaceholder": "Optional: Enter breed",
+    "types": {
+      "dog": "Dog",
+      "cat": "Cat",
+      "bird": "Bird",
+      "rabbit": "Rabbit",
+      "other": "Other"
+    },
+    "sizes": {
+      "small": "Small (< 10kg)",
+      "medium": "Medium (10-25kg)",
+      "large": "Large (> 25kg)"
+    },
+    "noPets": "No pets added yet",
+    "noPetsHint": "Add your furry friends to help find the perfect restaurants",
+    "added": "Pet added!",
+    "updated": "Pet updated!",
+    "deleted": "Pet removed"
+  },
+  "profile": {
+    "title": "My Profile",
+    "tabs": {
+      "pets": "My Pets",
+      "favorites": "Saved Places"
+    },
+    "loginRequired": "Please log in to view your profile"
   }
 }
+

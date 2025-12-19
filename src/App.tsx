@@ -15,6 +15,7 @@ const Explore = lazy(() => import('@/pages/Explore').then(module => ({ default: 
 const Search = lazy(() => import('@/pages/Search').then(module => ({ default: module.Search })))
 const RestaurantDetail = lazy(() => import('@/pages/RestaurantDetail').then(module => ({ default: module.RestaurantDetail })))
 const Submit = lazy(() => import('@/pages/Submit').then(module => ({ default: module.Submit })))
+const Profile = lazy(() => import('@/pages/Profile').then(module => ({ default: module.Profile })))
 
 // Lazy load Admin pages
 const AdminDashboard = lazy(() => import('@/pages/Admin/Dashboard').then(module => ({ default: module.AdminDashboard })))
@@ -38,6 +39,7 @@ function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/submit" element={<Submit />} />
+                <Route path="/profile" element={<Profile />} />
                 
                 {/* Admin Routes */}
                 <Route element={<ProtectedRoute requireAdmin />}>

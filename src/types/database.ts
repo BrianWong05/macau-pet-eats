@@ -146,10 +146,44 @@ export interface Review {
   restaurant_id: string
   user_id: string
   rating: 1 | 2 | 3 | 4 | 5
-  comment: string
-  image_url?: string | null
+  comment: string | null
   created_at: string
   updated_at: string
+  // Joined data (optional, populated when fetching with user info)
+  user_email?: string
+  user_avatar?: string
+}
+
+// Favorite entity
+export interface Favorite {
+  user_id: string
+  restaurant_id: string
+  created_at: string
+  // Joined data (optional)
+  restaurant?: Restaurant
+}
+
+// Pet size enum
+export type PetSize = 'small' | 'medium' | 'large'
+
+// User Pet entity
+export interface UserPet {
+  id: string
+  user_id: string
+  name: string
+  type: string // 'dog', 'cat', etc.
+  size: PetSize
+  breed: string | null
+  image_url: string | null
+  created_at: string
+  updated_at: string
+}
+
+// Restaurant rating summary
+export interface RestaurantRating {
+  restaurant_id: string
+  review_count: number
+  average_rating: number
 }
 
 // Supabase Database types
