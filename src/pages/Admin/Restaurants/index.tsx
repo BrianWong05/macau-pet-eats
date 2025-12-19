@@ -90,14 +90,13 @@ export function AdminRestaurants() {
     }
   }
 
-  const handleStatusUpdate = async (id: string, status: 'approved' | 'rejected') => {
+  const handleStatusUpdate = async (id: string, status: 'approved' | 'rejected', adminComment?: string) => {
     const { error } = await supabase
       .from('restaurants')
-      .update({ status } as never)
+      .update({ status, admin_comment: adminComment || null } as never)
       .eq('id', id)
 
     if (!error) {
-      toast.success(`Restaurant ${status} successfully`)
       toast.success(status === 'approved' ? t('admin.restaurants.actions.approveSuccess') : t('admin.restaurants.actions.rejectSuccess'))
       fetchRestaurants()
     }

@@ -21,6 +21,7 @@ export interface Restaurant {
   address: string
   status: 'pending' | 'approved' | 'rejected'
   submitted_by: string | null  // User ID who submitted
+  admin_comment?: string | null  // Admin's comment on decision
   
   // Chinese (中文)
   name_zh: string | null
@@ -229,6 +230,7 @@ export interface AppFeedback {
   status: FeedbackStatus
   created_at: string
   updated_at: string
+  admin_comment?: string | null
 }
 
 // Restaurant Report type
@@ -245,6 +247,7 @@ export interface RestaurantReport {
   created_at: string
   reviewed_at: string | null
   reviewed_by: string | null
+  admin_comment?: string | null
 }
 
 // Form types for submissions

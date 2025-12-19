@@ -21,7 +21,8 @@
     "save": "Save",
     "delete": "Delete",
     "view": "View",
-    "edit": "Edit"
+    "edit": "Edit",
+    "adminComment": "Admin Response"
   },
   "nav": {
     "home": "Home",
@@ -277,6 +278,11 @@
         "approved": "Approved",
         "rejected": "Rejected"
       }
+    },
+    "comment": {
+      "title": "Add Comment",
+      "hint": "Add a comment for the user (optional)",
+      "placeholder": "Enter your response..."
     },
     "modal": {
       "labels": {

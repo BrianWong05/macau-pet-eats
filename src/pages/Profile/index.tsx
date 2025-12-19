@@ -504,37 +504,46 @@ export function Profile() {
                 {contributions.map(restaurant => (
                   <div
                     key={restaurant.id}
-                    className="bg-white rounded-xl border border-neutral-200 p-4 flex items-center gap-4"
+                    className="bg-white rounded-xl border border-neutral-200 p-4"
                   >
-                    {restaurant.image_url && (
-                      <img
-                        src={restaurant.image_url}
-                        alt={restaurant.name_zh || restaurant.name}
-                        className="w-16 h-16 rounded-lg object-cover"
-                      />
+                    <div className="flex items-center gap-4">
+                      {restaurant.image_url && (
+                        <img
+                          src={restaurant.image_url}
+                          alt={restaurant.name_zh || restaurant.name}
+                          className="w-16 h-16 rounded-lg object-cover"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-neutral-900 truncate">
+                          {restaurant.name_zh || restaurant.name || t('common.unnamed')}
+                        </h3>
+                        <p className="text-sm text-neutral-500 truncate">
+                          {restaurant.address_zh || restaurant.address}
+                        </p>
+                      </div>
+                      {/* Status Badge */}
+                      <div className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${
+                        restaurant.status === 'approved'
+                          ? 'bg-green-100 text-green-700'
+                          : restaurant.status === 'rejected'
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {restaurant.status === 'approved' 
+                          ? t('submit.status.approved')
+                          : restaurant.status === 'rejected'
+                          ? t('submit.status.rejected')
+                          : t('submit.status.pending')}
+                      </div>
+                    </div>
+                    {/* Admin Comment */}
+                    {restaurant.admin_comment && (
+                      <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common.adminComment')}</p>
+                        <p className="text-sm text-neutral-700">{restaurant.admin_comment}</p>
+                      </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-neutral-900 truncate">
-                        {restaurant.name_zh || restaurant.name || t('common.unnamed')}
-                      </h3>
-                      <p className="text-sm text-neutral-500 truncate">
-                        {restaurant.address_zh || restaurant.address}
-                      </p>
-                    </div>
-                    {/* Status Badge */}
-                    <div className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${
-                      restaurant.status === 'approved'
-                        ? 'bg-green-100 text-green-700'
-                        : restaurant.status === 'rejected'
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}>
-                      {restaurant.status === 'approved' 
-                        ? t('submit.status.approved')
-                        : restaurant.status === 'rejected'
-                        ? t('submit.status.rejected')
-                        : t('submit.status.pending')}
-                    </div>
                   </div>
                 ))}
               </div>
@@ -592,6 +601,13 @@ export function Profile() {
                         {t(`feedback.status.${fb.status}`)}
                       </div>
                     </div>
+                    {/* Admin Comment */}
+                    {fb.admin_comment && (
+                      <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common.adminComment')}</p>
+                        <p className="text-sm text-neutral-700">{fb.admin_comment}</p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -645,6 +661,13 @@ export function Profile() {
                         {t(`report.status.${rpt.status}`)}
                       </div>
                     </div>
+                    {/* Admin Comment */}
+                    {rpt.admin_comment && (
+                      <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                        <p className="text-xs font-medium text-neutral-500 mb-1">{t('common.adminComment')}</p>
+                        <p className="text-sm text-neutral-700">{rpt.admin_comment}</p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

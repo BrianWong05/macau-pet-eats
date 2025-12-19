@@ -21,7 +21,8 @@
     "save": "保存",
     "delete": "刪除",
     "view": "查看",
-    "edit": "編輯"
+    "edit": "編輯",
+    "adminComment": "管理員回覆"
   },
   "nav": {
     "home": "首頁",
@@ -268,6 +269,11 @@
       "totalReviews": "評論總數",
       "updateReports": "更新回報"
     },
+    "comment": {
+      "title": "新增回覆",
+      "hint": "新增給用戶的回覆 (選填)",
+      "placeholder": "輸入您的回覆..."
+    },
     "restaurants": {
       "title": "餐廳列表",
       "subtitle": "管理餐廳與審核",
@@ -278,7 +284,7 @@
         "pending": "待審核",
         "approved": "已批准"
       },
-      "table": {
+    "table": {
         "headers": {
           "restaurant": "餐廳",
           "status": "狀態",

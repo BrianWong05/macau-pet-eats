@@ -21,7 +21,8 @@
     "save": "Guardar",
     "delete": "Apagar",
     "view": "Ver",
-    "edit": "Editar"
+    "edit": "Editar",
+    "adminComment": "Resposta do Admin"
   },
   "nav": {
     "home": "Início",
@@ -269,6 +270,11 @@
         "approved": "Aprovado",
         "rejected": "Rejeitado"
       }
+    },
+    "comment": {
+      "title": "Adicionar Comentário",
+      "hint": "Adicione um comentário para o utilizador (opcional)",
+      "placeholder": "Introduza a sua resposta..."
     },
     "modal": {
       "labels": {

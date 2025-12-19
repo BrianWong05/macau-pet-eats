@@ -93,7 +93,7 @@ export function AdminReports() {
     }
   }
 
-  const handleApprove = async (report: ReportWithRestaurant) => {
+  const handleApprove = async (report: ReportWithRestaurant, adminComment?: string) => {
     setProcessingId(report.id)
     try {
       // Handle special field types
@@ -145,6 +145,7 @@ export function AdminReports() {
         .from('restaurant_reports')
         .update({
           status: 'approved',
+          admin_comment: adminComment || null,
           reviewed_at: new Date().toISOString(),
           reviewed_by: user?.id
         } as never)
@@ -162,13 +163,14 @@ export function AdminReports() {
     }
   }
 
-  const handleReject = async (reportId: string) => {
+  const handleReject = async (reportId: string, adminComment?: string) => {
     setProcessingId(reportId)
     try {
       const { error } = await supabase
         .from('restaurant_reports')
         .update({
           status: 'rejected',
+          admin_comment: adminComment || null,
           reviewed_at: new Date().toISOString(),
           reviewed_by: user?.id
         } as never)

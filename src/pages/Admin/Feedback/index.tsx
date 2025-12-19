@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MessageSquare, Bug, Lightbulb, CheckCircle, Clock, Eye } from 'lucide-react'
+import { MessageSquare, Bug, Lightbulb, CheckCircle, Clock, Eye, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { Pagination } from '@/components/Pagination'
@@ -14,6 +14,11 @@ interface Feedback {
   page_url: string | null
   status: 'pending' | 'reviewed' | 'resolved'
   created_at: string
+}
+
+interface PendingAction {
+  id: string
+  status: 'pending' | 'reviewed' | 'resolved'
 }
 
 const TYPE_ICONS = {
@@ -45,6 +50,10 @@ export function AdminFeedback() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(25)
+
+  // Comment modal state
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null)
+  const [comment, setComment] = useState('')
 
   const fetchFeedback = async () => {
     setIsLoading(true)
@@ -80,10 +89,10 @@ export function AdminFeedback() {
     return feedback.slice(startIndex, startIndex + itemsPerPage)
   }, [feedback, currentPage, itemsPerPage])
 
-  const handleStatusChange = async (id: string, newStatus: 'pending' | 'reviewed' | 'resolved') => {
+  const handleStatusChange = async (id: string, newStatus: 'pending' | 'reviewed' | 'resolved', adminComment?: string) => {
     const { error } = await supabase
       .from('app_feedback')
-      .update({ status: newStatus, updated_at: new Date().toISOString() } as never)
+      .update({ status: newStatus, admin_comment: adminComment || null, updated_at: new Date().toISOString() } as never)
       .eq('id', id)
 
     if (!error) {
@@ -91,6 +100,19 @@ export function AdminFeedback() {
       fetchFeedback()
     } else {
       toast.error('Failed to update status')
+    }
+  }
+
+  const openStatusModal = (id: string, status: 'pending' | 'reviewed' | 'resolved') => {
+    setPendingAction({ id, status })
+    setComment('')
+  }
+
+  const confirmStatusChange = () => {
+    if (pendingAction) {
+      handleStatusChange(pendingAction.id, pendingAction.status, comment || undefined)
+      setPendingAction(null)
+      setComment('')
     }
   }
 
@@ -187,7 +209,7 @@ export function AdminFeedback() {
                   <div className="flex gap-1">
                     {item.status !== 'reviewed' && (
                       <button
-                        onClick={() => handleStatusChange(item.id, 'reviewed')}
+                        onClick={() => openStatusModal(item.id, 'reviewed')}
                         className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Mark as Reviewed"
                       >
@@ -196,7 +218,7 @@ export function AdminFeedback() {
                     )}
                     {item.status !== 'resolved' && (
                       <button
-                        onClick={() => handleStatusChange(item.id, 'resolved')}
+                        onClick={() => openStatusModal(item.id, 'resolved')}
                         className="p-2 text-green-500 hover:bg-green-50 rounded-lg transition-colors"
                         title="Mark as Resolved"
                       >
@@ -205,7 +227,7 @@ export function AdminFeedback() {
                     )}
                     {item.status !== 'pending' && (
                       <button
-                        onClick={() => handleStatusChange(item.id, 'pending')}
+                        onClick={() => openStatusModal(item.id, 'pending')}
                         className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-colors"
                         title="Mark as Pending"
                       >
@@ -225,6 +247,53 @@ export function AdminFeedback() {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
+
+      {/* Comment Modal */}
+      {pendingAction && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
+            <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-neutral-900">
+                {t('admin.comment.title') || 'Add Comment'}
+              </h3>
+              <button
+                onClick={() => setPendingAction(null)}
+                className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+              >
+                <X size={18} className="text-neutral-500" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <p className="text-sm text-neutral-600 mb-2">
+                  {t('admin.comment.hint') || 'Add a comment for the user (optional)'}
+                </p>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder={t('admin.comment.placeholder') || 'Enter your response...'}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setPendingAction(null)}
+                  className="flex-1 px-4 py-2 border border-neutral-200 rounded-xl font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  onClick={confirmStatusChange}
+                  className="flex-1 px-4 py-2 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors"
+                >
+                  {t('common.submit')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
