@@ -64,7 +64,7 @@ export function ExploreHeader({
           <Upload size={16} />
           <span className="hidden sm:inline">{t('common:nav.submit')}</span>
         </Link>
-        </Link>
+
         <LanguageSwitcher />
       </div>
     </header>

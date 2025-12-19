@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Image as ImageIcon } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
-import { getLocalizedText } from '@/types/database'
+
 import { useState } from 'react' // Added import for useState
 import { X } from 'lucide-react' // Added import for X icon
 
