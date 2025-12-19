@@ -39,6 +39,13 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
               <span className={`text-sm font-medium hidden sm:block ${isScrolled ? 'text-neutral-700' : 'text-neutral-700'}`}>
                 {user.email}
               </span>
+              <Link
+                to="/profile"
+                className={`p-2 rounded-full shadow-sm hover:shadow-md transition-all ${isScrolled ? 'bg-white text-neutral-600 hover:text-primary-600' : 'bg-white/80 backdrop-blur-sm text-neutral-600 hover:text-primary-600'}`}
+                title={t('profile.title') || 'Profile'}
+              >
+                <User size={20} />
+              </Link>
               <button
                 onClick={() => signOut()}
                 className={`p-2 rounded-full shadow-sm hover:shadow-md transition-all ${isScrolled ? 'bg-white text-neutral-600 hover:text-red-600' : 'bg-white/80 backdrop-blur-sm text-neutral-600 hover:text-red-600'}`}
