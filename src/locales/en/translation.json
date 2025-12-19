@@ -181,7 +181,8 @@
     "small_pets_only": "Small Pets Only",
     "all_pets_welcome": "All Pets Welcome",
     "dogs_only": "Dogs Only",
-    "cats_only": "Cats Only"
+    "cats_only": "Cats Only",
+    "medium_dogs_allowed": "Medium Dogs Allowed"
   },
   "openingHours": {
     "title": "Opening Hours",

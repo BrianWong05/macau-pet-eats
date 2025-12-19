@@ -9,6 +9,7 @@ export type PetPolicy =
   | 'all_pets_welcome'
   | 'dogs_only'
   | 'cats_only'
+  | 'medium_dogs_allowed'
 
 // Restaurant entity with multilingual fields
 export interface Restaurant {

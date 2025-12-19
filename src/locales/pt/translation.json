@@ -181,7 +181,8 @@
     "small_pets_only": "Apenas Animais Pequenos",
     "all_pets_welcome": "Todos os Animais Bem-vindos",
     "dogs_only": "Apenas Cães",
-    "cats_only": "Apenas Gatos"
+    "cats_only": "Apenas Gatos",
+    "medium_dogs_allowed": "Cães Médios Permitidos"
   },
   "openingHours": {
     "title": "Horário de Funcionamento",

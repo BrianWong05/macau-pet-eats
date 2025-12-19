@@ -181,7 +181,8 @@
     "small_pets_only": "僅限小型寵物",
     "all_pets_welcome": "歡迎所有寵物",
     "dogs_only": "僅限狗狗",
-    "cats_only": "僅限貓咪"
+    "cats_only": "僅限貓咪",
+    "medium_dogs_allowed": "允許中型犬"
   },
   "openingHours": {
     "title": "營業時間",
