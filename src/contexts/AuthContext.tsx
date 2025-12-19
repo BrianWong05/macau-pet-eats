@@ -9,11 +9,13 @@ interface AuthContextType {
   isAdmin: boolean
   isLoading: boolean
   username: string | null
+  avatarUrl: string | null
   signInWithGoogle: () => Promise<{ error: AuthError | null }>
   signInWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signUpWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
   updateUsername: (newUsername: string) => Promise<{ error: Error | null }>
+  updateAvatar: (file: File) => Promise<{ error: Error | null; url?: string }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -24,12 +26,19 @@ function getUsernameFromUser(user: User | null): string | null {
   return user.user_metadata?.username || user.user_metadata?.full_name || null
 }
 
+// Helper to extract avatar URL from user metadata
+function getAvatarFromUser(user: User | null): string | null {
+  if (!user) return null
+  return user.user_metadata?.avatar_url || user.user_metadata?.picture || null
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [username, setUsername] = useState<string | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
   useEffect(() => {
     // Get initial session
@@ -43,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session)
         setUser(session?.user ?? null)
         setUsername(getUsernameFromUser(session?.user ?? null))
+        setAvatarUrl(getAvatarFromUser(session?.user ?? null))
         
         // Check JWT for admin status (Zero DB lookup)
         if (session?.user?.app_metadata?.is_admin) {
@@ -69,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSession(session)
           setUser(session?.user ?? null)
           setUsername(getUsernameFromUser(session?.user ?? null))
+          setAvatarUrl(getAvatarFromUser(session?.user ?? null))
           
           if (session?.user?.app_metadata?.is_admin) {
             console.log('Auth: Admin detected via JWT (Update)')
@@ -120,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
     setIsAdmin(false)
     setUsername(null)
+    setAvatarUrl(null)
     
     // 2. Attempt network sign out in background (don't await)
     try {
@@ -154,6 +166,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const updateAvatar = async (file: File): Promise<{ error: Error | null; url?: string }> => {
+    try {
+      if (!user) throw new Error('User not logged in')
+      
+      // Create unique filename
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`
+      const filePath = `avatars/${fileName}`
+      
+      // Upload to Supabase storage
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true })
+      
+      if (uploadError) throw uploadError
+      
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath)
+      
+      // Update user metadata
+      const { data, error } = await supabase.auth.updateUser({
+        data: { avatar_url: publicUrl }
+      })
+      
+      if (error) throw error
+      
+      // Update local state
+      if (data.user) {
+        setUser(data.user)
+        setAvatarUrl(publicUrl)
+      }
+      
+      return { error: null, url: publicUrl }
+    } catch (err) {
+      console.error('Auth: Update avatar error:', err)
+      return { error: err instanceof Error ? err : new Error('Failed to update avatar') }
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -162,11 +215,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAdmin,
         isLoading,
         username,
+        avatarUrl,
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,
         signOut,
         updateUsername,
+        updateAvatar,
       }}
     >
       {children}

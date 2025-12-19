@@ -429,7 +429,10 @@
     "setUsername": "Set Username",
     "editUsername": "Edit Username",
     "usernameRequired": "Username is required",
-    "usernameUpdated": "Username updated successfully"
+    "usernameUpdated": "Username updated successfully",
+    "avatarUpdated": "Profile photo updated",
+    "avatarTooLarge": "Image must be less than 2MB",
+    "changePhoto": "Change Photo"
   }
 }
 

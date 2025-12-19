@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X } from 'lucide-react'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -87,9 +87,90 @@ function UsernameEditor() {
   )
 }
 
+// Avatar Upload component
+function AvatarUpload() {
+  const { t } = useTranslation()
+  const { user, username, avatarUrl, updateAvatar } = useAuth()
+  const [isUploading, setIsUploading] = useState(false)
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error(t('common.uploadError'))
+      return
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error(t('profile.avatarTooLarge'))
+      return
+    }
+
+    setIsUploading(true)
+    const { error } = await updateAvatar(file)
+    setIsUploading(false)
+
+    if (error) {
+      toast.error(t('common.error'))
+    } else {
+      toast.success(t('profile.avatarUpdated'))
+    }
+  }
+
+  const initial = (username || user?.email?.charAt(0) || '?').charAt(0).toUpperCase()
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <label className="relative w-20 h-20 cursor-pointer group">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+          disabled={isUploading}
+        />
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt="Avatar"
+            className="w-20 h-20 rounded-full object-cover border-2 border-neutral-200 group-hover:border-primary-400 transition-colors"
+          />
+        ) : (
+          <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center border-2 border-transparent group-hover:border-primary-400 transition-colors">
+            <span className="text-2xl font-bold text-primary-600">{initial}</span>
+          </div>
+        )}
+        {isUploading ? (
+          <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 rounded-full flex items-center justify-center transition-colors">
+            <Camera className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+        )}
+      </label>
+      <label className="text-sm text-primary-600 hover:text-primary-700 cursor-pointer font-medium flex items-center gap-1">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+          disabled={isUploading}
+        />
+        <Camera size={14} />
+        {t('profile.changePhoto')}
+      </label>
+    </div>
+  )
+}
+
 export function Profile() {
   const { t } = useTranslation()
-  const { user, username } = useAuth()
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<TabType>('pets')
   const { favorites, isLoading: favoritesLoading } = useFavorites()
   
@@ -170,11 +251,7 @@ export function Profile() {
         {/* Profile Info */}
         <div className="mb-8 bg-white rounded-xl border border-neutral-200 p-6">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-primary-600">
-                {(username || user.email?.charAt(0) || '?').charAt(0).toUpperCase()}
-              </span>
-            </div>
+            <AvatarUpload />
             <div className="flex-1">
               <UsernameEditor />
               <p className="text-neutral-500 text-sm">{user.email}</p>

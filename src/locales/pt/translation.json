@@ -439,7 +439,10 @@
     "setUsername": "Definir Nome",
     "editUsername": "Editar Nome",
     "usernameRequired": "O nome de utilizador é obrigatório",
-    "usernameUpdated": "Nome de utilizador atualizado"
+    "usernameUpdated": "Nome de utilizador atualizado",
+    "avatarUpdated": "Foto de perfil atualizada",
+    "avatarTooLarge": "A imagem deve ter menos de 2MB",
+    "changePhoto": "Alterar Foto"
   }
 }
 
