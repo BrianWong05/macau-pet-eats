@@ -457,21 +457,21 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.nameEn')} *</label>
+                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.nameZh')}</label>
                 <input
                   type="text"
                   required
-                  value={formData.name || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  value={formData.name_zh || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name_zh: e.target.value }))}
                   className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.nameZh')}</label>
+                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.nameEn')}</label>
                 <input
                   type="text"
-                  value={formData.name_zh || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name_zh: e.target.value }))}
+                  value={formData.name || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 />
               </div>
@@ -488,7 +488,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.cuisineType')} *</label>
+                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.cuisineType')}</label>
                 <div className="grid grid-cols-2 xs:grid-cols-3 gap-2">
                   {cuisineTypes.filter(ct => ct.name !== 'Other').map((ct: CuisineType) => {
                     const name = i18n.language === 'zh' ? (ct.name_zh || ct.name) : 
@@ -554,7 +554,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.petPolicy')} *</label>
+                <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.petPolicy')}</label>
                 <select
                   required
                   value={formData.pet_policy || 'patio_only'}
@@ -584,24 +584,24 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionEn')} *</label>
+              <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.descriptionZh')}</label>
               <textarea
                 required
-                rows={3}
-                value={formData.description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.description')}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionZh')}</label>
-              <textarea
                 rows={3}
                 value={formData.description_zh || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, description_zh: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 placeholder={t('admin.modal.placeholders.description') + ' (中文)'}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.descriptionEn')}</label>
+              <textarea
+                rows={3}
+                value={formData.description || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder={t('admin.modal.placeholders.description')}
               />
             </div>
             <div className="space-y-2">
@@ -618,24 +618,24 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressEn')} *</label>
+              <label className="text-sm font-medium text-neutral-700"><span className="text-red-500 text-xs mr-1">{t('common.requiredField')}</span>{t('admin.modal.labels.addressZh')}</label>
               <input
                 type="text"
                 required
-                value={formData.address || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
-                placeholder={t('admin.modal.placeholders.address')}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressZh')}</label>
-              <input
-                type="text"
                 value={formData.address_zh || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, address_zh: e.target.value }))}
                 className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 placeholder={t('admin.modal.placeholders.address') + ' (中文)'}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-neutral-700">{t('admin.modal.labels.addressEn')}</label>
+              <input
+                type="text"
+                value={formData.address || ''}
+                onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                placeholder={t('admin.modal.placeholders.address')}
               />
             </div>
             <div className="space-y-2">

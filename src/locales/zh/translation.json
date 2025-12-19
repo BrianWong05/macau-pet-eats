@@ -10,7 +10,8 @@
     "submit": "提交",
     "cancel": "取消",
     "close": "關閉",
-    "other": "其他"
+    "other": "其他",
+    "requiredField": "(必填)"
   },
   "nav": {
     "home": "首頁",

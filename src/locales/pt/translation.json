@@ -10,7 +10,8 @@
     "submit": "Enviar",
     "cancel": "Cancelar",
     "close": "Fechar",
-    "other": "Outros"
+    "other": "Outros",
+    "requiredField": "(obrigatório)"
   },
   "nav": {
     "home": "Início",

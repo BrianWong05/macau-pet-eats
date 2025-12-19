@@ -10,7 +10,8 @@
     "submit": "Submit",
     "cancel": "Cancel",
     "close": "Close",
-    "other": "Other"
+    "other": "Other",
+    "requiredField": "(required)"
   },
   "nav": {
     "home": "Home",
