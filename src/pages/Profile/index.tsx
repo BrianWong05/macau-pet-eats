@@ -9,6 +9,7 @@ import { getUserPets, deletePet, createPet, updatePet, PET_TYPES, PET_SIZES } fr
 import { PetProfileCard } from '@/components/PetProfileCard'
 import { RestaurantCard } from '@/components/RestaurantCard'
 import { AuthModal } from '@/components/AuthModal'
+import { ProfileHeader } from '@/components/Profile/ProfileHeader'
 import type { UserPet, PetSize } from '@/types/database'
 
 type TabType = 'pets' | 'favorites'
@@ -90,8 +91,10 @@ export function Profile() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <ProfileHeader />
+      
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
+        {/* Page Title */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-neutral-900">{t('profile.title')}</h1>
           <p className="text-neutral-500 mt-1">{user.email}</p>
