@@ -92,6 +92,9 @@ export function RestaurantForm({
         return
       }
 
+      // Get current user (if logged in)
+      const { data: { user } } = await supabase.auth.getUser()
+
       const uploadedUrls: string[] = []
       
       if (imageFiles.length > 0) {
@@ -128,7 +131,8 @@ export function RestaurantForm({
         address: '',  // Leave English address empty
         image_url: mainImageUrl,
         gallery_images: uploadedUrls,
-        status: 'pending' // Default status for new submissions
+        status: 'pending', // Default status for new submissions
+        submitted_by: user?.id || null  // Track who submitted
       }
       
       if (dataToSave.cuisine_type && Array.isArray(dataToSave.cuisine_type)) {

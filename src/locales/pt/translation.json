@@ -432,7 +432,8 @@
     "loginRequired": "Inicie sessão para ver o perfil",
     "tabs": {
       "pets": "Os Meus Animais",
-      "favorites": "Locais Guardados"
+      "favorites": "Locais Guardados",
+      "contributions": "As Minhas Contribuições"
     },
     "username": "Nome de Utilizador",
     "usernamePlaceholder": "Introduza o seu nome de utilizador",
@@ -443,6 +444,34 @@
     "avatarUpdated": "Foto de perfil atualizada",
     "avatarTooLarge": "A imagem deve ter menos de 2MB",
     "changePhoto": "Alterar Foto"
+  },
+  "submit": {
+    "title": "Submeter Restaurante",
+    "errorMessage": "Por favor preencha todos os campos obrigatórios",
+    "submitButton": "Submeter Restaurante",
+    "noContributions": "Ainda não submeteu nenhum restaurante",
+    "noContributionsHint": "Ajude outros donos de animais partilhando locais pet-friendly!",
+    "status": {
+      "pending": "Em Análise",
+      "approved": "Publicado",
+      "rejected": "Rejeitado"
+    },
+    "form": {
+      "name": "Nome do Restaurante",
+      "namePlaceholder": "ex. Café Pet Friendly",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Conte-nos sobre este local...",
+      "optional": "opcional",
+      "address": "Morada",
+      "addressPlaceholder": "ex. Rua de Londres, Macau",
+      "petPolicy": "Política de Animais",
+      "cuisineType": "Tipo de Cozinha",
+      "otherCuisinePlaceholder": "Especifique o tipo de cozinha",
+      "selectAtLeastOne": "Selecione pelo menos um tipo de cozinha",
+      "contactInfo": "Contacto",
+      "uploadPhoto": "Fotos",
+      "clickToUpload": "Clique para carregar"
+    }
   }
 }
 

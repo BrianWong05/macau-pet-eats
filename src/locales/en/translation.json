@@ -421,7 +421,8 @@
     "title": "My Profile",
     "tabs": {
       "pets": "My Pets",
-      "favorites": "Saved Places"
+      "favorites": "Saved Places",
+      "contributions": "My Contributions"
     },
     "loginRequired": "Please log in to view your profile",
     "username": "Username",
@@ -433,6 +434,34 @@
     "avatarUpdated": "Profile photo updated",
     "avatarTooLarge": "Image must be less than 2MB",
     "changePhoto": "Change Photo"
+  },
+  "submit": {
+    "title": "Submit a Restaurant",
+    "errorMessage": "Please fill in all required fields",
+    "submitButton": "Submit Restaurant",
+    "noContributions": "You haven't submitted any restaurants yet",
+    "noContributionsHint": "Help other pet owners by sharing pet-friendly spots!",
+    "status": {
+      "pending": "Under Review",
+      "approved": "Live",
+      "rejected": "Rejected"
+    },
+    "form": {
+      "name": "Restaurant Name",
+      "namePlaceholder": "e.g. Pet Friendly Cafe",
+      "description": "Description",
+      "descriptionPlaceholder": "Tell us about this pet friendly spot...",
+      "optional": "optional",
+      "address": "Address",
+      "addressPlaceholder": "e.g. Rua de Londres, Macau",
+      "petPolicy": "Pet Policy",
+      "cuisineType": "Cuisine Type",
+      "otherCuisinePlaceholder": "Please specify cuisine type",
+      "selectAtLeastOne": "Please select at least one cuisine type",
+      "contactInfo": "Contact Info",
+      "uploadPhoto": "Photos",
+      "clickToUpload": "Click to upload"
+    }
   }
 }
 

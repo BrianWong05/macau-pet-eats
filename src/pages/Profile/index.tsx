@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera } from 'lucide-react'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
+import { supabase } from '@/lib/supabase'
 import { getUserPets, deletePet, createPet, updatePet, PET_TYPES, PET_SIZES } from '@/services/userPets'
 import { PetProfileCard } from '@/components/PetProfileCard'
 import { RestaurantCard } from '@/components/RestaurantCard'
 import { AuthModal } from '@/components/AuthModal'
 import { ProfileHeader } from '@/components/Profile/ProfileHeader'
-import type { UserPet, PetSize } from '@/types/database'
+import type { UserPet, PetSize, Restaurant } from '@/types/database'
 
-type TabType = 'pets' | 'favorites'
+type TabType = 'pets' | 'favorites' | 'contributions'
 
 // Inline UsernameEditor component
 function UsernameEditor() {
@@ -181,6 +183,10 @@ export function Profile() {
   const [editingPet, setEditingPet] = useState<UserPet | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
 
+  // Contributions state
+  const [contributions, setContributions] = useState<Restaurant[]>([])
+  const [contributionsLoading, setContributionsLoading] = useState(true)
+
   // Fetch pets
   useEffect(() => {
     const fetchPets = async () => {
@@ -197,6 +203,31 @@ export function Profile() {
     }
     
     fetchPets()
+  }, [user])
+
+  // Fetch user's contributions
+  useEffect(() => {
+    const fetchContributions = async () => {
+      if (!user) {
+        setContributions([])
+        setContributionsLoading(false)
+        return
+      }
+      
+      setContributionsLoading(true)
+      const { data, error } = await supabase
+        .from('restaurants')
+        .select('*')
+        .eq('submitted_by', user.id)
+        .order('created_at', { ascending: false })
+      
+      if (!error && data) {
+        setContributions(data as Restaurant[])
+      }
+      setContributionsLoading(false)
+    }
+    
+    fetchContributions()
   }, [user])
 
   // Handle pet deletion
@@ -283,6 +314,17 @@ export function Profile() {
             <Heart size={18} />
             {t('profile.tabs.favorites')}
           </button>
+          <button
+            onClick={() => setActiveTab('contributions')}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
+              activeTab === 'contributions'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+            }`}
+          >
+            <Store size={18} />
+            {t('profile.tabs.contributions')}
+          </button>
         </div>
 
         {/* Content */}
@@ -349,6 +391,71 @@ export function Profile() {
                     key={fav.restaurant_id}
                     restaurant={fav.restaurant}
                   />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Contributions Content */}
+        {activeTab === 'contributions' && (
+          <div className="space-y-6">
+            {contributionsLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-24 bg-neutral-200 rounded-xl animate-pulse" />
+                ))}
+              </div>
+            ) : contributions.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
+                <Store size={48} className="mx-auto text-neutral-300 mb-4" />
+                <p className="text-neutral-600 font-medium">{t('submit.noContributions')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('submit.noContributionsHint')}</p>
+                <Link
+                  to="/submit"
+                  className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
+                >
+                  <Plus size={18} />
+                  {t('submit.title')}
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {contributions.map(restaurant => (
+                  <div
+                    key={restaurant.id}
+                    className="bg-white rounded-xl border border-neutral-200 p-4 flex items-center gap-4"
+                  >
+                    {restaurant.image_url && (
+                      <img
+                        src={restaurant.image_url}
+                        alt={restaurant.name_zh || restaurant.name}
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-neutral-900 truncate">
+                        {restaurant.name_zh || restaurant.name || t('common.unnamed')}
+                      </h3>
+                      <p className="text-sm text-neutral-500 truncate">
+                        {restaurant.address_zh || restaurant.address}
+                      </p>
+                    </div>
+                    {/* Status Badge */}
+                    <div className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${
+                      restaurant.status === 'approved'
+                        ? 'bg-green-100 text-green-700'
+                        : restaurant.status === 'rejected'
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {restaurant.status === 'approved' 
+                        ? t('submit.status.approved')
+                        : restaurant.status === 'rejected'
+                        ? t('submit.status.rejected')
+                        : t('submit.status.pending')}
+                    </div>
+                  </div>
                 ))}
               </div>
             )}

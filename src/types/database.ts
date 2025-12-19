@@ -20,6 +20,7 @@ export interface Restaurant {
   description: string
   address: string
   status: 'pending' | 'approved' | 'rejected'
+  submitted_by: string | null  // User ID who submitted
   
   // Chinese (中文)
   name_zh: string | null
