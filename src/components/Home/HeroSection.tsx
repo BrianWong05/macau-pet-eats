@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { PawPrint, Sparkles, MapPin } from 'lucide-react'
+import { PawPrint, Sparkles, MapPin, Search } from 'lucide-react'
 import { SearchBar } from '@/components/SearchBar'
 
 export function HeroSection() {
@@ -35,9 +36,27 @@ export function HeroSection() {
             {t('home.subheadline')}
           </p>
 
-          {/* Search Bar */}
-          <div className="flex justify-center">
+          {/* Search Bar - Hidden on mobile, shown on sm and up */}
+          <div className="hidden sm:flex justify-center">
             <SearchBar />
+          </div>
+
+          {/* See All Button - Shown on mobile, hidden on sm and up */}
+          <div className="flex sm:hidden justify-center">
+            <Link
+              to="/search"
+              className="
+                inline-flex items-center gap-2 px-8 py-4
+                bg-primary-500 hover:bg-primary-600
+                text-white font-semibold text-lg
+                rounded-xl shadow-lg hover:shadow-xl
+                transition-all duration-200
+                focus:outline-none focus:ring-4 focus:ring-primary-200
+              "
+            >
+              <Search className="w-5 h-5" />
+              {t('common.viewAll')}
+            </Link>
           </div>
 
           {/* Quick Stats */}
