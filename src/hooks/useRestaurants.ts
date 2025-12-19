@@ -9,7 +9,7 @@ export type LocationArea = typeof LOCATION_AREAS[number]
 interface UseRestaurantsOptions {
   searchQuery?: string
   petPolicyFilter?: PetPolicy | null
-  cuisineFilter?: string | null
+  cuisineFilters?: string[]  // Changed to array for multi-select
   locationFilter?: LocationArea | null
 }
 
@@ -23,9 +23,10 @@ interface UseRestaurantsReturn {
 }
 
 export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaurantsReturn {
-  const { searchQuery = '', petPolicyFilter = null, cuisineFilter = null, locationFilter = null } = options
+  const { searchQuery = '', petPolicyFilter = null, cuisineFilters = [], locationFilter = null } = options
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([])  // Store all for client-side filtering
   const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -50,11 +51,6 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
         query = query.eq('pet_policy', petPolicyFilter)
       }
 
-      // Apply cuisine filter
-      if (cuisineFilter) {
-        query = query.contains('cuisine_type', [cuisineFilter])
-      }
-
       // Apply location filter (filter by location column)
       if (locationFilter) {
         query = query.eq('location', locationFilter)
@@ -69,7 +65,7 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
       }
 
       console.log('useRestaurants: Data received', data?.length)
-      setRestaurants(data || [])
+      setAllRestaurants(data || [])
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch restaurants'
       setError(message)
@@ -77,7 +73,24 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
     } finally {
       setIsLoading(false)
     }
-  }, [searchQuery, petPolicyFilter, cuisineFilter, locationFilter])
+  }, [searchQuery, petPolicyFilter, locationFilter])
+
+  // Client-side filtering for multiple cuisine types (OR logic)
+  useEffect(() => {
+    if (cuisineFilters.length === 0) {
+      // No cuisine filter = show all
+      setRestaurants(allRestaurants)
+    } else {
+      // Filter restaurants that have ANY of the selected cuisine types
+      const filtered = allRestaurants.filter(restaurant => {
+        const restaurantCuisines = (restaurant.cuisine_type || []).map((c: string) => c.toLowerCase())
+        return cuisineFilters.some(filter => 
+          restaurantCuisines.includes(filter.toLowerCase())
+        )
+      })
+      setRestaurants(filtered)
+    }
+  }, [allRestaurants, cuisineFilters])
 
   // Fetch cuisine types from database
   useEffect(() => {

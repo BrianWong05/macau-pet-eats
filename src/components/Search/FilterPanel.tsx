@@ -17,20 +17,20 @@ const PET_POLICY_OPTIONS: PetPolicy[] = [
 interface FilterPanelProps {
   petPolicyFilter: PetPolicy | null
   setPetPolicyFilter: (policy: PetPolicy | null) => void
-  cuisineFilter: string | null
-  setCuisineFilter: (cuisine: string | null) => void
+  cuisineFilters: string[]  // Now an array
+  toggleCuisineFilter: (cuisine: string) => void  // Toggle function
   locationFilter?: LocationArea | null
   setLocationFilter?: (location: LocationArea | null) => void
   cuisineTypes: CuisineType[]
   clearFilters: () => void
-  hasActiveFilters: boolean | null | string
+  hasActiveFilters: boolean | null | string | number
 }
 
 export function FilterPanel({
   petPolicyFilter,
   setPetPolicyFilter,
-  cuisineFilter,
-  setCuisineFilter,
+  cuisineFilters,
+  toggleCuisineFilter,
   locationFilter,
   setLocationFilter,
   cuisineTypes,
@@ -127,18 +127,21 @@ export function FilterPanel({
           </div>
         </div>
 
-        {/* Cuisine Filter */}
+        {/* Cuisine Filter - Multi-select with toggle */}
         {cuisineTypes.length > 0 && (
           <div>
             <label className="text-sm font-medium text-neutral-700 mb-2 block">
-              {t('explore.filters.cuisine')}
+              {t('explore.filters.cuisine')} {cuisineFilters.length > 0 && `(${cuisineFilters.length})`}
             </label>
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setCuisineFilter(null)}
+                onClick={() => {
+                  // Clear all cuisine filters
+                  cuisineFilters.forEach(c => toggleCuisineFilter(c))
+                }}
                 className={`
                   px-3 py-1.5 rounded-full text-sm font-medium transition-all
-                  ${!cuisineFilter
+                  ${cuisineFilters.length === 0
                     ? 'bg-secondary-500 text-white shadow-sm'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                   }
@@ -146,22 +149,25 @@ export function FilterPanel({
               >
                 {t('explore.filters.all')}
               </button>
-              {cuisineTypes.map((ct) => (
-                <button
-                  key={ct.id}
-                  onClick={() => setCuisineFilter(ct.name)}
-                  className={`
-                    px-3 py-1.5 rounded-full text-sm font-medium transition-all
-                    ${cuisineFilter === ct.name
-                      ? 'bg-secondary-500 text-white shadow-sm'
-                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-                    }
-                  `}
-                >
-                  {lang === 'zh' ? (ct.name_zh || ct.name) : 
-                   lang === 'pt' ? (ct.name_pt || ct.name) : ct.name}
-                </button>
-              ))}
+              {cuisineTypes.map((ct) => {
+                const isSelected = cuisineFilters.includes(ct.name)
+                return (
+                  <button
+                    key={ct.id}
+                    onClick={() => toggleCuisineFilter(ct.name)}
+                    className={`
+                      px-3 py-1.5 rounded-full text-sm font-medium transition-all
+                      ${isSelected
+                        ? 'bg-secondary-500 text-white shadow-sm'
+                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                      }
+                    `}
+                  >
+                    {lang === 'zh' ? (ct.name_zh || ct.name) : 
+                     lang === 'pt' ? (ct.name_pt || ct.name) : ct.name}
+                  </button>
+                )
+              })}
             </div>
           </div>
         )}

@@ -15,14 +15,14 @@ export function Search() {
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [debouncedQuery, setDebouncedQuery] = useState(initialQuery)
   const [petPolicyFilter, setPetPolicyFilter] = useState<PetPolicy | null>(null)
-  const [cuisineFilter, setCuisineFilter] = useState<string | null>(null)
+  const [cuisineFilters, setCuisineFilters] = useState<string[]>([])  // Multi-select
   const [locationFilter, setLocationFilter] = useState<LocationArea | null>(null)
   const [showFilters, setShowFilters] = useState(false)
 
   const { restaurants, cuisineTypes, isLoading } = useRestaurants({
     searchQuery: debouncedQuery,
     petPolicyFilter,
-    cuisineFilter,
+    cuisineFilters,  // Now an array
     locationFilter
   })
 
@@ -49,11 +49,20 @@ export function Search() {
 
   const clearFilters = useCallback(() => {
     setPetPolicyFilter(null)
-    setCuisineFilter(null)
+    setCuisineFilters([])
     setLocationFilter(null)
   }, [])
 
-  const hasActiveFilters = petPolicyFilter || cuisineFilter || locationFilter
+  // Toggle cuisine filter (add if not present, remove if present)
+  const toggleCuisineFilter = useCallback((cuisine: string) => {
+    setCuisineFilters(prev => 
+      prev.includes(cuisine) 
+        ? prev.filter(c => c !== cuisine)  // Remove
+        : [...prev, cuisine]  // Add
+    )
+  }, [])
+
+  const hasActiveFilters = petPolicyFilter || cuisineFilters.length > 0 || locationFilter
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -71,8 +80,8 @@ export function Search() {
           <FilterPanel
             petPolicyFilter={petPolicyFilter}
             setPetPolicyFilter={setPetPolicyFilter}
-            cuisineFilter={cuisineFilter}
-            setCuisineFilter={setCuisineFilter}
+            cuisineFilters={cuisineFilters}
+            toggleCuisineFilter={toggleCuisineFilter}
             locationFilter={locationFilter}
             setLocationFilter={setLocationFilter}
             cuisineTypes={cuisineTypes}
