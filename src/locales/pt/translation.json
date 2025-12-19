@@ -110,7 +110,14 @@
     "successTitle": "Obrigado pela sua sugestão!",
     "successMessage": "Vamos rever a sua sugestão e adicioná-la à lista em breve.",
     "errorMessage": "Falha no envio. Por favor tente novamente mais tarde.",
-    "backToHome": "Voltar ao Início"
+    "backToHome": "Voltar ao Início",
+    "noContributions": "Ainda não submeteu nenhum restaurante",
+    "noContributionsHint": "Ajude outros donos de animais partilhando locais pet-friendly!",
+    "status": {
+      "pending": "Em Análise",
+      "approved": "Publicado",
+      "rejected": "Rejeitado"
+    }
   },
   "cuisineTypes": {
     "portuguese": "Português",
@@ -483,34 +490,6 @@
       "pending": "Pendente",
       "approved": "Aprovado",
       "rejected": "Rejeitado"
-    }
-  },
-  "submit": {
-    "title": "Submeter Restaurante",
-    "errorMessage": "Por favor preencha todos os campos obrigatórios",
-    "submitButton": "Submeter Restaurante",
-    "noContributions": "Ainda não submeteu nenhum restaurante",
-    "noContributionsHint": "Ajude outros donos de animais partilhando locais pet-friendly!",
-    "status": {
-      "pending": "Em Análise",
-      "approved": "Publicado",
-      "rejected": "Rejeitado"
-    },
-    "form": {
-      "name": "Nome do Restaurante",
-      "namePlaceholder": "ex. Café Pet Friendly",
-      "description": "Descrição",
-      "descriptionPlaceholder": "Conte-nos sobre este local...",
-      "optional": "opcional",
-      "address": "Morada",
-      "addressPlaceholder": "ex. Rua de Londres, Macau",
-      "petPolicy": "Política de Animais",
-      "cuisineType": "Tipo de Cozinha",
-      "otherCuisinePlaceholder": "Especifique o tipo de cozinha",
-      "selectAtLeastOne": "Selecione pelo menos um tipo de cozinha",
-      "contactInfo": "Contacto",
-      "uploadPhoto": "Fotos",
-      "clickToUpload": "Clique para carregar"
     }
   }
 }

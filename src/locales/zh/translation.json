@@ -110,7 +110,14 @@
     "successTitle": "感謝您的推薦！",
     "successMessage": "我們會審核您提交的資料，並盡快加入列表。",
     "errorMessage": "提交失敗，請稍後再試。",
-    "backToHome": "返回首頁"
+    "backToHome": "返回首頁",
+    "noContributions": "您尚未投稿任何餐廳",
+    "noContributionsHint": "分享寵物友善餐廳，幫助其他寵物主人！",
+    "status": {
+      "pending": "審核中",
+      "approved": "已上線",
+      "rejected": "已拒絕"
+    }
   },
   "cuisineTypes": {
     "portuguese": "葡國菜",
@@ -525,34 +532,6 @@
       "pending": "待處理",
       "approved": "已採用",
       "rejected": "已拒絕"
-    }
-  },
-  "submit": {
-    "title": "提交餐廳",
-    "errorMessage": "請填寫所有必填欄位",
-    "submitButton": "提交餐廳",
-    "noContributions": "您尚未投稿任何餐廳",
-    "noContributionsHint": "分享寵物友善餐廳，幫助其他寵物主人！",
-    "status": {
-      "pending": "審核中",
-      "approved": "已上線",
-      "rejected": "已拒絕"
-    },
-    "form": {
-      "name": "餐廳名稱",
-      "namePlaceholder": "例如：寵物友善咖啡廳",
-      "description": "描述",
-      "descriptionPlaceholder": "介紹一下這家餐廳...",
-      "optional": "選填",
-      "address": "地址",
-      "addressPlaceholder": "例如：澳門倫敦街",
-      "petPolicy": "寵物政策",
-      "cuisineType": "菜式類型",
-      "otherCuisinePlaceholder": "請註明菜式",
-      "selectAtLeastOne": "請至少選擇一種菜式",
-      "contactInfo": "聯絡資訊",
-      "uploadPhoto": "照片",
-      "clickToUpload": "點擊上傳"
     }
   }
 }

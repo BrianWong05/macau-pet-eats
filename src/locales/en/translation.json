@@ -110,7 +110,14 @@
     "successTitle": "Thank you for your submission!",
     "successMessage": "We'll review your submission and add it to the list soon.",
     "errorMessage": "Submission failed. Please try again later.",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "noContributions": "You haven't submitted any restaurants yet",
+    "noContributionsHint": "Help other pet owners by sharing pet-friendly spots!",
+    "status": {
+      "pending": "Under Review",
+      "approved": "Live",
+      "rejected": "Rejected"
+    }
   },
   "cuisineTypes": {
     "portuguese": "Portuguese",
@@ -473,34 +480,6 @@
       "pending": "Pending",
       "approved": "Approved",
       "rejected": "Rejected"
-    }
-  },
-  "submit": {
-    "title": "Submit a Restaurant",
-    "errorMessage": "Please fill in all required fields",
-    "submitButton": "Submit Restaurant",
-    "noContributions": "You haven't submitted any restaurants yet",
-    "noContributionsHint": "Help other pet owners by sharing pet-friendly spots!",
-    "status": {
-      "pending": "Under Review",
-      "approved": "Live",
-      "rejected": "Rejected"
-    },
-    "form": {
-      "name": "Restaurant Name",
-      "namePlaceholder": "e.g. Pet Friendly Cafe",
-      "description": "Description",
-      "descriptionPlaceholder": "Tell us about this pet friendly spot...",
-      "optional": "optional",
-      "address": "Address",
-      "addressPlaceholder": "e.g. Rua de Londres, Macau",
-      "petPolicy": "Pet Policy",
-      "cuisineType": "Cuisine Type",
-      "otherCuisinePlaceholder": "Please specify cuisine type",
-      "selectAtLeastOne": "Please select at least one cuisine type",
-      "contactInfo": "Contact Info",
-      "uploadPhoto": "Photos",
-      "clickToUpload": "Click to upload"
     }
   }
 }
