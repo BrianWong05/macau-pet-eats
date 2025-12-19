@@ -5,10 +5,11 @@ import type { Restaurant } from '@/types/database'
 interface ActionButtonsProps {
   restaurant: Restaurant
   onReportClick: () => void
+  onEditClick?: () => void
   isAdmin?: boolean
 }
 
-export function ActionButtons({ restaurant, onReportClick, isAdmin }: ActionButtonsProps) {
+export function ActionButtons({ restaurant, onReportClick, onEditClick, isAdmin }: ActionButtonsProps) {
   const { t } = useTranslation()
 
   const getGoogleMapsUrl = () => {
@@ -53,12 +54,12 @@ export function ActionButtons({ restaurant, onReportClick, isAdmin }: ActionButt
       </button>
 
       {isAdmin && (
-        <a
-          href={`#/admin/restaurants?edit=${restaurant.id}`}
+        <button
+          onClick={onEditClick}
           className="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 px-6 py-4 bg-neutral-800 hover:bg-neutral-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
         >
           {t('common.edit') || 'Edit'}
-        </a>
+        </button>
       )}
     </div>
   )

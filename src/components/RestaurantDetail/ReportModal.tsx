@@ -134,7 +134,7 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in" style={{ zIndex: 100 }}>
       <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-neutral-100 flex items-center justify-between sticky top-0 bg-white">
           <h2 className="text-xl font-bold text-neutral-900">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
@@ -19,6 +19,7 @@ import { ReportModal } from '@/components/RestaurantDetail/ReportModal'
 import { DetailFooter } from '@/components/RestaurantDetail/DetailFooter'
 import { LoadingState } from '@/components/RestaurantDetail/LoadingState'
 import { ErrorState } from '@/components/RestaurantDetail/ErrorState'
+import { RestaurantFormModal } from '@/components/RestaurantFormModal'
 
 export function RestaurantDetail() {
   const { id } = useParams<{ id: string }>()
@@ -32,6 +33,7 @@ export function RestaurantDetail() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showReportModal, setShowReportModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,32 +43,32 @@ export function RestaurantDetail() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useEffect(() => {
-    async function fetchRestaurant() {
-      if (!id) return
-      
-      setIsLoading(true)
-      setError(null)
-      
-      try {
-        const { data, error: fetchError } = await supabase
-          .from('restaurants')
-          .select('*')
-          .eq('id', id)
-          .single()
-        
-        if (fetchError) throw fetchError
-        setRestaurant(data)
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Failed to load restaurant'
-        setError(message)
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  const fetchRestaurant = useCallback(async (silenceLoading = false) => {
+    if (!id) return
     
-    fetchRestaurant()
+    if (!silenceLoading) setIsLoading(true)
+    setError(null)
+    
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('restaurants')
+        .select('*')
+        .eq('id', id)
+        .single()
+      
+      if (fetchError) throw fetchError
+      setRestaurant(data)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to load restaurant'
+      setError(message)
+    } finally {
+      if (!silenceLoading) setIsLoading(false)
+    }
   }, [id])
+
+  useEffect(() => {
+    fetchRestaurant()
+  }, [fetchRestaurant])
 
   if (isLoading) {
     return <LoadingState />
@@ -93,6 +95,7 @@ export function RestaurantDetail() {
           restaurant={restaurant} 
           onReportClick={() => setShowReportModal(true)} 
           isAdmin={isAdmin}
+          onEditClick={() => setShowEditModal(true)}
         />
 
         <InfoCard 
@@ -135,6 +138,16 @@ export function RestaurantDetail() {
         onClose={() => setShowReportModal(false)} 
         restaurantId={restaurant.id}
         userId={user?.id}
+      />
+
+      <RestaurantFormModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onSave={() => {
+          fetchRestaurant(true) // Reload data silently (or with loader if preferred)
+          setShowEditModal(false)
+        }}
+        restaurant={restaurant}
       />
     </div>
   )

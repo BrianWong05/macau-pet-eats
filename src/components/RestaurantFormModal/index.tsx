@@ -460,7 +460,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 overflow-y-auto">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 overflow-y-auto" style={{ zIndex: 100 }}>
       <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-neutral-100 p-6 flex items-center justify-between z-10">
           <h2 className="text-xl font-bold text-neutral-900">
