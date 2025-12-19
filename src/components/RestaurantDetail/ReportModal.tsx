@@ -23,6 +23,10 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
   const [uploading, setUploading] = useState(false)
   const [menuType, setMenuType] = useState<'upload' | 'link'>('upload')
   const [menuLink, setMenuLink] = useState('')
+  // Image states
+  const [imageType, setImageType] = useState<'upload' | 'link'>('upload')
+  const [imageLink, setImageLink] = useState('')
+  
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   if (!isOpen) return null
@@ -79,16 +83,25 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
     // Validate based on field type
     if (!reportField) return
     if (!isFileField && !reportValue) return
-    if (reportField === 'image' && uploadedFiles.length === 0) return
-    if (reportField === 'menu' && menuType === 'upload' && uploadedFiles.length === 0) return
-    if (reportField === 'menu' && menuType === 'link' && !menuLink) return
+    
+    // Image Validation
+    if (reportField === 'image') {
+      if (imageType === 'upload' && uploadedFiles.length === 0) return
+      if (imageType === 'link' && !imageLink) return
+    }
+    
+    // Menu Validation
+    if (reportField === 'menu') {
+       if (menuType === 'upload' && uploadedFiles.length === 0) return
+       if (menuType === 'link' && !menuLink) return
+    }
     
     setReportLoading(true)
     try {
       // Determine value based on field type
       let finalValue = reportValue
       if (reportField === 'image') {
-        finalValue = uploadedFiles.join(',')
+        finalValue = imageType === 'link' ? imageLink : uploadedFiles.join(',')
       } else if (reportField === 'menu') {
         finalValue = menuType === 'link' ? menuLink : uploadedFiles.join(',')
       }
@@ -169,44 +182,86 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-2">
                 <ImageIcon size={16} className="inline mr-1" />
-                {t('restaurant.reportModal.uploadImages') || '上傳相片'}
-              </label>
-              
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept={acceptedTypes}
-                multiple
-                onChange={handleFileUpload}
-                className="hidden"
-                id="report-file-upload"
-              />
-              
-              <label
-                htmlFor="report-file-upload"
-                className="flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-neutral-300 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition-colors"
-              >
-                <Upload size={20} className="text-neutral-500" />
-                <span className="text-neutral-600">
-                  {uploading ? (t('common.uploading') || '上傳中...') : (t('common.clickToUpload') || '點擊上傳')}
-                </span>
+                {t('restaurant.reportModal.uploadImages') || '相片'}
               </label>
 
-              {uploadedFiles.length > 0 && (
-                <div className="mt-3 grid grid-cols-3 gap-2">
-                  {uploadedFiles.map((url, index) => (
-                    <div key={index} className="relative group">
-                      <img src={url} alt="" className="w-full h-20 object-cover rounded-lg" />
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index)}
-                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 size={12} />
-                      </button>
+              {/* Toggle: Upload vs Link */}
+              <div className="flex gap-2 mb-3">
+                <button
+                  type="button"
+                  onClick={() => setImageType('upload')}
+                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1 ${
+                    imageType === 'upload' 
+                      ? 'bg-primary-500 text-white' 
+                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  }`}
+                >
+                  <Upload size={14} />
+                  {t('common.upload') || '上傳'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImageType('link')}
+                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1 ${
+                    imageType === 'link' 
+                      ? 'bg-primary-500 text-white' 
+                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  }`}
+                >
+                  <LinkIcon size={14} />
+                  {t('common.link') || '連結'}
+                </button>
+              </div>
+              
+              {imageType === 'upload' && (
+                <>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept={acceptedTypes}
+                    multiple
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    id="report-file-upload"
+                  />
+                  
+                  <label
+                    htmlFor="report-file-upload"
+                    className="flex items-center justify-center gap-2 w-full p-4 border-2 border-dashed border-neutral-300 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition-colors"
+                  >
+                    <Upload size={20} className="text-neutral-500" />
+                    <span className="text-neutral-600">
+                      {uploading ? (t('common.uploading') || '上傳中...') : (t('common.clickToUpload') || '點擊上傳')}
+                    </span>
+                  </label>
+
+                  {uploadedFiles.length > 0 && (
+                    <div className="mt-3 grid grid-cols-3 gap-2">
+                      {uploadedFiles.map((url, index) => (
+                        <div key={index} className="relative group">
+                          <img src={url} alt="" className="w-full h-20 object-cover rounded-lg" />
+                          <button
+                            type="button"
+                            onClick={() => removeFile(index)}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
+              )}
+
+              {imageType === 'link' && (
+                <input
+                  type="url"
+                  value={imageLink}
+                  onChange={(e) => setImageLink(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
               )}
             </div>
           )}

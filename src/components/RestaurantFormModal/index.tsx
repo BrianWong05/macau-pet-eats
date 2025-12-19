@@ -45,6 +45,7 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     url?: string // If existing
   }
   const [imageItems, setImageItems] = useState<ImageItem[]>([])
+  const [galleryUrlInput, setGalleryUrlInput] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   // Menu Image State (Keep simple for now unless requested)
@@ -306,6 +307,24 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
     setFormData(prev => ({ ...prev, menu_images: newMenuImages }))
     setMenuPreviews(prev => [...prev, url])
     setMenuUrlInput('')
+  }
+
+  const handleAddGalleryUrl = () => {
+    const url = galleryUrlInput.trim()
+    if (!url) return
+    
+    // Basic URL validation
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      toast.error('Please enter a valid URL starting with http:// or https://')
+      return
+    }
+
+    setImageItems(prev => [...prev, {
+      id: `url-${Date.now()}`,
+      preview: url,
+      url: url
+    }])
+    setGalleryUrlInput('')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -1021,6 +1040,24 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
               onChange={handleImageChange}
               className="hidden"
             />
+            
+            {/* Gallery URL Input */}
+            <div className="flex gap-2 mt-4">
+              <input
+                type="url"
+                value={galleryUrlInput}
+                onChange={(e) => setGalleryUrlInput(e.target.value)}
+                placeholder="Enter image URL (e.g., https://...)"
+                className="flex-1 px-4 py-2 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all text-sm"
+              />
+              <button
+                type="button"
+                onClick={handleAddGalleryUrl}
+                className="px-4 py-2 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors text-sm font-medium"
+              >
+                Add Link
+              </button>
+            </div>
           </div>
 
           {/* Menu Images Upload */}
