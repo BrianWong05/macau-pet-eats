@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
@@ -10,6 +11,7 @@ import { RestaurantsTable } from '@/components/Admin/Restaurants/RestaurantsTabl
 
 export function AdminRestaurants() {
   const { t } = useTranslation()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -28,7 +30,36 @@ export function AdminRestaurants() {
     const { data, error } = await query
     
     if (!error && data) {
-      setRestaurants(data)
+      const restaurantsData = data as Restaurant[]
+      setRestaurants(restaurantsData)
+      
+      // Handle deep link edit
+      const editId = searchParams.get('edit')
+      if (editId) {
+        const target = restaurantsData.find(r => r.id === editId)
+        if (target) {
+          setEditingRestaurant(target)
+          setIsModalOpen(true)
+          // Clear param so it doesn't reopen on refresh/filter change
+          setSearchParams(params => {
+            params.delete('edit')
+            return params
+          })
+        } else {
+            // If not in current list (e.g. filtered out), fetch explicitly? 
+            // For now, let's assume if it exists it's likely relevant. 
+            // Or we can do a single fetch if not found.
+            const { data: singleData } = await supabase.from('restaurants').select('*').eq('id', editId).single()
+            if (singleData) {
+                setEditingRestaurant(singleData)
+                setIsModalOpen(true)
+                setSearchParams(params => {
+                    params.delete('edit')
+                    return params
+                })
+            }
+        }
+      }
     }
     setIsLoading(false)
   }

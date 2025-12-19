@@ -20,7 +20,8 @@
     "uploadError": "Upload failed",
     "save": "Save",
     "delete": "Delete",
-    "view": "View"
+    "view": "View",
+    "edit": "Edit"
   },
   "nav": {
     "home": "Home",

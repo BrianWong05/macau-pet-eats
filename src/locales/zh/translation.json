@@ -20,7 +20,8 @@
     "uploadError": "上傳失敗",
     "save": "保存",
     "delete": "刪除",
-    "view": "查看"
+    "view": "查看",
+    "edit": "編輯"
   },
   "nav": {
     "home": "首頁",

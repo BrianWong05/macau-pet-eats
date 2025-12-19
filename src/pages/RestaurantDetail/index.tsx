@@ -24,7 +24,7 @@ export function RestaurantDetail() {
   const { id } = useParams<{ id: string }>()
   const { i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -92,6 +92,7 @@ export function RestaurantDetail() {
         <ActionButtons 
           restaurant={restaurant} 
           onReportClick={() => setShowReportModal(true)} 
+          isAdmin={isAdmin}
         />
 
         <InfoCard 
