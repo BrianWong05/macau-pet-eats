@@ -74,6 +74,8 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
               value={reportField}
               onChange={(e) => setReportField(e.target.value)}
               required
+              onInvalid={e => (e.target as HTMLSelectElement).setCustomValidity(t('restaurant.reportModal.selectField'))}
+              onInput={e => (e.target as HTMLSelectElement).setCustomValidity('')}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">{t('restaurant.reportModal.selectField')}</option>
@@ -93,6 +95,8 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
               value={reportValue}
               onChange={(e) => setReportValue(e.target.value)}
               required
+              onInvalid={e => (e.target as HTMLTextAreaElement).setCustomValidity(t('restaurant.reportModal.validation.required'))}
+              onInput={e => (e.target as HTMLTextAreaElement).setCustomValidity('')}
               rows={3}
               className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
             />

@@ -146,6 +146,9 @@
       "submit": "Enviar Relatório",
       "success": "Relatório enviado! Obrigado pela ajuda.",
       "error": "Falha ao enviar. Por favor tente novamente.",
+      "validation": {
+        "required": "Este campo é obrigatório"
+      },
       "fields": {
         "pet_policy": "Política de Animais",
         "contact_info": "Número de Contacto",

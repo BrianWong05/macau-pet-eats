@@ -146,6 +146,9 @@
       "submit": "提交回報",
       "success": "回報已提交！感謝您的幫助。",
       "error": "提交失敗，請稍後再試。",
+      "validation": {
+        "required": "此欄位必填"
+      },
       "fields": {
         "pet_policy": "寵物政策",
         "contact_info": "聯絡電話",

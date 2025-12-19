@@ -146,6 +146,9 @@
       "submit": "Submit Report",
       "success": "Report submitted! Thank you for helping.",
       "error": "Failed to submit report. Please try again.",
+      "validation": {
+        "required": "This field is required"
+      },
       "fields": {
         "pet_policy": "Pet Policy",
         "contact_info": "Contact Number",
