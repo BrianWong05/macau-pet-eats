@@ -252,6 +252,14 @@
     "photoHint": "Optional: Add a photo of your experience"
   },
   "admin": {
+    "dashboard": {
+      "title": "Dashboard",
+      "totalRestaurants": "Total Restaurants",
+      "activeListings": "Active Listings",
+      "pendingApproval": "Pending Approval",
+      "totalReviews": "Total Reviews",
+      "updateReports": "Update Reports"
+    },
     "restaurants": {
       "status": {
         "pending": "Pending",

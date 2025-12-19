@@ -252,6 +252,14 @@
     "photoHint": "Opcional: Adicione uma foto da sua experiência"
   },
   "admin": {
+    "dashboard": {
+      "title": "Painel",
+      "totalRestaurants": "Total de Restaurantes",
+      "activeListings": "Publicados",
+      "pendingApproval": "Pendentes",
+      "totalReviews": "Total de Avaliações",
+      "updateReports": "Relatórios de Atualização"
+    },
     "restaurants": {
       "status": {
         "pending": "Pendente",

@@ -262,7 +262,8 @@
       "totalRestaurants": "餐廳總數",
       "activeListings": "已上架",
       "pendingApproval": "待審核",
-      "totalReviews": "評論總數"
+      "totalReviews": "評論總數",
+      "updateReports": "更新回報"
     },
     "restaurants": {
       "title": "餐廳列表",

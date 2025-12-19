@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import { Users, Store, CheckCircle, Clock } from 'lucide-react'
+import { Users, Store, CheckCircle, Clock, FileText } from 'lucide-react'
 
 interface Stats {
   totalRestaurants: number
   activeRestaurants: number
   pendingRestaurants: number
+  pendingReports: number
   totalReviews: number
 }
 
@@ -34,6 +35,12 @@ export function StatsGrid({ stats, isLoading }: StatsGridProps) {
       value: stats.pendingRestaurants,
       icon: Clock,
       color: 'bg-amber-500'
+    },
+    {
+      label: t('admin.dashboard.updateReports') || 'Update Reports',
+      value: stats.pendingReports,
+      icon: FileText,
+      color: 'bg-orange-500'
     },
     {
       label: t('admin.dashboard.totalReviews') || 'Total Reviews',

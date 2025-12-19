@@ -9,6 +9,7 @@ export function AdminDashboard() {
     totalRestaurants: 0,
     activeRestaurants: 0,
     pendingRestaurants: 0,
+    pendingReports: 0,
     totalReviews: 0
   })
   const [isLoading, setIsLoading] = useState(true)
@@ -20,11 +21,13 @@ export function AdminDashboard() {
           { count: total },
           { count: active },
           { count: pending },
+          { count: pendingReports },
           { count: reviews }
         ] = await Promise.all([
           supabase.from('restaurants').select('*', { count: 'exact', head: true }),
           supabase.from('restaurants').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
           supabase.from('restaurants').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+          supabase.from('restaurant_reports').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
           supabase.from('reviews').select('*', { count: 'exact', head: true })
         ])
 
@@ -32,6 +35,7 @@ export function AdminDashboard() {
           totalRestaurants: total || 0,
           activeRestaurants: active || 0,
           pendingRestaurants: pending || 0,
+          pendingReports: pendingReports || 0,
           totalReviews: reviews || 0
         })
       } catch (error) {
