@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import { Plus } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant } from '@/types/database'
@@ -25,6 +25,15 @@ export function AdminRestaurants() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(25)
+
+  // Comment modal state for approve/reject
+  interface PendingAction {
+    type: 'approve' | 'reject'
+    restaurantId: string
+    restaurantName: string
+  }
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null)
+  const [comment, setComment] = useState('')
 
   const fetchRestaurants = async () => {
     setIsLoading(true)
@@ -102,6 +111,24 @@ export function AdminRestaurants() {
     }
   }
 
+  // Wrapper functions for modal
+  const openApproveModal = (id: string, name: string) => {
+    setPendingAction({ type: 'approve', restaurantId: id, restaurantName: name })
+    setComment('')
+  }
+
+  const openRejectModal = (id: string, name: string) => {
+    setPendingAction({ type: 'reject', restaurantId: id, restaurantName: name })
+    setComment('')
+  }
+
+  const confirmAction = async () => {
+    if (!pendingAction) return
+    await handleStatusUpdate(pendingAction.restaurantId, pendingAction.type === 'approve' ? 'approved' : 'rejected', comment || undefined)
+    setPendingAction(null)
+    setComment('')
+  }
+
   const filteredRestaurants = restaurants.filter(r =>
     r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.name_zh?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -165,7 +192,8 @@ export function AdminRestaurants() {
       <RestaurantsTable 
         restaurants={paginatedRestaurants}
         isLoading={isLoading}
-        onStatusUpdate={handleStatusUpdate}
+        onApprove={(restaurant) => openApproveModal(restaurant.id, restaurant.name)}
+        onReject={(restaurant) => openRejectModal(restaurant.id, restaurant.name)}
         onEdit={(restaurant) => {
           setEditingRestaurant(restaurant)
           setIsModalOpen(true)
@@ -188,6 +216,61 @@ export function AdminRestaurants() {
         }}
         restaurant={editingRestaurant}
       />
+
+      {/* Comment Modal for Approve/Reject */}
+      {pendingAction && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
+            <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-neutral-900">
+                {t('admin.comment.title') || 'Add Comment'}
+              </h3>
+              <button
+                onClick={() => setPendingAction(null)}
+                className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+              >
+                <X size={18} className="text-neutral-500" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <p className="text-sm text-neutral-600 mb-1">
+                  {pendingAction.type === 'approve' ? t('admin.restaurants.actions.approve') : t('admin.restaurants.actions.reject')}: <strong>{pendingAction.restaurantName}</strong>
+                </p>
+                <p className="text-sm text-neutral-500 mb-2">
+                  {t('admin.comment.hint') || 'Add a comment for the user (optional)'}
+                </p>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder={t('admin.comment.placeholder') || 'Enter your response...'}
+                  rows={3}
+                  className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                  autoFocus
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setPendingAction(null)}
+                  className="flex-1 px-4 py-2 border border-neutral-200 rounded-xl font-medium text-neutral-600 hover:bg-neutral-50 transition-colors"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  onClick={confirmAction}
+                  className={`flex-1 px-4 py-2 rounded-xl font-medium text-white transition-colors ${
+                    pendingAction.type === 'approve' 
+                      ? 'bg-green-500 hover:bg-green-600' 
+                      : 'bg-red-500 hover:bg-red-600'
+                  }`}
+                >
+                  {pendingAction.type === 'approve' ? t('admin.restaurants.actions.approve') : t('admin.restaurants.actions.reject')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

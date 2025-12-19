@@ -7,7 +7,8 @@ import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 interface RestaurantsTableProps {
   restaurants: Restaurant[]
   isLoading: boolean
-  onStatusUpdate: (id: string, status: 'approved' | 'rejected') => void
+  onApprove: (restaurant: Restaurant) => void
+  onReject: (restaurant: Restaurant) => void
   onEdit: (restaurant: Restaurant) => void
   onDelete: (id: string) => void
 }
@@ -15,7 +16,8 @@ interface RestaurantsTableProps {
 export function RestaurantsTable({ 
   restaurants, 
   isLoading, 
-  onStatusUpdate, 
+  onApprove, 
+  onReject, 
   onEdit, 
   onDelete 
 }: RestaurantsTableProps) {
@@ -109,14 +111,14 @@ export function RestaurantsTable({
                       {restaurant.status === 'pending' && (
                         <>
                           <button
-                            onClick={() => onStatusUpdate(restaurant.id, 'approved')}
+                            onClick={() => onApprove(restaurant)}
                             className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                             title="Approve"
                           >
                             <CheckCircle size={18} />
                           </button>
                           <button
-                            onClick={() => onStatusUpdate(restaurant.id, 'rejected')}
+                            onClick={() => onReject(restaurant)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             title="Reject"
                           >
