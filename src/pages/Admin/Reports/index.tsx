@@ -41,10 +41,56 @@ export function AdminReports() {
       query = query.eq('status', filterStatus)
     }
 
-    const { data, error } = await query
+    const { data: reportsData, error } = await query
 
-    if (!error && data) {
-      setReports(data as ReportWithRestaurant[])
+    if (!error && reportsData) {
+      // Cast explicitly to handle potential type inference issues
+      const reports = reportsData as any[]
+      
+      // Fetch profiles for these reports
+      const rawUserIds = reports.map(r => r.user_id)
+
+      // Ensure we only have valid string UUIDs
+      const userIds = Array.from(new Set(
+        rawUserIds.filter((id: any): id is string => 
+          typeof id === 'string' && 
+          id.trim().length > 0 && 
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+        )
+      ))
+      
+      let profilesMap: Record<string, any> = {}
+      
+      if (userIds.length > 0) {
+        try {
+          const { data: profilesData, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, email')
+            .in('id', userIds)
+          
+          if (profilesError) {
+            console.error('Error fetching profiles:', profilesError)
+          }
+
+          if (profilesData) {
+            const profiles = profilesData as any[]
+            profilesMap = profiles.reduce((acc, profile) => ({
+              ...acc,
+              [profile.id]: profile
+            }), {})
+          }
+        } catch (err) {
+          console.error('Exception fetching profiles:', err)
+        }
+      }
+
+      // Attach profiles to reports
+      const reportsWithProfiles = reports.map(report => ({
+        ...report,
+        profile: report.user_id ? profilesMap[report.user_id] : undefined
+      }))
+
+      setReports(reportsWithProfiles as ReportWithRestaurant[])
     }
     setIsLoading(false)
   }

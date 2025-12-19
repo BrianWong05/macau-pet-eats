@@ -1,9 +1,13 @@
 import { useTranslation } from 'react-i18next'
-import { CheckCircle, XCircle, Clock, ExternalLink, Loader, Check, Pencil } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, ExternalLink, Loader, Check, Pencil, User } from 'lucide-react'
 import type { RestaurantReport, Restaurant } from '@/types/database'
 
 export interface ReportWithRestaurant extends RestaurantReport {
   restaurant?: Pick<Restaurant, 'id' | 'name' | 'name_zh'>
+  profile?: {
+    id: string
+    email: string
+  }
 }
 
 interface ReportListProps {
@@ -132,6 +136,16 @@ export function ReportList({
                 >
                   <ExternalLink size={16} />
                 </a>
+              </div>
+
+              {/* User Info */}
+              <div className="flex items-center gap-2 mb-4 p-2 bg-neutral-50 rounded-lg w-fit">
+                <div className="w-6 h-6 rounded-full bg-neutral-200 flex items-center justify-center">
+                  <User size={14} className="text-neutral-500" />
+                </div>
+                <span className="text-sm text-neutral-700 font-medium">
+                  {report.profile?.email || 'Anonymous User'}
+                </span>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
