@@ -334,10 +334,13 @@
       "suggestedValue": "建議值",
       "approve": "批准",
       "reject": "拒絕",
+      "check": "確認",
       "approveSuccess": "回報已批准並套用更新",
       "approveError": "批准失敗",
       "rejectSuccess": "回報已拒絕",
       "rejectError": "拒絕失敗",
+      "checkSuccess": "回報已確認",
+      "checkError": "確認失敗",
       "status": {
         "pending": "待處理",
         "approved": "已批准",

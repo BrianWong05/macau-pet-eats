@@ -283,10 +283,13 @@
       "suggestedValue": "Suggested Value",
       "approve": "Approve",
       "reject": "Reject",
+      "check": "Check",
       "approveSuccess": "Report approved and changes applied",
       "approveError": "Failed to approve report",
       "rejectSuccess": "Report rejected",
       "rejectError": "Failed to reject report",
+      "checkSuccess": "Report marked as reviewed",
+      "checkError": "Failed to mark report as reviewed",
       "status": {
         "pending": "Pending",
         "approved": "Approved",

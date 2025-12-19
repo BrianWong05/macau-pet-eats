@@ -283,10 +283,13 @@
       "suggestedValue": "Valor Sugerido",
       "approve": "Aprovar",
       "reject": "Rejeitar",
+      "check": "Verificar",
       "approveSuccess": "Relatório aprovado e alterações aplicadas",
       "approveError": "Falha ao aprovar",
       "rejectSuccess": "Relatório rejeitado",
       "rejectError": "Falha ao rejeitar",
+      "checkSuccess": "Relatório marcado como revisto",
+      "checkError": "Falha ao marcar como revisto",
       "status": {
         "pending": "Pendente",
         "approved": "Aprovado",

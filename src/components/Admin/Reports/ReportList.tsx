@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { CheckCircle, XCircle, Clock, ExternalLink, Loader } from 'lucide-react'
+import { CheckCircle, XCircle, Clock, ExternalLink, Loader, Check } from 'lucide-react'
 import type { RestaurantReport, Restaurant } from '@/types/database'
 
 export interface ReportWithRestaurant extends RestaurantReport {
@@ -12,6 +12,7 @@ interface ReportListProps {
   processingId: string | null
   onApprove: (report: ReportWithRestaurant) => void
   onReject: (reportId: string) => void
+  onCheck: (reportId: string) => void
 }
 
 export function ReportList({ 
@@ -19,7 +20,8 @@ export function ReportList({
   isLoading, 
   processingId, 
   onApprove, 
-  onReject 
+  onReject,
+  onCheck
 }: ReportListProps) {
   const { t } = useTranslation()
 
@@ -115,6 +117,14 @@ export function ReportList({
                   className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-neutral-300 text-white rounded-lg font-medium transition-colors"
                 >
                   {processingId === report.id ? '...' : t('admin.reports.approve')}
+                </button>
+                <button
+                  onClick={() => onCheck(report.id)}
+                  disabled={processingId === report.id}
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-neutral-300 text-white rounded-lg font-medium transition-colors flex items-center gap-1"
+                >
+                  <Check size={16} />
+                  {processingId === report.id ? '...' : t('admin.reports.check')}
                 </button>
                 <button
                   onClick={() => onReject(report.id)}

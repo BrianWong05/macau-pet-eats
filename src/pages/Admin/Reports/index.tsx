@@ -112,6 +112,31 @@ export function AdminReports() {
     }
   }
 
+  // Mark as checked without updating the restaurant (admin manually handled it)
+  const handleCheck = async (reportId: string) => {
+    setProcessingId(reportId)
+    try {
+      const { error } = await supabase
+        .from('restaurant_reports')
+        .update({
+          status: 'approved',
+          reviewed_at: new Date().toISOString(),
+          reviewed_by: user?.id
+        } as never)
+        .eq('id', reportId)
+
+      if (error) throw error
+
+      toast.success(t('admin.reports.checkSuccess'))
+      fetchReports()
+    } catch (err) {
+      console.error('Check error:', err)
+      toast.error(t('admin.reports.checkError'))
+    } finally {
+      setProcessingId(null)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -132,6 +157,7 @@ export function AdminReports() {
         processingId={processingId}
         onApprove={handleApprove}
         onReject={handleReject}
+        onCheck={handleCheck}
       />
     </div>
   )
