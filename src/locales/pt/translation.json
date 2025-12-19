@@ -332,6 +332,12 @@
       "subtitle": "Gerir opções de tipo de cozinha",
       "add": "Adicionar Tipo"
     },
+    "petPolicies": {
+      "title": "Políticas de Animais",
+      "subtitle": "Gerir opções de política de animais",
+      "add": "Adicionar Política",
+      "orderChanged": "A ordem foi alterada. Clique em \"Guardar Ordem\" para guardar."
+    },
     "feedback": {
       "title": "Comentários dos Utilizadores",
       "subtitle": "Ver e gerir comentários dos utilizadores",

@@ -86,6 +86,17 @@ export interface CuisineType {
   updated_at?: string
 }
 
+// Pet policy from database
+export interface PetPolicyType {
+  id: string
+  name: string
+  name_zh?: string
+  name_pt?: string
+  sort_order: number
+  created_at?: string
+  updated_at?: string
+}
+
 // Helper function to get localized text from Restaurant
 export function getLocalizedText(
   restaurant: Restaurant,

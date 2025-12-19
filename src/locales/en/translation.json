@@ -332,6 +332,12 @@
       "subtitle": "Manage cuisine type options",
       "add": "Add Type"
     },
+    "petPolicies": {
+      "title": "Pet Policies",
+      "subtitle": "Manage pet policy options",
+      "add": "Add Policy",
+      "orderChanged": "Order has changed. Click \"Save Order\" to save."
+    },
     "feedback": {
       "title": "User Feedback",
       "subtitle": "View and manage user feedback",

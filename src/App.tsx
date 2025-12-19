@@ -20,6 +20,7 @@ const AdminDashboard = lazy(() => import('@/pages/Admin/Dashboard').then(module 
 const AdminRestaurants = lazy(() => import('@/pages/Admin/Restaurants').then(module => ({ default: module.AdminRestaurants })))
 const AdminReports = lazy(() => import('@/pages/Admin/Reports').then(module => ({ default: module.AdminReports })))
 const AdminCuisineTypes = lazy(() => import('@/pages/Admin/CuisineTypes').then(module => ({ default: module.AdminCuisineTypes })))
+const AdminPetPolicies = lazy(() => import('@/pages/Admin/PetPolicies').then(module => ({ default: module.AdminPetPolicies })))
 const AdminFeedback = lazy(() => import('@/pages/Admin/Feedback').then(module => ({ default: module.AdminFeedback })))
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                   <Route index element={<AdminDashboard />} />
                   <Route path="restaurants" element={<AdminRestaurants />} />
                   <Route path="cuisine-types" element={<AdminCuisineTypes />} />
+                  <Route path="pet-policies" element={<AdminPetPolicies />} />
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="feedback" element={<AdminFeedback />} />
                 </Route>

@@ -376,6 +376,12 @@
       "subtitle": "管理菜式類型選項",
       "add": "新增類型"
     },
+    "petPolicies": {
+      "title": "寵物政策",
+      "subtitle": "管理寵物政策選項",
+      "add": "新增政策",
+      "orderChanged": "順序已更改，請點擊「保存順序」以保存更改"
+    },
     "feedback": {
       "title": "用戶反饋",
       "subtitle": "查看和管理用戶反饋",

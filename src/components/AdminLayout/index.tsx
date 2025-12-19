@@ -7,7 +7,8 @@ import {
   X,
   Flag,
   Utensils,
-  MessageSquare
+  MessageSquare,
+  PawPrint
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
@@ -23,6 +24,7 @@ export function AdminLayout() {
     { path: '/admin', icon: BarChart, label: t('admin.sidebar.dashboard') },
     { path: '/admin/restaurants', icon: Store, label: t('admin.sidebar.restaurants') },
     { path: '/admin/cuisine-types', icon: Utensils, label: t('admin.cuisineTypes.title') },
+    { path: '/admin/pet-policies', icon: PawPrint, label: t('admin.petPolicies.title') || 'Pet Policies' },
     { path: '/admin/reports', icon: Flag, label: t('admin.reports.title') },
     { path: '/admin/feedback', icon: MessageSquare, label: t('admin.feedback.title') || 'Feedback' },
   ]
