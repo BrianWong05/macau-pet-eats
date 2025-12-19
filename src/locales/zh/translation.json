@@ -490,6 +490,15 @@
     "changePhoto": "更換頭像"
   },
   "feedback": {
+    "title": "發送意見",
+    "typeLabel": "意見類型",
+    "messageLabel": "您的訊息",
+    "messagePlaceholder": "告訴我們您的想法...",
+    "emailLabel": "電子郵件 (選填)",
+    "emailHint": "我們僅會用此郵件跟進您的意見",
+    "submit": "提交意見",
+    "success": "感謝您的意見！",
+    "error": "提交意見失敗",
     "noFeedback": "您尚未提交任何意見",
     "noFeedbackHint": "分享您的想法，幫助我們改進！",
     "types": {

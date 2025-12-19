@@ -448,6 +448,15 @@
     "changePhoto": "Alterar Foto"
   },
   "feedback": {
+    "title": "Enviar Feedback",
+    "typeLabel": "Tipo de feedback",
+    "messageLabel": "A sua mensagem",
+    "messagePlaceholder": "Diga-nos o que pensa...",
+    "emailLabel": "Email (opcional)",
+    "emailHint": "Usaremos apenas para dar seguimento ao seu feedback",
+    "submit": "Enviar Feedback",
+    "success": "Obrigado pelo seu feedback!",
+    "error": "Falha ao enviar feedback",
     "noFeedback": "Ainda não enviou nenhum feedback",
     "noFeedbackHint": "Partilhe as suas opiniões para nos ajudar a melhorar!",
     "types": {
