@@ -1,4 +1,4 @@
-import{u as g,b as f,j as s}from"./index-CH_RZSJt.js";import{g as n,P as x}from"./index-BYznTCpO.js";import{U as h,g as p}from"./ui-vendor-r0va27WY.js";import{L as N}from"./react-vendor-B-2HpIm1.js";function z({restaurant:e}){const{i18n:t}=g(),a=t.language,{getLocalizedName:r}=f(),{id:u,pet_policy:c,image_url:d}=e,i=n(e,"name",a),j=n(e,"description",a),m=n(e,"address",a),o=n(e,"cuisine_type","en");return s.jsxs(N,{to:`/restaurant/${u}`,className:`
+import{u as g,b as f,j as s}from"./index-Cwj2wa9J.js";import{g as n,P as x}from"./index-DHFcRUdy.js";import{U as h,g as p}from"./ui-vendor-1tFYE1Xe.js";import{L as N}from"./react-vendor-B-2HpIm1.js";function z({restaurant:e}){const{i18n:t}=g(),a=t.language,{getLocalizedName:r}=f(),{id:u,pet_policy:c,image_url:d}=e,i=n(e,"name",a),j=n(e,"description",a),m=n(e,"address",a),o=n(e,"cuisine_type","en");return s.jsxs(N,{to:`/restaurant/${u}`,className:`
         group block bg-white rounded-xl sm:rounded-2xl overflow-hidden
         shadow-card card-hover
         focus:outline-none focus:ring-4 focus:ring-primary-200
