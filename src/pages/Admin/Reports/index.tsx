@@ -46,8 +46,18 @@ export function AdminReports() {
     setProcessingId(report.id)
     try {
       // Update the restaurant field
-      const updateData: Record<string, string> = {}
-      updateData[report.field_name] = report.suggested_value
+      const updateData: Record<string, string | string[]> = {}
+      
+      // Handle array fields like cuisine_type
+      if (report.field_name === 'cuisine_type') {
+        // If value contains commas, split into array; otherwise wrap in array
+        const values = report.suggested_value.includes(',')
+          ? report.suggested_value.split(',').map(v => v.trim())
+          : [report.suggested_value.trim()]
+        updateData[report.field_name] = values
+      } else {
+        updateData[report.field_name] = report.suggested_value
+      }
       
       const { error: updateError } = await supabase
         .from('restaurants')
