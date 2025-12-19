@@ -6,7 +6,8 @@ import {
   Menu,
   X,
   Flag,
-  Utensils
+  Utensils,
+  MessageSquare
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
@@ -23,6 +24,7 @@ export function AdminLayout() {
     { path: '/admin/restaurants', icon: Store, label: t('admin.sidebar.restaurants') },
     { path: '/admin/cuisine-types', icon: Utensils, label: t('admin.cuisineTypes.title') },
     { path: '/admin/reports', icon: Flag, label: t('admin.reports.title') },
+    { path: '/admin/feedback', icon: MessageSquare, label: t('admin.feedback.title') || 'Feedback' },
   ]
 
   return (

@@ -329,6 +329,34 @@
       "title": "Cuisine Types",
       "subtitle": "Manage cuisine type options",
       "add": "Add Type"
+    },
+    "feedback": {
+      "title": "User Feedback",
+      "subtitle": "View and manage user feedback",
+      "empty": "No feedback yet",
+      "statusUpdated": "Status updated",
+      "status": {
+        "all": "All",
+        "pending": "Pending",
+        "reviewed": "Reviewed",
+        "resolved": "Resolved"
+      }
     }
+  },
+  "feedback": {
+    "title": "Send Feedback",
+    "typeLabel": "What type of feedback?",
+    "types": {
+      "bug": "Bug Report",
+      "feature": "Feature Request",
+      "general": "General Feedback"
+    },
+    "messageLabel": "Your message",
+    "messagePlaceholder": "Tell us what you think...",
+    "emailLabel": "Email (optional)",
+    "emailHint": "We'll only use this to follow up on your feedback",
+    "submit": "Send Feedback",
+    "success": "Thanks for your feedback!",
+    "error": "Failed to submit feedback"
   }
 }

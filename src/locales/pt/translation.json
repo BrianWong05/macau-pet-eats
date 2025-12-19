@@ -329,6 +329,34 @@
       "title": "Tipos de Cozinha",
       "subtitle": "Gerir opções de tipo de cozinha",
       "add": "Adicionar Tipo"
+    },
+    "feedback": {
+      "title": "Comentários dos Utilizadores",
+      "subtitle": "Ver e gerir comentários dos utilizadores",
+      "empty": "Ainda sem comentários",
+      "statusUpdated": "Estado atualizado",
+      "status": {
+        "all": "Todos",
+        "pending": "Pendente",
+        "reviewed": "Revisto",
+        "resolved": "Resolvido"
+      }
     }
+  },
+  "feedback": {
+    "title": "Enviar Comentário",
+    "typeLabel": "Que tipo de comentário?",
+    "types": {
+      "bug": "Reportar Erro",
+      "feature": "Sugestão de Funcionalidade",
+      "general": "Comentário Geral"
+    },
+    "messageLabel": "A sua mensagem",
+    "messagePlaceholder": "Diga-nos o que pensa...",
+    "emailLabel": "Email (opcional)",
+    "emailHint": "Usaremos apenas para dar seguimento ao seu comentário",
+    "submit": "Enviar Comentário",
+    "success": "Obrigado pelo seu comentário!",
+    "error": "Falha ao enviar comentário"
   }
 }
