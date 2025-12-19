@@ -18,7 +18,7 @@ export function Explore() {
 
   const { restaurants, cuisineTypes, isLoading } = useRestaurants({
     petPolicyFilter,
-    cuisineFilter
+    cuisineFilters: cuisineFilter ? [cuisineFilter] : undefined
   })
 
   // Filter restaurants for display - redundant if hook handles it, but keeping structure safe
