@@ -35,6 +35,13 @@ export function DetailHeader({ isScrolled, onLoginClick }: DetailHeaderProps) {
               <span className={`text-sm font-medium hidden sm:block ${isScrolled ? 'text-neutral-700' : 'text-white drop-shadow-md'}`}>
                 {user.email}
               </span>
+              <Link
+                to="/profile"
+                className={`p-2 rounded-full transition-all ${isScrolled ? 'bg-white shadow-sm text-neutral-600 hover:text-primary-600' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}
+                title={t('profile.title') || 'Profile'}
+              >
+                <User size={20} />
+              </Link>
               <button
                 onClick={() => signOut()}
                 className={`p-2 rounded-full transition-all ${isScrolled ? 'bg-white shadow-sm text-neutral-600 hover:text-red-600' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}

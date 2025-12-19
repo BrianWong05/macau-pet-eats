@@ -1,6 +1,5 @@
 import { Utensils, AlertCircle } from 'lucide-react'
 import { PetPolicyBadge } from '@/components/PetPolicyBadge'
-import { FavoriteButton } from '@/components/FavoriteButton'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
 import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
@@ -8,10 +7,9 @@ import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
 interface HeroImageProps {
   restaurant: Restaurant
   lang: 'zh' | 'en' | 'pt'
-  onAuthRequired?: () => void
 }
 
-export function HeroImage({ restaurant, lang, onAuthRequired }: HeroImageProps) {
+export function HeroImage({ restaurant, lang }: HeroImageProps) {
   const { getLocalizedName } = useCuisineTypes()
   const name = getLocalizedText(restaurant, 'name', lang)
   // Always use 'en' for cuisine_type since localization happens via getLocalizedName()
@@ -25,15 +23,6 @@ export function HeroImage({ restaurant, lang, onAuthRequired }: HeroImageProps) 
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-      
-      {/* Favorite Button - Top Right */}
-      <div className="absolute top-4 right-4 md:top-6 md:right-6">
-        <FavoriteButton 
-          restaurantId={restaurant.id} 
-          size="lg"
-          onAuthRequired={onAuthRequired}
-        />
-      </div>
       
       <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
         <div className="max-w-4xl mx-auto">
@@ -62,4 +51,5 @@ export function HeroImage({ restaurant, lang, onAuthRequired }: HeroImageProps) 
     </div>
   )
 }
+
 
