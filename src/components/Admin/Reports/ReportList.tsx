@@ -42,9 +42,54 @@ export function ReportList({
       contact_info: t('restaurant.reportModal.fields.contact_info'),
       address: t('restaurant.reportModal.fields.address'),
       cuisine_type: t('restaurant.reportModal.fields.cuisine_type'),
+      image: t('restaurant.reportModal.fields.image') || '相片',
+      menu: t('restaurant.reportModal.fields.menu') || '菜單',
       other: t('restaurant.reportModal.fields.other')
     }
     return labels[field] || field
+  }
+
+  // Render value based on field type
+  const renderValue = (report: ReportWithRestaurant) => {
+    const { field_name, suggested_value } = report
+    
+    // Image or menu field - show images/files
+    if (field_name === 'image' || field_name === 'menu') {
+      const urls = suggested_value.split(',').filter(Boolean)
+      return (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {urls.map((url, idx) => {
+            const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(url)
+            const isPdf = /\.pdf$/i.test(url)
+            
+            if (isImage) {
+              return (
+                <a key={idx} href={url} target="_blank" rel="noopener noreferrer">
+                  <img src={url} alt="" className="w-24 h-24 object-cover rounded-lg border border-neutral-200 hover:border-primary-400 transition-colors" />
+                </a>
+              )
+            } else if (isPdf || url.startsWith('http')) {
+              return (
+                <a 
+                  key={idx} 
+                  href={url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-sm text-neutral-700 transition-colors"
+                >
+                  <ExternalLink size={14} />
+                  {isPdf ? 'PDF' : 'Link'}
+                </a>
+              )
+            }
+            return <span key={idx} className="text-sm text-neutral-600">{url}</span>
+          })}
+        </div>
+      )
+    }
+    
+    // Default text display
+    return <span className="ml-2 font-medium text-primary-600">{suggested_value}</span>
   }
 
   if (isLoading) {
@@ -94,7 +139,7 @@ export function ReportList({
                 </div>
                 <div>
                   <span className="text-neutral-500">{t('admin.reports.suggestedValue')}:</span>
-                  <span className="ml-2 font-medium text-primary-600">{report.suggested_value}</span>
+                  {renderValue(report)}
                 </div>
               </div>
               

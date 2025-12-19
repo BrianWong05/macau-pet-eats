@@ -45,26 +45,50 @@ export function AdminReports() {
   const handleApprove = async (report: ReportWithRestaurant) => {
     setProcessingId(report.id)
     try {
-      // Update the restaurant field
-      const updateData: Record<string, string | string[]> = {}
-      
-      // Handle array fields like cuisine_type
-      if (report.field_name === 'cuisine_type') {
-        // If value contains commas, split into array; otherwise wrap in array
-        const values = report.suggested_value.includes(',')
-          ? report.suggested_value.split(',').map(v => v.trim())
-          : [report.suggested_value.trim()]
-        updateData[report.field_name] = values
+      // Handle special field types
+      if (report.field_name === 'image' || report.field_name === 'menu') {
+        // Image/menu reports need to append to existing array columns
+        const columnName = report.field_name === 'image' ? 'gallery_images' : 'menu_images'
+        const newValues = report.suggested_value.split(',').filter(Boolean)
+        
+        // First get current values
+        const { data: restaurant } = await supabase
+          .from('restaurants')
+          .select(columnName)
+          .eq('id', report.restaurant_id)
+          .single()
+        
+        const currentValues: string[] = restaurant ? (restaurant as Record<string, string[]>)[columnName] || [] : []
+        const updatedValues = [...currentValues, ...newValues]
+        
+        const { error: updateError } = await supabase
+          .from('restaurants')
+          .update({ [columnName]: updatedValues } as never)
+          .eq('id', report.restaurant_id)
+        
+        if (updateError) throw updateError
       } else {
-        updateData[report.field_name] = report.suggested_value
-      }
-      
-      const { error: updateError } = await supabase
-        .from('restaurants')
-        .update(updateData as never)
-        .eq('id', report.restaurant_id)
+        // Regular field update
+        const updateData: Record<string, string | string[]> = {}
+        
+        // Handle array fields like cuisine_type
+        if (report.field_name === 'cuisine_type') {
+          // If value contains commas, split into array; otherwise wrap in array
+          const values = report.suggested_value.includes(',')
+            ? report.suggested_value.split(',').map(v => v.trim())
+            : [report.suggested_value.trim()]
+          updateData[report.field_name] = values
+        } else {
+          updateData[report.field_name] = report.suggested_value
+        }
+        
+        const { error: updateError } = await supabase
+          .from('restaurants')
+          .update(updateData as never)
+          .eq('id', report.restaurant_id)
 
-      if (updateError) throw updateError
+        if (updateError) throw updateError
+      }
 
       // Mark report as approved
       const { error: reportError } = await supabase

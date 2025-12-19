@@ -11,7 +11,13 @@
     "cancel": "取消",
     "close": "關閉",
     "other": "其他",
-    "requiredField": "(必填)"
+    "requiredField": "(必填)",
+    "upload": "上傳",
+    "link": "連結",
+    "uploading": "上傳中...",
+    "clickToUpload": "點擊上傳",
+    "uploadImageOrPdf": "上傳圖片或 PDF",
+    "uploadError": "上傳失敗"
   },
   "nav": {
     "home": "首頁",
@@ -156,8 +162,12 @@
         "contact_info": "聯絡電話",
         "address": "地址",
         "cuisine_type": "菜式類型",
+        "image": "相片",
+        "menu": "菜單",
         "other": "其他"
-      }
+      },
+      "uploadImages": "上傳相片",
+      "menuUpload": "菜單"
     }
   },
   "petPolicy": {

@@ -11,7 +11,13 @@
     "cancel": "Cancel",
     "close": "Close",
     "other": "Other",
-    "requiredField": "(required)"
+    "requiredField": "(required)",
+    "upload": "Upload",
+    "link": "Link",
+    "uploading": "Uploading...",
+    "clickToUpload": "Click to upload",
+    "uploadImageOrPdf": "Upload image or PDF",
+    "uploadError": "Upload failed"
   },
   "nav": {
     "home": "Home",
@@ -156,8 +162,12 @@
         "contact_info": "Contact Number",
         "address": "Address",
         "cuisine_type": "Cuisine Type",
+        "image": "Photos",
+        "menu": "Menu",
         "other": "Other"
-      }
+      },
+      "uploadImages": "Upload Photos",
+      "menuUpload": "Menu"
     }
   },
   "petPolicy": {
