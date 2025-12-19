@@ -5,11 +5,19 @@ import type { PetPolicyType } from '@/types/database'
 interface PetPoliciesContextType {
   petPolicies: PetPolicyType[]
   isLoading: boolean
-  getPetPolicyName: (policyKey: string, language: 'en' | 'zh' | 'pt') => string
+  getPetPolicyDisplayName: (policyKey: string, language: 'en' | 'zh' | 'pt') => string
   refreshPetPolicies: () => Promise<void>
 }
 
 const PetPoliciesContext = createContext<PetPoliciesContextType | undefined>(undefined)
+
+// Helper: Convert snake_case to Title Case
+const toTitleCase = (str: string): string => {
+  return str
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+}
 
 export function PetPoliciesProvider({ children }: { children: ReactNode }) {
   const [petPolicies, setPetPolicies] = useState<PetPolicyType[]>([])
@@ -36,13 +44,18 @@ export function PetPoliciesProvider({ children }: { children: ReactNode }) {
     fetchPetPolicies()
   }, [])
 
-  const getPetPolicyName = (policyKey: string, language: 'en' | 'zh' | 'pt') => {
+  const getPetPolicyDisplayName = (policyKey: string, language: 'en' | 'zh' | 'pt') => {
     const policy = petPolicies.find(p => p.name === policyKey)
-    if (!policy) return policyKey
-
-    if (language === 'zh') return policy.name_zh || policy.name
-    if (language === 'pt') return policy.name_pt || policy.name
-    return policyKey === policy.name ? policyKey : policy.name // fallback logic if needed
+    
+    if (policy) {
+      if (language === 'zh') return policy.name_zh || toTitleCase(policyKey)
+      if (language === 'pt') return policy.name_pt || toTitleCase(policyKey)
+      // For English, use Title Case from the key
+      return toTitleCase(policyKey)
+    }
+    
+    // Fallback: convert key to Title Case
+    return toTitleCase(policyKey)
   }
 
   return (
@@ -50,7 +63,7 @@ export function PetPoliciesProvider({ children }: { children: ReactNode }) {
       value={{ 
         petPolicies, 
         isLoading, 
-        getPetPolicyName,
+        getPetPolicyDisplayName,
         refreshPetPolicies: fetchPetPolicies 
       }}
     >

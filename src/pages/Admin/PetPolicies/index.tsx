@@ -19,6 +19,21 @@ export function AdminPetPolicies() {
   // Check if order has changed
   const hasOrderChanged = JSON.stringify(petPolicies.map(p => p.id)) !== JSON.stringify(originalOrder.map(p => p.id))
 
+  // Helpers
+  const toTitleCase = (str: string) => {
+    return str
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+  }
+
+  const toSnakeCase = (str: string) => {
+    return str
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_')
+  }
+
   const fetchPetPolicies = async () => {
     setIsLoading(true)
     const { data, error } = await supabase
@@ -47,9 +62,6 @@ export function AdminPetPolicies() {
       ? Math.max(...petPolicies.map(p => p.sort_order)) 
       : 0
 
-    // snake_case helper for key
-    const toSnakeCase = (str: string) => str.trim().toLowerCase().replace(/\s+/g, '_')
-
     const { error } = await supabase
       .from('pet_policies')
       .insert({
@@ -72,7 +84,7 @@ export function AdminPetPolicies() {
   const handleEdit = (pp: PetPolicyType) => {
     setEditingId(pp.id)
     setEditForm({ 
-      name: pp.name, 
+      name: toTitleCase(pp.name), // Show as Title Case for editing
       name_zh: pp.name_zh || '', 
       name_pt: pp.name_pt || '' 
     })
@@ -84,12 +96,10 @@ export function AdminPetPolicies() {
       return
     }
 
-    const toSnakeCase = (str: string) => str.trim().toLowerCase().replace(/\s+/g, '_')
-
     const { error } = await supabase
       .from('pet_policies')
       .update({
-        name: toSnakeCase(editForm.name),
+        name: toSnakeCase(editForm.name), // Convert back to snake_case for DB
         name_zh: editForm.name_zh.trim() || null,
         name_pt: editForm.name_pt.trim() || null
       } as never)
@@ -211,7 +221,7 @@ export function AdminPetPolicies() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
               type="text"
-              placeholder="Name (key, e.g. dogs_only)"
+              placeholder="Name (e.g. Medium Dogs Allowed)"
               value={newForm.name}
               onChange={(e) => setNewForm({ ...newForm, name: e.target.value })}
               className="px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary-500"
@@ -318,7 +328,7 @@ export function AdminPetPolicies() {
                     </>
                   ) : (
                     <>
-                      <td className="px-4 py-3 font-mono text-sm text-neutral-700">{pp.name}</td>
+                      <td className="px-4 py-3 font-mono text-sm text-neutral-700">{toTitleCase(pp.name)}</td>
                       <td className="px-4 py-3 text-neutral-700">{pp.name_zh || '-'}</td>
                       <td className="px-4 py-3 text-neutral-700">{pp.name_pt || '-'}</td>
                       <td className="px-4 py-3 text-right">

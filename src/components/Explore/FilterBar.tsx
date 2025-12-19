@@ -2,14 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import type { PetPolicy, CuisineType } from '@/types/database'
 
-const PET_POLICY_OPTIONS: PetPolicy[] = [
-  'indoors_allowed',
-  'patio_only',
-  'small_pets_only',
-  'all_pets_welcome',
-  'dogs_only',
-  'cats_only'
-]
+import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 interface FilterBarProps {
   petPolicyFilter: PetPolicy | null
@@ -32,6 +25,11 @@ export function FilterBar({
 }: FilterBarProps) {
   const { t, i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
+  const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
+  
+  const displayPolicies: PetPolicy[] = petPolicies.length > 0
+    ? petPolicies.map(p => p.name as PetPolicy)
+    : ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed']
 
   return (
     <div className="bg-white border-b border-neutral-200 px-4 py-4 shrink-0 z-10 animate-fade-in">
@@ -55,7 +53,7 @@ export function FilterBar({
             >
               {t('explore.filters.all')}
             </button>
-            {PET_POLICY_OPTIONS.map((policy) => (
+            {displayPolicies.map((policy) => (
               <button
                 key={policy}
                 onClick={() => setPetPolicyFilter(policy)}
@@ -68,7 +66,7 @@ export function FilterBar({
                   }
                 `}
               >
-                {t(`petPolicy.${policy}`)}
+                {getPetPolicyDisplayName(policy, lang)}
               </button>
             ))}
           </div>

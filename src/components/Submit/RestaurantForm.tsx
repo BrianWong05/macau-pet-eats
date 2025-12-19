@@ -32,7 +32,8 @@ export function RestaurantForm({
   setImagePreviews
 }: RestaurantFormProps) {
   const { t, i18n } = useTranslation()
-  const { petPolicies } = usePetPolicies()
+  const lang = i18n.language as 'en' | 'zh' | 'pt'
+  const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleInputChange = (
@@ -270,15 +271,13 @@ export function RestaurantForm({
             {petPolicies.length > 0 ? (
               petPolicies.map(policy => (
                 <option key={policy.name} value={policy.name}>
-                  {i18n.language === 'zh' ? (policy.name_zh || policy.name) :
-                   i18n.language === 'pt' ? (policy.name_pt || policy.name) :
-                   policy.name}
+                  {getPetPolicyDisplayName(policy.name, lang)}
                 </option>
               ))
             ) : (
               // Fallback
               ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed'].map(p => (
-                <option key={p} value={p}>{t(`petPolicy.${p}`)}</option>
+                <option key={p} value={p}>{getPetPolicyDisplayName(p, lang)}</option>
               ))
             )}
           </select>

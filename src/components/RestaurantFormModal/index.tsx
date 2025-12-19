@@ -25,7 +25,8 @@ import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
   const { t, i18n } = useTranslation()
-  const { petPolicies } = usePetPolicies()
+  const lang = i18n.language as 'en' | 'zh' | 'pt'
+  const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [mapsUrl, setMapsUrl] = useState('')
@@ -150,24 +151,19 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
       setMenuPreviews(restaurant.menu_images || [])
     } else {
       setFormData({
-        name: '',
-        name_zh: '',
-        name_pt: '',
-        address: '',
-        address_zh: '',
-        address_pt: '',
-        description: '',
-        description_zh: '',
-        description_pt: '',
+        name: '', name_zh: '', name_pt: '',
+        description: '', description_zh: '', description_pt: '',
+        address: '', address_zh: '', address_pt: '',
+        latitude: 22.1987, longitude: 113.5439,
+        google_maps_url: '',
+        location: '澳門',
         pet_policy: 'patio_only',
-        cuisine_type: [],
+        cuisine_type: [], cuisine_type_zh: [], cuisine_type_pt: [],
+        image_url: '', gallery_images: [],
         contact_info: '',
-        image_url: '',
-        gallery_images: [],
-        menu_images: [],
-        latitude: 22.1937,
-        longitude: 113.5399,
-        status: 'approved'
+        opening_hours: {},
+        social_media: {},
+        status: 'pending'
       })
       setImageItems([])
       setMenuPreviews([])
@@ -582,15 +578,13 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   {petPolicies.length > 0 ? (
                     petPolicies.map(policy => (
                       <option key={policy.name} value={policy.name}>
-                        {i18n.language === 'zh' ? (policy.name_zh || policy.name) :
-                         i18n.language === 'pt' ? (policy.name_pt || policy.name) :
-                         policy.name}
+                        {getPetPolicyDisplayName(policy.name, lang)}
                       </option>
                     ))
                   ) : (
                     // Fallback while loading or if empty
                     ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed'].map(p => (
-                      <option key={p} value={p}>{t(`petPolicy.${p}`)}</option>
+                      <option key={p} value={p}>{getPetPolicyDisplayName(p, lang)}</option>
                     ))
                   )}
                 </select>

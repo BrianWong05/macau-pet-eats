@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { PetPolicy } from '@/types/database'
 import { PawPrint, TreePine, Dog, Cat, Heart, Bone } from 'lucide-react'
+import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 interface PetPolicyBadgeProps {
   policy: PetPolicy
@@ -51,7 +52,10 @@ const iconSizes = {
 }
 
 export function PetPolicyBadge({ policy, size = 'md' }: PetPolicyBadgeProps) {
-  const { t } = useTranslation()
+  const { i18n } = useTranslation()
+  const { getPetPolicyDisplayName } = usePetPolicies()
+  const lang = i18n.language as 'en' | 'zh' | 'pt'
+  
   // Fallback for unknown policies
   const config = policyConfig[policy] || { 
     icon: PawPrint, 
@@ -69,7 +73,7 @@ export function PetPolicyBadge({ policy, size = 'md' }: PetPolicyBadgeProps) {
       `}
     >
       <Icon size={iconSizes[size]} />
-      <span>{t(`petPolicy.${policy}`) || policy}</span>
+      <span>{getPetPolicyDisplayName(policy, lang)}</span>
     </span>
   )
 }

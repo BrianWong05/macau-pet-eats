@@ -29,7 +29,7 @@ export function FilterPanel({
 }: FilterPanelProps) {
   const { t, i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
-  const { petPolicies } = usePetPolicies()
+  const { petPolicies, getPetPolicyDisplayName } = usePetPolicies()
 
   // Location names in different languages
   const getLocationName = (location: LocationArea) => {
@@ -41,25 +41,7 @@ export function FilterPanel({
     return names[location][lang] || location
   }
 
-  // Get localized pet policy name
-  const getPetPolicyName = (key: string) => {
-    // Start with static translation logic first for backward compatibility/speed
-    const translated = t(`petPolicy.${key}`)
-    if (translated && translated !== `petPolicy.${key}` && translated !== key) {
-      return translated
-    }
-
-    // Fallback to DB name if translation missing
-    const policy = petPolicies.find(p => p.name === key)
-    if (policy) {
-      if (lang === 'zh') return policy.name_zh || policy.name
-      if (lang === 'pt') return policy.name_pt || policy.name
-      return policy.name
-    }
-    return key
-  }
-
-  // Use DB policies if loaded, otherwise fallback to empty (or could keep static as backup)
+  // Use DB policies if loaded, otherwise fallback
   const displayPolicies = petPolicies.length > 0 
     ? petPolicies.map(p => p.name as PetPolicy)
     : ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed'] as PetPolicy[]
@@ -135,7 +117,7 @@ export function FilterPanel({
                   }
                 `}
               >
-                {getPetPolicyName(policy)}
+                {getPetPolicyDisplayName(policy, lang)}
               </button>
             ))}
           </div>
