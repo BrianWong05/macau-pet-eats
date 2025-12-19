@@ -49,10 +49,13 @@ export function AdminCuisineTypes() {
       ? Math.max(...cuisineTypes.map(c => c.sort_order)) 
       : 0
 
+    // Title Case helper
+    const toTitleCase = (str: string) => str.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+
     const { error } = await supabase
       .from('cuisine_types')
       .insert({
-        name: newForm.name.toLowerCase().trim(),
+        name: toTitleCase(newForm.name),
         name_zh: newForm.name_zh.trim() || null,
         name_pt: newForm.name_pt.trim() || null,
         sort_order: maxOrder + 1
@@ -83,10 +86,13 @@ export function AdminCuisineTypes() {
       return
     }
 
+    // Title Case helper
+    const toTitleCase = (str: string) => str.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+
     const { error } = await supabase
       .from('cuisine_types')
       .update({
-        name: editForm.name.toLowerCase().trim(),
+        name: toTitleCase(editForm.name),
         name_zh: editForm.name_zh.trim() || null,
         name_pt: editForm.name_pt.trim() || null
       } as never)
