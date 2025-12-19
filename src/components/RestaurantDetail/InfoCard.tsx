@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { MapPin, Phone, ExternalLink } from 'lucide-react'
+import { MapPin, Phone, ExternalLink, AlertCircle } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
 import { getLocalizedText } from '@/types/database'
 
@@ -28,9 +28,17 @@ export function InfoCard({ restaurant, lang }: InfoCardProps) {
     <>
       {/* Description Card */}
       <div className="bg-white rounded-2xl shadow-card p-6 mb-6">
-        <p className="text-lg text-neutral-700 leading-relaxed">
+        <p className="text-lg text-neutral-700 leading-relaxed mb-4">
           {description}
         </p>
+        <div className="flex items-start gap-2 pt-3 border-t border-neutral-100">
+          <AlertCircle className="w-4 h-4 text-neutral-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-neutral-500 italic">
+            {lang === 'zh' ? '此描述可能由 AI 生成，請以實際為準' : 
+             lang === 'pt' ? 'Esta descrição pode ser gerada por IA, por favor confirme com o local' :
+             'This description may be AI-generated, please verify with the restaurant'}
+          </p>
+        </div>
       </div>
 
       {/* Details Grid */}
