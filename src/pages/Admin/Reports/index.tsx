@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Flag, X, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
@@ -7,6 +7,9 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { ReportFilter } from '@/components/Admin/Reports/ReportFilter'
 import { ReportList, type ReportWithRestaurant } from '@/components/Admin/Reports/ReportList'
+import { Pagination } from '@/components/Pagination'
+
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
 
 export function AdminReports() {
   const { t } = useTranslation()
@@ -15,6 +18,10 @@ export function AdminReports() {
   const [isLoading, setIsLoading] = useState(true)
   const [filterStatus, setFilterStatus] = useState<'pending' | 'approved' | 'rejected' | 'all'>('pending')
   const [processingId, setProcessingId] = useState<string | null>(null)
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(25)
   
   // Edit modal state
   const [editingReport, setEditingReport] = useState<ReportWithRestaurant | null>(null)
@@ -45,6 +52,18 @@ export function AdminReports() {
   useEffect(() => {
     fetchReports()
   }, [filterStatus])
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [filterStatus, itemsPerPage])
+
+  const totalPages = Math.ceil(reports.length / itemsPerPage)
+  
+  const paginatedReports = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return reports.slice(startIndex, startIndex + itemsPerPage)
+  }, [reports, currentPage, itemsPerPage])
 
   const handleEdit = (report: ReportWithRestaurant) => {
     setEditingReport(report)
@@ -205,14 +224,42 @@ export function AdminReports() {
         setFilterStatus={setFilterStatus}
       />
 
+      {/* Per-page selector */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-neutral-500">
+          {t('search.results', { count: reports.length })}
+        </p>
+        <div className="flex items-center gap-2">
+          <label htmlFor="reports-page-size" className="text-sm text-neutral-500">
+            {t('search.perPage')}:
+          </label>
+          <select
+            id="reports-page-size"
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            className="px-3 py-1.5 text-sm border border-neutral-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500"
+          >
+            {PAGE_SIZE_OPTIONS.map(size => (
+              <option key={size} value={size}>{size}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <ReportList 
-        reports={reports}
+        reports={paginatedReports}
         isLoading={isLoading}
         processingId={processingId}
         onApprove={handleApprove}
         onReject={handleReject}
         onCheck={handleCheck}
         onEdit={handleEdit}
+      />
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
       />
 
       {/* Edit Modal */}

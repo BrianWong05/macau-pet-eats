@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import { Plus } from 'lucide-react'
@@ -8,6 +8,9 @@ import type { Restaurant } from '@/types/database'
 import { RestaurantFormModal } from '@/components/RestaurantFormModal'
 import { RestaurantsFilter } from '@/components/Admin/Restaurants/RestaurantsFilter'
 import { RestaurantsTable } from '@/components/Admin/Restaurants/RestaurantsTable'
+import { Pagination } from '@/components/Pagination'
+
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
 
 export function AdminRestaurants() {
   const { t } = useTranslation()
@@ -18,6 +21,10 @@ export function AdminRestaurants() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'approved'>('all')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingRestaurant, setEditingRestaurant] = useState<Restaurant | null>(null)
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(25)
 
   const fetchRestaurants = async () => {
     setIsLoading(true)
@@ -68,6 +75,11 @@ export function AdminRestaurants() {
     fetchRestaurants()
   }, [filterStatus])
 
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery, filterStatus, itemsPerPage])
+
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this restaurant?')) return
 
@@ -96,6 +108,13 @@ export function AdminRestaurants() {
     r.name_zh?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const totalPages = Math.ceil(filteredRestaurants.length / itemsPerPage)
+  
+  const paginatedRestaurants = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return filteredRestaurants.slice(startIndex, startIndex + itemsPerPage)
+  }, [filteredRestaurants, currentPage, itemsPerPage])
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -122,8 +141,30 @@ export function AdminRestaurants() {
         setFilterStatus={setFilterStatus}
       />
 
+      {/* Per-page selector */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm text-neutral-500">
+          {t('search.results', { count: filteredRestaurants.length })}
+        </p>
+        <div className="flex items-center gap-2">
+          <label htmlFor="admin-page-size" className="text-sm text-neutral-500">
+            {t('search.perPage')}:
+          </label>
+          <select
+            id="admin-page-size"
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            className="px-3 py-1.5 text-sm border border-neutral-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500"
+          >
+            {PAGE_SIZE_OPTIONS.map(size => (
+              <option key={size} value={size}>{size}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <RestaurantsTable 
-        restaurants={filteredRestaurants}
+        restaurants={paginatedRestaurants}
         isLoading={isLoading}
         onStatusUpdate={handleStatusUpdate}
         onEdit={(restaurant) => {
@@ -131,6 +172,12 @@ export function AdminRestaurants() {
           setIsModalOpen(true)
         }}
         onDelete={handleDelete}
+      />
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
       />
 
       <RestaurantFormModal

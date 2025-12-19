@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MessageSquare, Bug, Lightbulb, CheckCircle, Clock, Eye } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
+import { Pagination } from '@/components/Pagination'
 
 interface Feedback {
   id: string
@@ -33,11 +34,17 @@ const STATUS_COLORS = {
   resolved: 'bg-green-100 text-green-700'
 }
 
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100]
+
 export function AdminFeedback() {
   const { t } = useTranslation()
   const [feedback, setFeedback] = useState<Feedback[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'reviewed' | 'resolved'>('all')
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(25)
 
   const fetchFeedback = async () => {
     setIsLoading(true)
@@ -60,6 +67,18 @@ export function AdminFeedback() {
   useEffect(() => {
     fetchFeedback()
   }, [filterStatus])
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [filterStatus, itemsPerPage])
+
+  const totalPages = Math.ceil(feedback.length / itemsPerPage)
+  
+  const paginatedFeedback = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return feedback.slice(startIndex, startIndex + itemsPerPage)
+  }, [feedback, currentPage, itemsPerPage])
 
   const handleStatusChange = async (id: string, newStatus: 'pending' | 'reviewed' | 'resolved') => {
     const { error } = await supabase
@@ -101,6 +120,28 @@ export function AdminFeedback() {
         ))}
       </div>
 
+      {/* Per-page selector */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm text-neutral-500">
+          {t('search.results', { count: feedback.length })}
+        </p>
+        <div className="flex items-center gap-2">
+          <label htmlFor="feedback-page-size" className="text-sm text-neutral-500">
+            {t('search.perPage')}:
+          </label>
+          <select
+            id="feedback-page-size"
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            className="px-3 py-1.5 text-sm border border-neutral-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500"
+          >
+            {PAGE_SIZE_OPTIONS.map(size => (
+              <option key={size} value={size}>{size}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {/* Feedback List */}
       <div className="space-y-4">
         {isLoading ? (
@@ -110,7 +151,7 @@ export function AdminFeedback() {
             {t('admin.feedback.empty') || 'No feedback yet'}
           </div>
         ) : (
-          feedback.map((item) => {
+          paginatedFeedback.map((item) => {
             const TypeIcon = TYPE_ICONS[item.type]
             return (
               <div key={item.id} className="bg-white rounded-xl border border-neutral-200 p-5">
@@ -178,6 +219,12 @@ export function AdminFeedback() {
           })
         )}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   )
 }
