@@ -38,7 +38,8 @@ export function CuisineTypesProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const getLocalizedName = (code: string, lang: 'zh' | 'en' | 'pt'): string => {
-    const cuisineType = cuisineTypes.find(ct => ct.name === code)
+    // Case-insensitive lookup to handle both "portuguese" and "Portuguese"
+    const cuisineType = cuisineTypes.find(ct => ct.name.toLowerCase() === code.toLowerCase())
     if (!cuisineType) return code // Fallback to raw code if not found
     
     switch (lang) {

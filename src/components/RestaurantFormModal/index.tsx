@@ -111,9 +111,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
       // We need to identify any cuisine types that are NOT in the standard list
       // And move them to 'Other' state
       if (restaurant.cuisine_type && restaurant.cuisine_type.length > 0 && cuisineTypes.length > 0) {
-        const standardNames = cuisineTypes.map(ct => ct.name)
+        // Case-insensitive lookup helper
+        const standardNamesLower = cuisineTypes.map(ct => ct.name.toLowerCase())
         // Find first custom type (assuming UI only supports one input for now)
-        const customType = restaurant.cuisine_type.find(t => !standardNames.includes(t) && t !== 'Other')
+        // Case-insensitive check: if lowercase value doesn't match any standard name, it's custom
+        const customType = restaurant.cuisine_type.find(t => !standardNamesLower.includes(t.toLowerCase()) && t !== 'Other')
         
         if (customType) {
            // We found a custom type (e.g. 'Vietnamese')
@@ -495,7 +497,8 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                                  i18n.language === 'pt' ? (ct.name_pt || ct.name) : ct.name
                     // Ensure cuisine_type is treated as array
                     const currentTypes = (formData.cuisine_type as string[]) || []
-                    const isSelected = currentTypes.includes(ct.name)
+                    // Case-insensitive check to handle both "tea restaurant" and "Tea Restaurant"
+                    const isSelected = currentTypes.some(c => c.toLowerCase() === ct.name.toLowerCase())
                     
                     return (
                       <button
@@ -503,9 +506,11 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                         type="button"
                         onClick={() => {
                           const current = (formData.cuisine_type as string[]) || []
-                          const newTypes = current.includes(ct.name)
-                            ? current.filter(c => c !== ct.name)
-                            : [...current, ct.name]
+                          // Case-insensitive check for toggle
+                          const existing = current.find(c => c.toLowerCase() === ct.name.toLowerCase())
+                          const newTypes = existing
+                            ? current.filter(c => c.toLowerCase() !== ct.name.toLowerCase())
+                            : [...current, ct.name]  // Add with Title Case
                           setFormData(prev => ({ ...prev, cuisine_type: newTypes }))
                         }}
                         className={`
