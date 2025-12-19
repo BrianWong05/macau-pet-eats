@@ -14,39 +14,49 @@ interface StatsGridProps {
   isLoading: boolean
 }
 
+import { useNavigate } from 'react-router-dom'
+
+// ... existing imports
+
 export function StatsGrid({ stats, isLoading }: StatsGridProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const statCards = [
     {
       label: t('admin.dashboard.totalRestaurants') || 'Total Restaurants',
       value: stats.totalRestaurants,
       icon: Store,
-      color: 'bg-blue-500'
+      color: 'bg-blue-500',
+      path: '/admin/restaurants'
     },
     {
       label: t('admin.dashboard.activeListings') || 'Active Listings',
       value: stats.activeRestaurants,
       icon: CheckCircle,
-      color: 'bg-green-500'
+      color: 'bg-green-500',
+      path: '/admin/restaurants'
     },
     {
       label: t('admin.dashboard.pendingApproval') || 'Pending Approval',
       value: stats.pendingRestaurants,
       icon: Clock,
-      color: 'bg-amber-500'
+      color: 'bg-amber-500',
+      path: '/admin/restaurants'
     },
     {
       label: t('admin.dashboard.updateReports') || 'Update Reports',
       value: stats.pendingReports,
       icon: FileText,
-      color: 'bg-orange-500'
+      color: 'bg-orange-500',
+      path: '/admin/reports'
     },
     {
       label: t('admin.dashboard.totalReviews') || 'Total Reviews',
       value: stats.totalReviews,
       icon: Users,
-      color: 'bg-purple-500'
+      color: 'bg-purple-500',
+      path: null
     }
   ]
 
@@ -63,7 +73,13 @@ export function StatsGrid({ stats, isLoading }: StatsGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {statCards.map((stat) => (
-        <div key={stat.label} className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
+        <div 
+          key={stat.label} 
+          onClick={() => stat.path && navigate(stat.path)}
+          className={`bg-white p-6 rounded-2xl shadow-sm border border-neutral-100 transition-all ${
+            stat.path ? 'cursor-pointer hover:shadow-md active:scale-95' : ''
+          }`}
+        >
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm font-medium text-neutral-500 mb-1">{stat.label}</p>
