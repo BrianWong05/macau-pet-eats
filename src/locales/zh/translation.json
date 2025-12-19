@@ -24,7 +24,7 @@
     "subheadline": "探索澳門各區的寵物友善餐廳、咖啡廳和酒吧。從舒適的露台到完全室內友善的場所。",
     "searchPlaceholder": "搜尋餐廳名稱或菜式...",
     "stats": {
-      "locations": "50+ 地點",
+      "locationsSuffix": "地點",
       "allPets": "歡迎所有寵物"
     },
     "featured": {

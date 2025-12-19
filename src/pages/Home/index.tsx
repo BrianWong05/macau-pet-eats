@@ -5,10 +5,12 @@ import { HeroSection } from '@/components/Home/HeroSection'
 import { FeaturedSection } from '@/components/Home/FeaturedSection'
 import { CtaSection } from '@/components/Home/CtaSection'
 import { HomeFooter } from '@/components/Home/HomeFooter'
+import { useRestaurants } from '@/hooks/useRestaurants'
 
 export function Home() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const { restaurants, featuredRestaurants, isLoading, error } = useRestaurants({})
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,9 +27,13 @@ export function Home() {
         onLoginClick={() => setIsAuthModalOpen(true)} 
       />
 
-      <HeroSection />
+      <HeroSection count={restaurants.length} />
 
-      <FeaturedSection />
+      <FeaturedSection 
+        featuredRestaurants={featuredRestaurants}
+        isLoading={isLoading}
+        error={error}
+      />
 
       <CtaSection />
 

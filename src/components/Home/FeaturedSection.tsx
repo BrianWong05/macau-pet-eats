@@ -3,11 +3,16 @@ import { useTranslation } from 'react-i18next'
 import { MapPin, PawPrint } from 'lucide-react'
 import { RestaurantCard } from '@/components/RestaurantCard'
 import { SkeletonCardGrid } from '@/components/SkeletonCard'
-import { useRestaurants } from '@/hooks/useRestaurants'
+import type { Restaurant } from '@/types/database'
 
-export function FeaturedSection() {
+interface FeaturedSectionProps {
+  featuredRestaurants: Restaurant[]
+  isLoading: boolean
+  error: string | null
+}
+
+export function FeaturedSection({ featuredRestaurants, isLoading, error }: FeaturedSectionProps) {
   const { t } = useTranslation()
-  const { featuredRestaurants, isLoading, error } = useRestaurants({})
 
   return (
     <section className="py-16 lg:py-24 bg-white">

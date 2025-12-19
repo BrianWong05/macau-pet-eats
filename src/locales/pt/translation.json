@@ -24,7 +24,7 @@
     "subheadline": "Descubra restaurantes, cafés e bares pet-friendly em Macau. De pátios acolhedores a espaços totalmente amigos dos animais.",
     "searchPlaceholder": "Pesquisar por nome ou tipo de cozinha...",
     "stats": {
-      "locations": "50+ Locais",
+      "locationsSuffix": "Locais",
       "allPets": "Todos os Animais Bem-vindos"
     },
     "featured": {

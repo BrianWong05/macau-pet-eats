@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { PawPrint, Sparkles, MapPin, Search } from 'lucide-react'
 import { SearchBar } from '@/components/SearchBar'
 
-export function HeroSection() {
+interface HeroSectionProps {
+  count?: number
+}
+
+export function HeroSection({ count }: HeroSectionProps) {
   const { t } = useTranslation()
 
   return (
@@ -63,7 +67,10 @@ export function HeroSection() {
           <div className="flex flex-wrap justify-center gap-8 mt-12">
             <div className="flex items-center gap-2 text-neutral-600">
               <MapPin className="w-5 h-5 text-primary-500" />
-              <span className="font-medium">{t('home.stats.locations')}</span>
+              <span className="font-medium">
+                {count ? `${count} ` : '50+ '}
+                {t('home.stats.locationsSuffix')}
+              </span>
             </div>
             <div className="flex items-center gap-2 text-neutral-600">
               <PawPrint className="w-5 h-5 text-secondary-500" />
