@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { CheckCircle, Clock, XCircle, Edit, Trash2 } from 'lucide-react'
 import type { Restaurant } from '@/types/database'
 import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
+import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 interface RestaurantsTableProps {
   restaurants: Restaurant[]
@@ -20,6 +21,7 @@ export function RestaurantsTable({
 }: RestaurantsTableProps) {
   const { t, i18n } = useTranslation()
   const { getLocalizedName } = useCuisineTypes()
+  const { getPetPolicyDisplayName } = usePetPolicies()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
 
   const StatusBadge = ({ status }: { status: string }) => {
@@ -97,7 +99,7 @@ export function RestaurantsTable({
                     <StatusBadge status={restaurant.status || 'approved'} />
                   </td>
                   <td className="px-6 py-4 text-sm text-neutral-600">
-                    {t(`petPolicy.${restaurant.pet_policy}`)}
+                    {getPetPolicyDisplayName(restaurant.pet_policy, lang)}
                   </td>
                   <td className="px-6 py-4 text-sm text-neutral-600">
                     {new Date(restaurant.created_at).toLocaleDateString()}
