@@ -81,16 +81,24 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
       // No cuisine filter = show all
       setRestaurants(allRestaurants)
     } else {
+      // Get standard cuisine names (lowercase) for "Other" check
+      const standardCuisinesLower = cuisineTypes.map(ct => ct.name.toLowerCase())
+      
       // Filter restaurants that have ANY of the selected cuisine types
       const filtered = allRestaurants.filter(restaurant => {
         const restaurantCuisines = (restaurant.cuisine_type || []).map((c: string) => c.toLowerCase())
-        return cuisineFilters.some(filter => 
-          restaurantCuisines.includes(filter.toLowerCase())
-        )
+        
+        return cuisineFilters.some(filter => {
+          if (filter === '__other__') {
+            // "Other" matches restaurants with any non-standard cuisine type
+            return restaurantCuisines.some(rc => !standardCuisinesLower.includes(rc))
+          }
+          return restaurantCuisines.includes(filter.toLowerCase())
+        })
       })
       setRestaurants(filtered)
     }
-  }, [allRestaurants, cuisineFilters])
+  }, [allRestaurants, cuisineFilters, cuisineTypes])
 
   // Fetch cuisine types from database
   useEffect(() => {

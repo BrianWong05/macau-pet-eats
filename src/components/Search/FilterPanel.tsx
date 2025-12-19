@@ -168,6 +168,19 @@ export function FilterPanel({
                   </button>
                 )
               })}
+              {/* Other option for custom cuisine types */}
+              <button
+                onClick={() => toggleCuisineFilter('__other__')}
+                className={`
+                  px-3 py-1.5 rounded-full text-sm font-medium transition-all
+                  ${cuisineFilters.includes('__other__')
+                    ? 'bg-secondary-500 text-white shadow-sm'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  }
+                `}
+              >
+                {t('common.other') || '其他'}
+              </button>
             </div>
           </div>
         )}
