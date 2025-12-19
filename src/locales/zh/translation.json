@@ -137,6 +137,8 @@
     "reportModal": {
       "title": "回報資訊更新",
       "subtitle": "幫助我們保持資訊準確",
+      "fieldLabel": "需要更新的項目",
+      "selectField": "請選擇項目",
       "field": "需要更新什麼？",
       "suggestedValue": "正確資訊",
       "reason": "補充說明（選填）",

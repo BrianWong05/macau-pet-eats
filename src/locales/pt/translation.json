@@ -137,6 +137,8 @@
     "reportModal": {
       "title": "Reportar uma Atualização",
       "subtitle": "Ajude-nos a manter as informações corretas",
+      "fieldLabel": "Campo a atualizar",
+      "selectField": "Selecione um campo",
       "field": "O que precisa de atualização?",
       "suggestedValue": "Informação correta",
       "reason": "Notas adicionais (opcional)",
