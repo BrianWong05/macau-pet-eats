@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft, LogOut, User, Upload } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
@@ -12,6 +12,7 @@ interface DetailHeaderProps {
 export function DetailHeader({ isScrolled, onLoginClick }: DetailHeaderProps) {
   const { t } = useTranslation()
   const { user, signOut } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <header 
@@ -21,13 +22,13 @@ export function DetailHeader({ isScrolled, onLoginClick }: DetailHeaderProps) {
       `}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        <Link
-          to="/"
+        <button
+          onClick={() => navigate(-1)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${isScrolled ? 'text-neutral-600 hover:bg-neutral-100' : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'}`}
         >
           <ArrowLeft size={20} />
           <span className="font-medium hidden sm:block">{t('restaurant.backToList')}</span>
-        </Link>
+        </button>
 
         <div className="flex items-center gap-3">
           {user ? (
