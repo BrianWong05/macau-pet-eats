@@ -121,9 +121,16 @@ export function RestaurantForm({
 
       const mainImageUrl = uploadedUrls.length > 0 ? uploadedUrls[0] : ''
 
-      // Prepare data with localized cuisine types
+      // Prepare data with Chinese fields for name, description, address
+      // Map formData.name -> name_zh, formData.description -> description_zh, formData.address -> address_zh
       const dataToSave = { 
         ...formData,
+        name_zh: formData.name,  // User inputs Chinese name
+        description_zh: formData.description,  // User inputs Chinese description
+        address_zh: formData.address,  // User inputs Chinese address
+        name: '',  // Leave English name empty for admin to fill later
+        description: '',  // Leave English description empty
+        address: '',  // Leave English address empty
         image_url: mainImageUrl,
         gallery_images: uploadedUrls,
         status: 'pending' // Default status for new submissions
