@@ -76,7 +76,8 @@
     "noResults": "Nenhum restaurante encontrado",
     "noResultsHint": "Tente palavras-chave diferentes ou ajuste os filtros",
     "clearFilters": "Limpar filtros",
-    "filter": "Filtrar"
+    "filter": "Filtrar",
+    "perPage": "Por página"
   },
   "submit": {
     "title": "Sugerir Local",

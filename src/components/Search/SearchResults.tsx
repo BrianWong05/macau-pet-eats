@@ -1,8 +1,12 @@
+import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PawPrint, X } from 'lucide-react'
 import { RestaurantCard } from '@/components/RestaurantCard'
 import { SkeletonCardGrid } from '@/components/SkeletonCard'
+import { Pagination } from '@/components/Pagination'
 import type { Restaurant } from '@/types/database'
+
+const PAGE_SIZE_OPTIONS = [6, 12, 24, 48]
 
 interface SearchResultsProps {
   restaurants: Restaurant[]
@@ -22,6 +26,25 @@ export function SearchResults({
   hasActiveFilters
 }: SearchResultsProps) {
   const { t } = useTranslation()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(12)
+
+  // Reset page when results or page size change
+  useMemo(() => {
+    setCurrentPage(1)
+  }, [restaurants.length, searchQuery, itemsPerPage])
+
+  const totalPages = Math.ceil(restaurants.length / itemsPerPage)
+  
+  const paginatedRestaurants = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return restaurants.slice(startIndex, startIndex + itemsPerPage)
+  }, [restaurants, currentPage, itemsPerPage])
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
@@ -37,6 +60,25 @@ export function SearchResults({
             </p>
           )}
         </div>
+
+        {/* Items per page selector */}
+        {!isLoading && restaurants.length > 0 && (
+          <div className="flex items-center gap-2">
+            <label htmlFor="page-size" className="text-sm text-neutral-500">
+              {t('search.perPage') || 'Per page'}:
+            </label>
+            <select
+              id="page-size"
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              className="px-3 py-1.5 text-sm border border-neutral-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            >
+              {PAGE_SIZE_OPTIONS.map(size => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {/* Loading State */}
@@ -44,17 +86,25 @@ export function SearchResults({
 
       {/* Results Grid */}
       {!isLoading && restaurants.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {restaurants.map((restaurant, index) => (
-            <div
-              key={restaurant.id}
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <RestaurantCard restaurant={restaurant} />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedRestaurants.map((restaurant, index) => (
+              <div
+                key={restaurant.id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <RestaurantCard restaurant={restaurant} />
+              </div>
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
 
       {/* Empty State */}
@@ -86,3 +136,4 @@ export function SearchResults({
     </main>
   )
 }
+

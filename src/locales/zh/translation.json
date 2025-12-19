@@ -76,7 +76,8 @@
     "noResults": "找不到餐廳",
     "noResultsHint": "試試不同的關鍵字或調整篩選條件",
     "clearFilters": "清除篩選",
-    "filter": "篩選"
+    "filter": "篩選",
+    "perPage": "每頁顯示"
   },
   "submit": {
     "title": "推薦餐廳",
