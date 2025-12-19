@@ -422,7 +422,9 @@
     "tabs": {
       "pets": "My Pets",
       "favorites": "Saved Places",
-      "contributions": "My Contributions"
+      "contributions": "My Contributions",
+      "feedback": "My Feedback",
+      "reports": "My Reports"
     },
     "loginRequired": "Please log in to view your profile",
     "username": "Username",
@@ -434,6 +436,29 @@
     "avatarUpdated": "Profile photo updated",
     "avatarTooLarge": "Image must be less than 2MB",
     "changePhoto": "Change Photo"
+  },
+  "feedback": {
+    "noFeedback": "You haven't submitted any feedback yet",
+    "noFeedbackHint": "Share your thoughts to help us improve!",
+    "types": {
+      "bug": "Bug",
+      "feature": "Feature",
+      "general": "General"
+    },
+    "status": {
+      "pending": "Pending",
+      "reviewed": "Reviewed",
+      "resolved": "Resolved"
+    }
+  },
+  "report": {
+    "noReports": "You haven't submitted any reports yet",
+    "noReportsHint": "Report inaccurate info to help keep data accurate!",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    }
   },
   "submit": {
     "title": "Submit a Restaurant",

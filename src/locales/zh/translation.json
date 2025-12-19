@@ -475,7 +475,9 @@
     "tabs": {
       "pets": "我的寵物",
       "favorites": "已收藏餐廳",
-      "contributions": "我的投稿"
+      "contributions": "我的投稿",
+      "feedback": "我的意見",
+      "reports": "我的回報"
     },
     "username": "用戶名稱",
     "usernamePlaceholder": "輸入您的用戶名稱",
@@ -486,6 +488,29 @@
     "avatarUpdated": "頭像已更新",
     "avatarTooLarge": "圖片須小於 2MB",
     "changePhoto": "更換頭像"
+  },
+  "feedback": {
+    "noFeedback": "您尚未提交任何意見",
+    "noFeedbackHint": "分享您的想法，幫助我們改進！",
+    "types": {
+      "bug": "錯誤",
+      "feature": "功能建議",
+      "general": "一般意見"
+    },
+    "status": {
+      "pending": "待處理",
+      "reviewed": "已查看",
+      "resolved": "已解決"
+    }
+  },
+  "report": {
+    "noReports": "您尚未回報任何資料",
+    "noReportsHint": "回報不正確的資訊，確保資料準確！",
+    "status": {
+      "pending": "待處理",
+      "approved": "已採用",
+      "rejected": "已拒絕"
+    }
   },
   "submit": {
     "title": "提交餐廳",

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store } from 'lucide-react'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -12,9 +12,9 @@ import { PetProfileCard } from '@/components/PetProfileCard'
 import { RestaurantCard } from '@/components/RestaurantCard'
 import { AuthModal } from '@/components/AuthModal'
 import { ProfileHeader } from '@/components/Profile/ProfileHeader'
-import type { UserPet, PetSize, Restaurant } from '@/types/database'
+import type { UserPet, PetSize, Restaurant, AppFeedback, RestaurantReport } from '@/types/database'
 
-type TabType = 'pets' | 'favorites' | 'contributions'
+type TabType = 'pets' | 'favorites' | 'contributions' | 'feedback' | 'reports'
 
 // Inline UsernameEditor component
 function UsernameEditor() {
@@ -187,6 +187,14 @@ export function Profile() {
   const [contributions, setContributions] = useState<Restaurant[]>([])
   const [contributionsLoading, setContributionsLoading] = useState(true)
 
+  // Feedback state
+  const [feedbacks, setFeedbacks] = useState<AppFeedback[]>([])
+  const [feedbacksLoading, setFeedbacksLoading] = useState(true)
+
+  // Reports state
+  const [reports, setReports] = useState<RestaurantReport[]>([])
+  const [reportsLoading, setReportsLoading] = useState(true)
+
   // Fetch pets
   useEffect(() => {
     const fetchPets = async () => {
@@ -228,6 +236,56 @@ export function Profile() {
     }
     
     fetchContributions()
+  }, [user])
+
+  // Fetch user's feedback submissions
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      if (!user) {
+        setFeedbacks([])
+        setFeedbacksLoading(false)
+        return
+      }
+      
+      setFeedbacksLoading(true)
+      const { data, error } = await supabase
+        .from('app_feedback')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      
+      if (!error && data) {
+        setFeedbacks(data as AppFeedback[])
+      }
+      setFeedbacksLoading(false)
+    }
+    
+    fetchFeedbacks()
+  }, [user])
+
+  // Fetch user's restaurant reports
+  useEffect(() => {
+    const fetchReports = async () => {
+      if (!user) {
+        setReports([])
+        setReportsLoading(false)
+        return
+      }
+      
+      setReportsLoading(true)
+      const { data, error } = await supabase
+        .from('restaurant_reports')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      
+      if (!error && data) {
+        setReports(data as RestaurantReport[])
+      }
+      setReportsLoading(false)
+    }
+    
+    fetchReports()
   }, [user])
 
   // Handle pet deletion
@@ -324,6 +382,28 @@ export function Profile() {
           >
             <Store size={18} />
             {t('profile.tabs.contributions')}
+          </button>
+          <button
+            onClick={() => setActiveTab('feedback')}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
+              activeTab === 'feedback'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+            }`}
+          >
+            <MessageCircle size={18} />
+            {t('profile.tabs.feedback')}
+          </button>
+          <button
+            onClick={() => setActiveTab('reports')}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
+              activeTab === 'reports'
+                ? 'bg-primary-500 text-white'
+                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+            }`}
+          >
+            <AlertTriangle size={18} />
+            {t('profile.tabs.reports')}
           </button>
         </div>
 
@@ -454,6 +534,116 @@ export function Profile() {
                         : restaurant.status === 'rejected'
                         ? t('submit.status.rejected')
                         : t('submit.status.pending')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Feedback Content */}
+        {activeTab === 'feedback' && (
+          <div className="space-y-6">
+            {feedbacksLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-20 bg-neutral-200 rounded-xl animate-pulse" />
+                ))}
+              </div>
+            ) : feedbacks.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
+                <MessageCircle size={48} className="mx-auto text-neutral-300 mb-4" />
+                <p className="text-neutral-600 font-medium">{t('feedback.noFeedback')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('feedback.noFeedbackHint')}</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {feedbacks.map(fb => (
+                  <div
+                    key={fb.id}
+                    className="bg-white rounded-xl border border-neutral-200 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            fb.type === 'bug' ? 'bg-red-100 text-red-700' :
+                            fb.type === 'feature' ? 'bg-amber-100 text-amber-700' :
+                            'bg-blue-100 text-blue-700'
+                          }`}>
+                            {t(`feedback.types.${fb.type}`)}
+                          </span>
+                          <span className="text-xs text-neutral-400">
+                            {new Date(fb.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-neutral-700 text-sm line-clamp-2">
+                          {fb.message}
+                        </p>
+                      </div>
+                      <div className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${
+                        fb.status === 'resolved'
+                          ? 'bg-green-100 text-green-700'
+                          : fb.status === 'reviewed'
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {t(`feedback.status.${fb.status}`)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Reports Content */}
+        {activeTab === 'reports' && (
+          <div className="space-y-6">
+            {reportsLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-20 bg-neutral-200 rounded-xl animate-pulse" />
+                ))}
+              </div>
+            ) : reports.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
+                <AlertTriangle size={48} className="mx-auto text-neutral-300 mb-4" />
+                <p className="text-neutral-600 font-medium">{t('report.noReports')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('report.noReportsHint')}</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {reports.map(rpt => (
+                  <div
+                    key={rpt.id}
+                    className="bg-white rounded-xl border border-neutral-200 p-4"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-sm font-medium text-neutral-700">
+                            {rpt.field_name}
+                          </span>
+                          <span className="text-xs text-neutral-400">
+                            {new Date(rpt.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-neutral-600 text-sm truncate">
+                          {rpt.suggested_value}
+                        </p>
+                      </div>
+                      <div className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${
+                        rpt.status === 'approved'
+                          ? 'bg-green-100 text-green-700'
+                          : rpt.status === 'rejected'
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {t(`report.status.${rpt.status}`)}
+                      </div>
                     </div>
                   </div>
                 ))}

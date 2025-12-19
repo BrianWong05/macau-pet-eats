@@ -433,7 +433,9 @@
     "tabs": {
       "pets": "Os Meus Animais",
       "favorites": "Locais Guardados",
-      "contributions": "As Minhas Contribuições"
+      "contributions": "As Minhas Contribuições",
+      "feedback": "O Meu Feedback",
+      "reports": "Os Meus Relatórios"
     },
     "username": "Nome de Utilizador",
     "usernamePlaceholder": "Introduza o seu nome de utilizador",
@@ -444,6 +446,29 @@
     "avatarUpdated": "Foto de perfil atualizada",
     "avatarTooLarge": "A imagem deve ter menos de 2MB",
     "changePhoto": "Alterar Foto"
+  },
+  "feedback": {
+    "noFeedback": "Ainda não enviou nenhum feedback",
+    "noFeedbackHint": "Partilhe as suas opiniões para nos ajudar a melhorar!",
+    "types": {
+      "bug": "Erro",
+      "feature": "Funcionalidade",
+      "general": "Geral"
+    },
+    "status": {
+      "pending": "Pendente",
+      "reviewed": "Analisado",
+      "resolved": "Resolvido"
+    }
+  },
+  "report": {
+    "noReports": "Ainda não enviou nenhum relatório",
+    "noReportsHint": "Reporte informações incorretas para manter os dados precisos!",
+    "status": {
+      "pending": "Pendente",
+      "approved": "Aprovado",
+      "rejected": "Rejeitado"
+    }
   },
   "submit": {
     "title": "Submeter Restaurante",

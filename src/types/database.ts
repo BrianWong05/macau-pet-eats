@@ -215,6 +215,22 @@ export interface Database {
   }
 }
 
+// App Feedback type
+export type FeedbackStatus = 'pending' | 'reviewed' | 'resolved'
+export type FeedbackType = 'bug' | 'feature' | 'general'
+
+export interface AppFeedback {
+  id: string
+  user_id: string | null
+  type: FeedbackType
+  message: string
+  contact_email: string | null
+  page_url: string | null
+  status: FeedbackStatus
+  created_at: string
+  updated_at: string
+}
+
 // Restaurant Report type
 export type ReportStatus = 'pending' | 'approved' | 'rejected'
 
