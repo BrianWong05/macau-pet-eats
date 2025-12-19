@@ -1,0 +1,128 @@
+{
+  "dashboard": {
+    "title": "Painel",
+    "totalRestaurants": "Total de Restaurantes",
+    "activeListings": "Publicados",
+    "pendingApproval": "Pendentes",
+    "totalReviews": "Total de Avaliações",
+    "updateReports": "Relatórios de Atualização"
+  },
+  "restaurants": {
+    "status": {
+      "pending": "Pendente",
+      "approved": "Aprovado",
+      "rejected": "Rejeitado"
+    },
+    "filters": {
+      "all": "Todos",
+      "pending": "Pendentes",
+      "approved": "Aprovados"
+    }
+  },
+  "comment": {
+    "title": "Adicionar Comentário",
+    "hint": "Adicione um comentário para o utilizador (opcional)",
+    "placeholder": "Introduza a sua resposta..."
+  },
+  "modal": {
+    "labels": {
+      "nameEn": "Nome (Inglês)",
+      "nameZh": "Nome (Chinês)",
+      "namePt": "Nome (Português)",
+      "cuisineType": "Tipo de Cozinha",
+      "petPolicy": "Política de Animais",
+      "status": "Estado",
+      "descriptionEn": "Descrição (Inglês)",
+      "descriptionZh": "Descrição (Chinês)",
+      "descriptionPt": "Descrição (Português)",
+      "addressEn": "Morada (Inglês)",
+      "addressZh": "Morada (Chinês)",
+      "addressPt": "Morada (Português)",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "imageUrl": "Imagens",
+      "contactInfo": "Telefone de Contacto",
+      "location": "Localização"
+    },
+    "placeholders": {
+      "selectCuisine": "Selecionar cozinha",
+      "description": "Descreva este restaurante...",
+      "address": "Introduza a morada",
+      "imageUrl": "https://...",
+      "imageUrlPlaceholder": "Introduzir URL da imagem (ex: https://...)",
+      "menuUrlPlaceholder": "Introduzir URL do PDF ou imagem (ex: https://...)"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "save": "Guardar Alterações",
+      "create": "Criar Restaurante",
+      "addLink": "Adicionar Link",
+      "addMore": "Adicionar Mais",
+      "uploadPhotos": "Carregar Fotos",
+      "uploadMenu": "Carregar Menu"
+    }
+  },
+  "reports": {
+    "title": "Relatórios de Atualização",
+    "empty": "Nenhum relatório encontrado",
+    "fieldLabel": "Campo",
+    "suggestedValue": "Valor Sugerido",
+    "images": "Imagens",
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "check": "Verificar",
+    "approveSuccess": "Relatório aprovado e alterações aplicadas",
+    "approveError": "Falha ao aprovar",
+    "rejectSuccess": "Relatório rejeitado",
+    "rejectError": "Falha ao rejeitar",
+    "checkSuccess": "Relatório marcado como revisto",
+    "checkError": "Falha ao marcar como revisto",
+    "edit": "Editar",
+    "editTitle": "Editar Relatório",
+    "editSuccess": "Relatório atualizado",
+    "editError": "Falha ao atualizar relatório",
+    "status": {
+      "pending": "Pendente",
+      "approved": "Aprovado",
+      "rejected": "Rejeitado",
+      "all": "Todos"
+    }
+  },
+  "cuisineTypes": {
+    "title": "Tipos de Cozinha",
+    "subtitle": "Gerir opções de tipo de cozinha",
+    "add": "Adicionar Tipo",
+    "empty": "Nenhum tipo de cozinha encontrado",
+    "form": {
+      "key": "Nome (Chave)",
+      "nameZh": "Nome em Chinês",
+      "namePt": "Nome em Português"
+    },
+    "table": {
+      "headers": {
+        "key": "Chave",
+        "nameZh": "Chinês",
+        "namePt": "Português",
+        "actions": "Ações"
+      }
+    }
+  },
+  "petPolicies": {
+    "title": "Políticas de Animais",
+    "subtitle": "Gerir opções de política de animais",
+    "add": "Adicionar Política",
+    "orderChanged": "A ordem foi alterada. Clique em \"Guardar Ordem\" para guardar."
+  },
+  "feedback": {
+    "title": "Comentários dos Utilizadores",
+    "subtitle": "Ver e gerir comentários dos utilizadores",
+    "empty": "Ainda sem comentários",
+    "statusUpdated": "Estado atualizado",
+    "status": {
+      "all": "Todos",
+      "pending": "Pendente",
+      "reviewed": "Revisto",
+      "resolved": "Resolvido"
+    }
+  }
+}

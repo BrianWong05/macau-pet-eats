@@ -1,0 +1,79 @@
+{
+  "title": "Perfil",
+  "loginRequired": "Inicie sessão para ver o perfil",
+  "tabs": {
+    "pets": "Os Meus Animais",
+    "favorites": "Locais Guardados",
+    "contributions": "As Minhas Contribuições",
+    "feedback": "O Meu Feedback",
+    "reports": "Os Meus Relatórios"
+  },
+  "username": "Nome de Utilizador",
+  "usernamePlaceholder": "Introduza o seu nome de utilizador",
+  "setUsername": "Definir Nome",
+  "editUsername": "Editar Nome",
+  "usernameRequired": "O nome de utilizador é obrigatório",
+  "usernameUpdated": "Nome de utilizador atualizado",
+  "avatarUpdated": "Foto de perfil atualizada",
+  "avatarTooLarge": "A imagem deve ter menos de 2MB",
+  "changePhoto": "Alterar Foto",
+  "favorites": {
+    "title": "Os Meus Favoritos",
+    "add": "Adicionar aos favoritos",
+    "added": "Adicionado aos favoritos",
+    "remove": "Remover dos favoritos",
+    "removed": "Removido dos favoritos",
+    "save": "Guardar",
+    "saved": "Guardado",
+    "noFavorites": "Ainda sem locais guardados",
+    "noFavoritesHint": "Toque no ícone de coração nos restaurantes para os guardar aqui"
+  },
+  "pets": {
+    "title": "Os Meus Animais",
+    "addPet": "Adicionar Animal",
+    "editPet": "Editar Animal",
+    "deletePet": "Apagar Animal",
+    "deleteConfirm": "Tem a certeza que deseja remover este animal?",
+    "name": "Nome do Animal",
+    "namePlaceholder": "Introduza o nome do seu animal",
+    "type": "Tipo de Animal",
+    "size": "Tamanho",
+    "breed": "Raça",
+    "breedPlaceholder": "Opcional: Introduza a raça",
+    "types": {
+      "dog": "Cão",
+      "cat": "Gato",
+      "bird": "Pássaro",
+      "rabbit": "Coelho",
+      "other": "Outro"
+    },
+    "sizes": {
+      "small": "Pequeno (< 10kg)",
+      "medium": "Médio (10-25kg)",
+      "large": "Grande (> 25kg)"
+    },
+    "noPets": "Ainda sem animais adicionados",
+    "noPetsHint": "Adicione os seus amigos peludos para ajudar a encontrar os restaurantes perfeitos",
+    "added": "Animal adicionado!",
+    "updated": "Animal atualizado!",
+    "deleted": "Animal removido"
+  },
+  "reviews": {
+    "title": "Avaliações",
+    "writeReview": "Escrever Avaliação",
+    "updateReview": "Atualizar Avaliação",
+    "yourReview": "A sua avaliação",
+    "rating": "Classificação",
+    "comment": "Comentário",
+    "commentPlaceholder": "Partilhe a sua experiência...",
+    "submitReview": "Submeter Avaliação",
+    "deleteReview": "Apagar Avaliação",
+    "noReviews": "Ainda sem avaliações",
+    "noReviewsHint": "Seja o primeiro a avaliar!",
+    "reviewCount": "{{count}} avaliações",
+    "loginToReview": "Inicie sessão para avaliar",
+    "added": "Avaliação adicionada",
+    "updated": "Avaliação atualizada",
+    "deleted": "Avaliação apagada"
+  }
+}

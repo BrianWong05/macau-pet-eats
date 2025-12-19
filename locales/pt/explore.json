@@ -1,0 +1,13 @@
+{
+  "title": "Explorar Restaurantes",
+  "subtitle": "Descubra restaurantes pet-friendly em Macau no mapa",
+  "filters": {
+    "all": "Todos",
+    "petPolicy": "Política de Animais",
+    "cuisine": "Cozinha",
+    "location": "Localização"
+  },
+  "results": "Encontrados {{count}} restaurantes",
+  "noResults": "Nenhum restaurante corresponde aos filtros",
+  "viewDetails": "Ver Detalhes"
+}

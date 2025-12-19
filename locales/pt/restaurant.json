@@ -1,0 +1,66 @@
+{
+  "cuisine": "Cozinha",
+  "address": "Morada",
+  "contact": "Contacto",
+  "getDirections": "Obter Direções",
+  "callNow": "Ligar Agora",
+  "backToList": "Voltar à Lista",
+  "location": "Localização",
+  "openInMaps": "Abrir no Google Maps",
+  "photos": "Fotos",
+  "menu": "Ementa",
+  "socialMedia": {
+    "title": "Redes Sociais",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "website": "Website"
+  },
+  "reportUpdate": "Reportar Atualização",
+  "reportModal": {
+    "title": "Reportar uma Atualização",
+    "subtitle": "Ajude-nos a manter as informações corretas",
+    "fieldLabel": "Campo a atualizar",
+    "selectField": "Selecione um campo",
+    "field": "O que precisa de atualização?",
+    "suggestedValue": "Informação correta",
+    "reason": "Notas adicionais (opcional)",
+    "reasonPlaceholder": "Porque é que esta informação está incorreta?",
+    "submit": "Enviar Relatório",
+    "success": "Relatório enviado! Obrigado pela ajuda.",
+    "error": "Falha ao enviar. Por favor tente novamente.",
+    "validation": {
+      "required": "Este campo é obrigatório"
+    },
+    "fields": {
+      "pet_policy": "Política de Animais",
+      "contact_info": "Número de Contacto",
+      "address": "Morada",
+      "cuisine_type": "Tipo de Cozinha",
+      "image": "Fotos",
+      "menu": "Ementa",
+      "other": "Outro"
+    },
+    "uploadImages": "Carregar Fotos",
+    "menuUpload": "Ementa"
+  },
+  "gallery": {
+    "title": "Fotos"
+  },
+  "reviews": {
+    "title": "Avaliações",
+    "writeReview": "Escrever Avaliação",
+    "yourRating": "Sua Classificação",
+    "yourReview": "Sua Avaliação",
+    "reviewPlaceholder": "Compartilhe sua experiência...",
+    "addPhoto": "Adicionar Foto",
+    "uploadPhoto": "Carregar Foto",
+    "takePhoto": "Tirar Foto",
+    "removePhoto": "Remover Foto",
+    "photoHint": "Opcional: Adicione uma foto",
+    "submitReview": "Enviar Avaliação",
+    "noReviews": "Ainda sem avaliações",
+    "noReviewsHint": "Seja o primeiro a avaliar!",
+    "loginToReview": "Fazer login para avaliar",
+    "deleteReview": "Excluir Avaliação"
+  }
+}

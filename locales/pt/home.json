@@ -1,0 +1,28 @@
+{
+  "badge": "O Guia #1 de Restaurantes Pet-Friendly em Macau",
+  "headline": "Encontre os Melhores Lugares para Jantar com o Seu",
+  "headlineHighlight": "Amigo Peludo",
+  "subheadline": "Descubra restaurantes, cafés e bares pet-friendly em Macau. De pátios acolhedores a espaços totalmente amigos dos animais.",
+  "searchPlaceholder": "Pesquisar por nome ou tipo de cozinha...",
+  "stats": {
+    "locationsSuffix": "Locais",
+    "allPets": "Todos os Animais Bem-vindos"
+  },
+  "featured": {
+    "title": "Restaurantes em Destaque",
+    "subtitle": "Locais selecionados onde você e o seu animal são sempre bem-vindos",
+    "searchTitle": "Resultados da Pesquisa",
+    "searchSubtitle": "A mostrar resultados para \"{{query}}\""
+  },
+  "noResults": {
+    "title": "Nenhum restaurante encontrado",
+    "searchHint": "Tente ajustar os termos de pesquisa",
+    "defaultHint": "Volte em breve para novas adições!"
+  },
+  "exploreButton": "Explorar Tudo no Mapa",
+  "cta": {
+    "title": "Descobriu um novo restaurante pet friendly?",
+    "subtitle": "Ajude-nos a criar o guia mais completo de restaurantes pet-friendly em Macau!",
+    "button": "Recomendar"
+  }
+}

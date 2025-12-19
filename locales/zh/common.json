@@ -1,0 +1,90 @@
+{
+  "appName": "澳門寵物友善餐廳",
+  "loading": "載入中...",
+  "error": "錯誤",
+  "search": "搜尋",
+  "viewAll": "查看全部",
+  "learnMore": "了解更多",
+  "getDirections": "取得路線",
+  "submit": "提交",
+  "cancel": "取消",
+  "close": "關閉",
+  "other": "其他",
+  "requiredField": "(必填)",
+  "upload": "上傳",
+  "link": "連結",
+  "uploading": "上傳中...",
+  "clickToUpload": "點擊上傳",
+  "uploadImageOrPdf": "上傳圖片或 PDF",
+  "uploadError": "上傳失敗",
+  "save": "保存",
+  "delete": "刪除",
+  "view": "查看",
+  "edit": "編輯",
+  "adminComment": "管理員回覆",
+  "nav": {
+    "home": "首頁",
+    "explore": "探索地圖",
+    "submit": "推薦餐廳"
+  },
+  "footer": {
+    "copyright": "© 2025 澳門寵物友善餐廳。由寵物愛好者用心製作。"
+  },
+  "allRightsReserved": "版權所有。",
+  "errors": {
+    "loadingRestaurants": "載入餐廳資料失敗",
+    "missingSupabase": "缺少 Supabase 環境變數。請在 .env 檔案中設定 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY。"
+  },
+  "language": {
+    "zh": "繁體中文",
+    "en": "English",
+    "pt": "Português"
+  },
+  "cuisineTypes": {
+    "portuguese": "葡國菜",
+    "cantonese": "粵菜",
+    "fusion": "融合菜",
+    "international": "國際美食",
+    "seafood": "海鮮",
+    "brunch": "早午餐",
+    "japanese": "日本菜",
+    "italian": "意大利菜",
+    "thai": "泰國菜",
+    "macanese": "澳門菜",
+    "chinese": "中國菜",
+    "american": "美式料理",
+    "cafe": "咖啡店",
+    "bar": "酒吧",
+    "dessert": "甜品店",
+    "other": "其他"
+  },
+  "petPolicy": {
+    "indoors_allowed": "允許室內",
+    "patio_only": "僅限露台",
+    "small_pets_only": "僅限小型寵物",
+    "all_pets_welcome": "歡迎所有寵物",
+    "dogs_only": "僅限狗狗",
+    "cats_only": "僅限貓咪",
+    "medium_dogs_allowed": "允許中型犬"
+  },
+  "openingHours": {
+    "title": "營業時間",
+    "closed": "休息",
+    "open": "營業",
+    "openNow": "營業中",
+    "closedNow": "已休息",
+    "everyday": "每天",
+    "applyToWeekdays": "→ 平日",
+    "applyToWeekend": "→ 週末",
+    "applyToAll": "→ 全部",
+    "days": {
+      "monday": "星期一",
+      "tuesday": "星期二",
+      "wednesday": "星期三",
+      "thursday": "星期四",
+      "friday": "星期五",
+      "saturday": "星期六",
+      "sunday": "星期日"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "badge": "澳門第一寵物友善餐廳指南",
+  "headline": "在澳門找到與毛孩一起用餐的",
+  "headlineHighlight": "最佳餐廳",
+  "subheadline": "探索澳門各區的寵物友善餐廳、咖啡廳和酒吧。從舒適的露台到完全室內友善的場所。",
+  "searchPlaceholder": "搜尋餐廳名稱或菜式...",
+  "stats": {
+    "locationsSuffix": "地點",
+    "allPets": "歡迎所有寵物"
+  },
+  "featured": {
+    "title": "精選餐廳",
+    "subtitle": "精心挑選的寵物友善好去處",
+    "searchTitle": "搜尋結果",
+    "searchSubtitle": "顯示「{{query}}」的結果"
+  },
+  "noResults": {
+    "title": "找不到餐廳",
+    "searchHint": "請嘗試調整搜尋條件",
+    "defaultHint": "稍後再來查看新增的餐廳！"
+  },
+  "exploreButton": "在地圖上探索",
+  "cta": {
+    "title": "發現了新的寵物友善餐廳？",
+    "subtitle": "幫助我們建立全澳門最完整的寵物友善餐廳指南！",
+    "button": "推薦餐廳"
+  }
+}

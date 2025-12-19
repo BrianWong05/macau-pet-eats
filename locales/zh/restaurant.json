@@ -1,0 +1,67 @@
+{
+  "cuisine": "菜式",
+  "address": "地址",
+  "contact": "聯絡方式",
+  "getDirections": "取得路線",
+  "callNow": "立即致電",
+  "backToList": "返回列表",
+  "location": "位置",
+  "openInMaps": "在 Google 地圖中開啟",
+  "photos": "相片",
+  "menu": "菜單",
+  "viewMenu": "查看菜單",
+  "socialMedia": {
+    "title": "社交媒體",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "website": "網站"
+  },
+  "reportUpdate": "回報更新",
+  "reportModal": {
+    "title": "回報資訊更新",
+    "subtitle": "幫助我們保持資訊準確",
+    "fieldLabel": "需要更新的項目",
+    "selectField": "請選擇項目",
+    "field": "需要更新什麼？",
+    "suggestedValue": "正確資訊",
+    "reason": "補充說明（選填）",
+    "reasonPlaceholder": "為什麼這個資訊不正確？",
+    "submit": "提交回報",
+    "success": "回報已提交！感謝您的幫助。",
+    "error": "提交失敗，請稍後再試。",
+    "validation": {
+      "required": "此欄位必填"
+    },
+    "fields": {
+      "pet_policy": "寵物政策",
+      "contact_info": "聯絡電話",
+      "address": "地址",
+      "cuisine_type": "菜式類型",
+      "image": "相片",
+      "menu": "菜單",
+      "other": "其他"
+    },
+    "uploadImages": "上傳相片",
+    "menuUpload": "菜單"
+  },
+  "gallery": {
+    "title": "相片"
+  },
+  "reviews": {
+    "title": "評價",
+    "writeReview": "撰寫評價",
+    "yourRating": "您的評分",
+    "yourReview": "您的評價",
+    "reviewPlaceholder": "分享您的用餐體驗...",
+    "addPhoto": "新增相片",
+    "uploadPhoto": "上傳相片",
+    "takePhoto": "拍攝相片",
+    "removePhoto": "移除相片",
+    "photoHint": "選填：新增相片",
+    "submitReview": "提交評價",
+    "noReviews": "暫無評價",
+    "noReviewsHint": "成為第一個評價的人！",
+    "loginToReview": "登入以撰寫評價",
+    "deleteReview": "刪除評價"
+  }
+}
