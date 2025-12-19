@@ -579,6 +579,19 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   <option value="rejected">{t('admin.restaurants.status.rejected')}</option>
                 </select>
               </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">{t('explore.filters.location') || '地區'}</label>
+                <select
+                  value={formData.location || '澳門'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                  className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="澳門">澳門 / Macau</option>
+                  <option value="氹仔">氹仔 / Taipa</option>
+                  <option value="路環">路環 / Coloane</option>
+                </select>
+              </div>
             </div>
           </div>
 

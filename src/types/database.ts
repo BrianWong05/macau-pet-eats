@@ -34,6 +34,7 @@ export interface Restaurant {
   latitude: number
   longitude: number
   google_maps_url: string | null
+  location: string | null  // Area: 澳門, 氹仔, 路環
   
   // Details
   pet_policy: PetPolicy

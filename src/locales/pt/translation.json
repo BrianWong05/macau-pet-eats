@@ -52,7 +52,8 @@
     "filters": {
       "all": "Todos",
       "petPolicy": "Política de Animais",
-      "cuisine": "Cozinha"
+      "cuisine": "Cozinha",
+      "location": "Localização"
     },
     "results": "Encontrados {{count}} restaurantes",
     "noResults": "Nenhum restaurante corresponde aos filtros",

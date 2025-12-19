@@ -239,6 +239,25 @@ export function RestaurantForm({
         />
       </div>
 
+      {/* Location Area */}
+      <div className="bg-white rounded-2xl shadow-card p-6">
+        <label htmlFor="location" className="block text-sm font-medium text-neutral-700 mb-2">
+          {t('explore.filters.location') || '地區'} *
+        </label>
+        <select
+          id="location"
+          name="location"
+          required
+          value={(formData as any).location || '澳門'}
+          onChange={handleInputChange}
+          className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all appearance-none bg-white"
+        >
+          <option value="澳門">澳門 / Macau</option>
+          <option value="氹仔">氹仔 / Taipa</option>
+          <option value="路環">路環 / Coloane</option>
+        </select>
+      </div>
+
       {/* Pet Policy & Cuisine Type */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Pet Policy */}

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import type { PetPolicy, CuisineType } from '@/types/database'
+import { LOCATION_AREAS, type LocationArea } from '@/hooks/useRestaurants'
 
 // Pet policy options - duplicated here or should extract to constant?
 // For now, duplicating but ideally should be in types or constants.
@@ -18,6 +19,8 @@ interface FilterPanelProps {
   setPetPolicyFilter: (policy: PetPolicy | null) => void
   cuisineFilter: string | null
   setCuisineFilter: (cuisine: string | null) => void
+  locationFilter?: LocationArea | null
+  setLocationFilter?: (location: LocationArea | null) => void
   cuisineTypes: CuisineType[]
   clearFilters: () => void
   hasActiveFilters: boolean | null | string
@@ -28,6 +31,8 @@ export function FilterPanel({
   setPetPolicyFilter,
   cuisineFilter,
   setCuisineFilter,
+  locationFilter,
+  setLocationFilter,
   cuisineTypes,
   clearFilters,
   hasActiveFilters
@@ -35,9 +40,57 @@ export function FilterPanel({
   const { t, i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
 
+  // Location names in different languages
+  const getLocationName = (location: LocationArea) => {
+    const names: Record<LocationArea, { zh: string; en: string; pt: string }> = {
+      '澳門': { zh: '澳門', en: 'Macau', pt: 'Macau' },
+      '氹仔': { zh: '氹仔', en: 'Taipa', pt: 'Taipa' },
+      '路環': { zh: '路環', en: 'Coloane', pt: 'Coloane' }
+    }
+    return names[location][lang] || location
+  }
+
   return (
     <div className="border-t border-neutral-100 bg-white px-4 py-4 animate-fade-in">
       <div className="max-w-7xl mx-auto space-y-4">
+        {/* Location Filter */}
+        {setLocationFilter && (
+          <div>
+            <label className="text-sm font-medium text-neutral-700 mb-2 block">
+              {t('explore.filters.location') || '地區'}
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setLocationFilter(null)}
+                className={`
+                  px-3 py-1.5 rounded-full text-sm font-medium transition-all
+                  ${!locationFilter
+                    ? 'bg-amber-500 text-white shadow-sm'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  }
+                `}
+              >
+                {t('explore.filters.all')}
+              </button>
+              {LOCATION_AREAS.map((location) => (
+                <button
+                  key={location}
+                  onClick={() => setLocationFilter(location)}
+                  className={`
+                    px-3 py-1.5 rounded-full text-sm font-medium transition-all
+                    ${locationFilter === location
+                      ? 'bg-amber-500 text-white shadow-sm'
+                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                    }
+                  `}
+                >
+                  {getLocationName(location)}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Pet Policy Filter */}
         <div>
           <label className="text-sm font-medium text-neutral-700 mb-2 block">

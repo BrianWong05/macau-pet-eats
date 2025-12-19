@@ -52,7 +52,8 @@
     "filters": {
       "all": "全部",
       "petPolicy": "寵物政策",
-      "cuisine": "菜式"
+      "cuisine": "菜式",
+      "location": "地區"
     },
     "results": "找到 {{count}} 間餐廳",
     "noResults": "沒有符合條件的餐廳",

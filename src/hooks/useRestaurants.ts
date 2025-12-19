@@ -2,10 +2,15 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { Restaurant, PetPolicy, CuisineType } from '@/types/database'
 
+// Location areas in Macau
+export const LOCATION_AREAS = ['澳門', '氹仔', '路環'] as const
+export type LocationArea = typeof LOCATION_AREAS[number]
+
 interface UseRestaurantsOptions {
   searchQuery?: string
   petPolicyFilter?: PetPolicy | null
   cuisineFilter?: string | null
+  locationFilter?: LocationArea | null
 }
 
 interface UseRestaurantsReturn {
@@ -18,7 +23,7 @@ interface UseRestaurantsReturn {
 }
 
 export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaurantsReturn {
-  const { searchQuery = '', petPolicyFilter = null, cuisineFilter = null } = options
+  const { searchQuery = '', petPolicyFilter = null, cuisineFilter = null, locationFilter = null } = options
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
   const [cuisineTypes, setCuisineTypes] = useState<CuisineType[]>([])
@@ -50,6 +55,11 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
         query = query.contains('cuisine_type', [cuisineFilter])
       }
 
+      // Apply location filter (filter by location column)
+      if (locationFilter) {
+        query = query.eq('location', locationFilter)
+      }
+
       console.log('useRestaurants: Fetching restaurants...')
       const { data, error: fetchError } = await query.order('created_at', { ascending: false })
 
@@ -67,7 +77,7 @@ export function useRestaurants(options: UseRestaurantsOptions = {}): UseRestaura
     } finally {
       setIsLoading(false)
     }
-  }, [searchQuery, petPolicyFilter, cuisineFilter])
+  }, [searchQuery, petPolicyFilter, cuisineFilter, locationFilter])
 
   // Fetch cuisine types from database
   useEffect(() => {

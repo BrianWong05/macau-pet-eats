@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useRestaurants } from '@/hooks/useRestaurants'
+import { useRestaurants, type LocationArea } from '@/hooks/useRestaurants'
 import type { PetPolicy } from '@/types/database'
 import { SearchHeader } from '@/components/Search/SearchHeader'
 import { FilterPanel } from '@/components/Search/FilterPanel'
@@ -16,12 +16,14 @@ export function Search() {
   const [debouncedQuery, setDebouncedQuery] = useState(initialQuery)
   const [petPolicyFilter, setPetPolicyFilter] = useState<PetPolicy | null>(null)
   const [cuisineFilter, setCuisineFilter] = useState<string | null>(null)
+  const [locationFilter, setLocationFilter] = useState<LocationArea | null>(null)
   const [showFilters, setShowFilters] = useState(false)
 
   const { restaurants, cuisineTypes, isLoading } = useRestaurants({
     searchQuery: debouncedQuery,
     petPolicyFilter,
-    cuisineFilter
+    cuisineFilter,
+    locationFilter
   })
 
   // Debounce search query
@@ -48,9 +50,10 @@ export function Search() {
   const clearFilters = useCallback(() => {
     setPetPolicyFilter(null)
     setCuisineFilter(null)
+    setLocationFilter(null)
   }, [])
 
-  const hasActiveFilters = petPolicyFilter || cuisineFilter
+  const hasActiveFilters = petPolicyFilter || cuisineFilter || locationFilter
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -70,6 +73,8 @@ export function Search() {
             setPetPolicyFilter={setPetPolicyFilter}
             cuisineFilter={cuisineFilter}
             setCuisineFilter={setCuisineFilter}
+            locationFilter={locationFilter}
+            setLocationFilter={setLocationFilter}
             cuisineTypes={cuisineTypes}
             clearFilters={clearFilters}
             hasActiveFilters={hasActiveFilters}

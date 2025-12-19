@@ -52,7 +52,8 @@
     "filters": {
       "all": "All",
       "petPolicy": "Pet Policy",
-      "cuisine": "Cuisine"
+      "cuisine": "Cuisine",
+      "location": "Location"
     },
     "results": "Found {{count}} restaurants",
     "noResults": "No restaurants match your filters",
