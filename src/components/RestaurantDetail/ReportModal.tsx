@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { X, Upload, Image as ImageIcon, FileText, Link as LinkIcon, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 
 interface ReportModalProps {
@@ -110,10 +111,10 @@ export function ReportModal({ isOpen, onClose, restaurantId, userId }: ReportMod
       setReportReason('')
       setUploadedFiles([])
       setMenuLink('')
-      alert(t('restaurant.reportModal.success'))
+      toast.success(t('restaurant.reportModal.success'))
     } catch (err) {
       console.error('Report submission error:', err)
-      alert(t('restaurant.reportModal.error'))
+      toast.error(t('restaurant.reportModal.error'))
     } finally {
       setReportLoading(false)
     }
