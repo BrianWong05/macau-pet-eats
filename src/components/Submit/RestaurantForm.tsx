@@ -2,16 +2,9 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Send, AlertCircle, Upload, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import type { RestaurantSubmission, CuisineType, PetPolicy } from '@/types/database'
+import type { RestaurantSubmission, CuisineType } from '@/types/database'
 
-const PET_POLICY_OPTIONS: PetPolicy[] = [
-  'indoors_allowed',
-  'patio_only',
-  'small_pets_only',
-  'all_pets_welcome',
-  'dogs_only',
-  'cats_only'
-]
+import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -39,6 +32,7 @@ export function RestaurantForm({
   setImagePreviews
 }: RestaurantFormProps) {
   const { t, i18n } = useTranslation()
+  const { petPolicies } = usePetPolicies()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleInputChange = (
@@ -273,11 +267,20 @@ export function RestaurantForm({
             onChange={handleInputChange}
             className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-400 focus:ring-4 focus:ring-primary-100 focus:outline-none transition-all appearance-none bg-white"
           >
-            {PET_POLICY_OPTIONS.map((policy) => (
-              <option key={policy} value={policy}>
-                {t(`petPolicy.${policy}`)}
-              </option>
-            ))}
+            {petPolicies.length > 0 ? (
+              petPolicies.map(policy => (
+                <option key={policy.name} value={policy.name}>
+                  {i18n.language === 'zh' ? (policy.name_zh || policy.name) :
+                   i18n.language === 'pt' ? (policy.name_pt || policy.name) :
+                   policy.name}
+                </option>
+              ))
+            ) : (
+              // Fallback
+              ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed'].map(p => (
+                <option key={p} value={p}>{t(`petPolicy.${p}`)}</option>
+              ))
+            )}
           </select>
         </div>
 

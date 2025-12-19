@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import type { PetPolicy } from '@/types/database'
-import { PawPrint, TreePine, Dog, Cat, Heart } from 'lucide-react'
+import { PawPrint, TreePine, Dog, Cat, Heart, Bone } from 'lucide-react'
 
 interface PetPolicyBadgeProps {
   policy: PetPolicy
   size?: 'sm' | 'md' | 'lg'
 }
 
-const policyConfig: Record<PetPolicy, { icon: typeof PawPrint; colorClass: string }> = {
+const policyConfig: Record<string, { icon: typeof PawPrint; colorClass: string }> = {
   indoors_allowed: {
     icon: Heart,
     colorClass: 'bg-secondary-100 text-secondary-700 border-secondary-200',
@@ -32,6 +32,10 @@ const policyConfig: Record<PetPolicy, { icon: typeof PawPrint; colorClass: strin
     icon: Cat,
     colorClass: 'bg-purple-100 text-purple-700 border-purple-200',
   },
+  medium_dogs_allowed: {
+    icon: Bone,
+    colorClass: 'bg-orange-100 text-orange-700 border-orange-200',
+  },
 }
 
 const sizeClasses = {
@@ -48,7 +52,11 @@ const iconSizes = {
 
 export function PetPolicyBadge({ policy, size = 'md' }: PetPolicyBadgeProps) {
   const { t } = useTranslation()
-  const config = policyConfig[policy]
+  // Fallback for unknown policies
+  const config = policyConfig[policy] || { 
+    icon: PawPrint, 
+    colorClass: 'bg-neutral-100 text-neutral-700 border-neutral-200' 
+  }
   const Icon = config.icon
 
   return (
@@ -61,7 +69,7 @@ export function PetPolicyBadge({ policy, size = 'md' }: PetPolicyBadgeProps) {
       `}
     >
       <Icon size={iconSizes[size]} />
-      <span>{t(`petPolicy.${policy}`)}</span>
+      <span>{t(`petPolicy.${policy}`) || policy}</span>
     </span>
   )
 }

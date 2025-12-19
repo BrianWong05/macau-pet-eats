@@ -2,23 +2,13 @@ import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import type { PetPolicy, CuisineType } from '@/types/database'
 import { LOCATION_AREAS, type LocationArea } from '@/hooks/useRestaurants'
-
-// Pet policy options - duplicated here or should extract to constant?
-// For now, duplicating but ideally should be in types or constants.
-const PET_POLICY_OPTIONS: PetPolicy[] = [
-  'indoors_allowed',
-  'patio_only',
-  'small_pets_only',
-  'all_pets_welcome',
-  'dogs_only',
-  'cats_only'
-]
+import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 interface FilterPanelProps {
   petPolicyFilter: PetPolicy | null
   setPetPolicyFilter: (policy: PetPolicy | null) => void
-  cuisineFilters: string[]  // Now an array
-  toggleCuisineFilter: (cuisine: string) => void  // Toggle function
+  cuisineFilters: string[]
+  toggleCuisineFilter: (cuisine: string) => void
   locationFilter?: LocationArea | null
   setLocationFilter?: (location: LocationArea | null) => void
   cuisineTypes: CuisineType[]
@@ -39,6 +29,7 @@ export function FilterPanel({
 }: FilterPanelProps) {
   const { t, i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
+  const { petPolicies } = usePetPolicies()
 
   // Location names in different languages
   const getLocationName = (location: LocationArea) => {
@@ -49,6 +40,29 @@ export function FilterPanel({
     }
     return names[location][lang] || location
   }
+
+  // Get localized pet policy name
+  const getPetPolicyName = (key: string) => {
+    // Start with static translation logic first for backward compatibility/speed
+    const translated = t(`petPolicy.${key}`)
+    if (translated && translated !== `petPolicy.${key}` && translated !== key) {
+      return translated
+    }
+
+    // Fallback to DB name if translation missing
+    const policy = petPolicies.find(p => p.name === key)
+    if (policy) {
+      if (lang === 'zh') return policy.name_zh || policy.name
+      if (lang === 'pt') return policy.name_pt || policy.name
+      return policy.name
+    }
+    return key
+  }
+
+  // Use DB policies if loaded, otherwise fallback to empty (or could keep static as backup)
+  const displayPolicies = petPolicies.length > 0 
+    ? petPolicies.map(p => p.name as PetPolicy)
+    : ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed'] as PetPolicy[]
 
   return (
     <div className="border-t border-neutral-100 bg-white px-4 py-4 animate-fade-in">
@@ -109,7 +123,7 @@ export function FilterPanel({
             >
               {t('explore.filters.all')}
             </button>
-            {PET_POLICY_OPTIONS.map((policy) => (
+            {displayPolicies.map((policy) => (
               <button
                 key={policy}
                 onClick={() => setPetPolicyFilter(policy)}
@@ -121,7 +135,7 @@ export function FilterPanel({
                   }
                 `}
               >
-                {t(`petPolicy.${policy}`)}
+                {getPetPolicyName(policy)}
               </button>
             ))}
           </div>

@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { CuisineTypesProvider } from '@/contexts/CuisineTypesContext'
+import { PetPoliciesProvider } from '@/contexts/PetPoliciesContext'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { AdminLayout } from '@/components/AdminLayout'
 import { LoadingScreen } from '@/components/LoadingScreen'
@@ -27,33 +28,35 @@ function App() {
   return (
     <AuthProvider>
       <CuisineTypesProvider>
-        <Router>
-          <Toaster position="top-right" richColors />
-          <Suspense fallback={<LoadingScreen />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-              <Route path="/submit" element={<Submit />} />
-              
-              {/* Admin Routes */}
-              <Route element={<ProtectedRoute requireAdmin />}>
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<AdminDashboard />} />
-                  <Route path="restaurants" element={<AdminRestaurants />} />
-                  <Route path="cuisine-types" element={<AdminCuisineTypes />} />
-                  <Route path="pet-policies" element={<AdminPetPolicies />} />
-                  <Route path="reports" element={<AdminReports />} />
-                  <Route path="feedback" element={<AdminFeedback />} />
+        <PetPoliciesProvider>
+          <Router>
+            <Toaster position="top-right" richColors />
+            <Suspense fallback={<LoadingScreen />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+                <Route path="/submit" element={<Submit />} />
+                
+                {/* Admin Routes */}
+                <Route element={<ProtectedRoute requireAdmin />}>
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="restaurants" element={<AdminRestaurants />} />
+                    <Route path="cuisine-types" element={<AdminCuisineTypes />} />
+                    <Route path="pet-policies" element={<AdminPetPolicies />} />
+                    <Route path="reports" element={<AdminReports />} />
+                    <Route path="feedback" element={<AdminFeedback />} />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
-          </Suspense>
-          
-          {/* Global Feedback Button */}
-          <FeedbackButton />
-        </Router>
+              </Routes>
+            </Suspense>
+            
+            {/* Global Feedback Button */}
+            <FeedbackButton />
+          </Router>
+        </PetPoliciesProvider>
       </CuisineTypesProvider>
     </AuthProvider>
   )

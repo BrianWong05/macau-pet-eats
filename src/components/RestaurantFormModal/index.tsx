@@ -17,14 +17,7 @@ interface RestaurantFormModalProps {
   restaurant?: Restaurant | null
 }
 
-const PET_POLICIES = [
-  'indoors_allowed',
-  'patio_only',
-  'small_pets_only',
-  'all_pets_welcome',
-  'dogs_only',
-  'cats_only'
-]
+import { usePetPolicies } from '@/contexts/PetPoliciesContext'
 
 
 
@@ -32,6 +25,7 @@ const PET_POLICIES = [
 
 export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: RestaurantFormModalProps) {
   const { t, i18n } = useTranslation()
+  const { petPolicies } = usePetPolicies()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [mapsUrl, setMapsUrl] = useState('')
@@ -585,9 +579,20 @@ export function RestaurantFormModal({ isOpen, onClose, onSave, restaurant }: Res
                   onChange={(e) => setFormData(prev => ({ ...prev, pet_policy: e.target.value as any }))}
                   className="w-full px-4 py-2 border border-neutral-200 rounded-xl focus:ring-2 focus:ring-primary-500"
                 >
-                  {PET_POLICIES.map(policy => (
-                    <option key={policy} value={policy}>{t(`petPolicy.${policy}`)}</option>
-                  ))}
+                  {petPolicies.length > 0 ? (
+                    petPolicies.map(policy => (
+                      <option key={policy.name} value={policy.name}>
+                        {i18n.language === 'zh' ? (policy.name_zh || policy.name) :
+                         i18n.language === 'pt' ? (policy.name_pt || policy.name) :
+                         policy.name}
+                      </option>
+                    ))
+                  ) : (
+                    // Fallback while loading or if empty
+                    ['indoors_allowed', 'patio_only', 'small_pets_only', 'all_pets_welcome', 'dogs_only', 'cats_only', 'medium_dogs_allowed'].map(p => (
+                      <option key={p} value={p}>{t(`petPolicy.${p}`)}</option>
+                    ))
+                  )}
                 </select>
               </div>
 
