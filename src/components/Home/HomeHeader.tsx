@@ -11,7 +11,7 @@ interface HomeHeaderProps {
 
 export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
   const { t } = useTranslation()
-  const { user, signOut } = useAuth()
+  const { user, username, signOut } = useAuth()
 
   return (
     <header 
@@ -37,7 +37,7 @@ export function HomeHeader({ isScrolled, onLoginClick }: HomeHeaderProps) {
           {user ? (
             <div className="flex items-center gap-4">
               <span className={`text-sm font-medium hidden sm:block ${isScrolled ? 'text-neutral-700' : 'text-neutral-700'}`}>
-                {user.email}
+                {username || user.email}
               </span>
               <Link
                 to="/profile"

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PawPrint, Heart, Plus, LogIn } from 'lucide-react'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -14,9 +14,82 @@ import type { UserPet, PetSize } from '@/types/database'
 
 type TabType = 'pets' | 'favorites'
 
+// Inline UsernameEditor component
+function UsernameEditor() {
+  const { t } = useTranslation()
+  const { username, updateUsername } = useAuth()
+  const [isEditing, setIsEditing] = useState(false)
+  const [newUsername, setNewUsername] = useState(username || '')
+  const [isSaving, setIsSaving] = useState(false)
+
+  const handleSave = async () => {
+    if (!newUsername.trim()) {
+      toast.error(t('profile.usernameRequired'))
+      return
+    }
+    
+    setIsSaving(true)
+    const { error } = await updateUsername(newUsername.trim())
+    setIsSaving(false)
+    
+    if (error) {
+      toast.error(t('common.error'))
+    } else {
+      toast.success(t('profile.usernameUpdated'))
+      setIsEditing(false)
+    }
+  }
+
+  if (isEditing) {
+    return (
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={newUsername}
+          onChange={(e) => setNewUsername(e.target.value)}
+          className="text-xl font-bold text-neutral-900 border-b-2 border-primary-500 bg-transparent outline-none px-1"
+          placeholder={t('profile.usernamePlaceholder')}
+          autoFocus
+        />
+        <button
+          onClick={handleSave}
+          disabled={isSaving}
+          className="p-1 text-green-600 hover:bg-green-50 rounded-full transition-colors"
+        >
+          <Check size={18} />
+        </button>
+        <button
+          onClick={() => {
+            setIsEditing(false)
+            setNewUsername(username || '')
+          }}
+          className="p-1 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+        >
+          <X size={18} />
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <h2 className="text-xl font-bold text-neutral-900">
+        {username || t('profile.setUsername')}
+      </h2>
+      <button
+        onClick={() => setIsEditing(true)}
+        className="p-1 text-neutral-400 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-colors"
+        title={t('profile.editUsername')}
+      >
+        <Pencil size={16} />
+      </button>
+    </div>
+  )
+}
+
 export function Profile() {
   const { t } = useTranslation()
-  const { user } = useAuth()
+  const { user, username } = useAuth()
   const [activeTab, setActiveTab] = useState<TabType>('pets')
   const { favorites, isLoading: favoritesLoading } = useFavorites()
   
@@ -94,10 +167,19 @@ export function Profile() {
       <ProfileHeader />
       
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-900">{t('profile.title')}</h1>
-          <p className="text-neutral-500 mt-1">{user.email}</p>
+        {/* Profile Info */}
+        <div className="mb-8 bg-white rounded-xl border border-neutral-200 p-6">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+              <span className="text-2xl font-bold text-primary-600">
+                {(username || user.email?.charAt(0) || '?').charAt(0).toUpperCase()}
+              </span>
+            </div>
+            <div className="flex-1">
+              <UsernameEditor />
+              <p className="text-neutral-500 text-sm">{user.email}</p>
+            </div>
+          </div>
         </div>
 
         {/* Tabs */}

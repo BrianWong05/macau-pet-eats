@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 
 export function ProfileHeader() {
   const { t } = useTranslation()
-  const { user, signOut } = useAuth()
+  const { user, username, signOut } = useAuth()
   const navigate = useNavigate()
 
   return (
@@ -21,7 +21,7 @@ export function ProfileHeader() {
         </button>
         <div>
           <h1 className="text-lg font-semibold text-neutral-900">
-            {t('profile.title')}
+            {username || t('profile.title')}
           </h1>
           {user?.email && (
             <p className="text-sm text-neutral-500 hidden sm:block">

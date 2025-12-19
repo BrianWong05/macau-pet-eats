@@ -423,7 +423,13 @@
       "pets": "My Pets",
       "favorites": "Saved Places"
     },
-    "loginRequired": "Please log in to view your profile"
+    "loginRequired": "Please log in to view your profile",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "setUsername": "Set Username",
+    "editUsername": "Edit Username",
+    "usernameRequired": "Username is required",
+    "usernameUpdated": "Username updated successfully"
   }
 }
 

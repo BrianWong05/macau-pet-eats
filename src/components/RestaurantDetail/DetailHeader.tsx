@@ -11,7 +11,7 @@ interface DetailHeaderProps {
 
 export function DetailHeader({ isScrolled, onLoginClick }: DetailHeaderProps) {
   const { t } = useTranslation()
-  const { user, signOut } = useAuth()
+  const { user, username, signOut } = useAuth()
   const navigate = useNavigate()
 
   return (
@@ -34,7 +34,7 @@ export function DetailHeader({ isScrolled, onLoginClick }: DetailHeaderProps) {
           {user ? (
             <div className="flex items-center gap-2 sm:gap-4">
               <span className={`text-sm font-medium hidden sm:block ${isScrolled ? 'text-neutral-700' : 'text-white drop-shadow-md'}`}>
-                {user.email}
+                {username || user.email}
               </span>
               <Link
                 to="/profile"

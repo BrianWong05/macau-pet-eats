@@ -433,7 +433,13 @@
     "tabs": {
       "pets": "Os Meus Animais",
       "favorites": "Locais Guardados"
-    }
+    },
+    "username": "Nome de Utilizador",
+    "usernamePlaceholder": "Introduza o seu nome de utilizador",
+    "setUsername": "Definir Nome",
+    "editUsername": "Editar Nome",
+    "usernameRequired": "O nome de utilizador é obrigatório",
+    "usernameUpdated": "Nome de utilizador atualizado"
   }
 }
 

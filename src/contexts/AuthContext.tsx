@@ -8,19 +8,28 @@ interface AuthContextType {
   session: Session | null
   isAdmin: boolean
   isLoading: boolean
+  username: string | null
   signInWithGoogle: () => Promise<{ error: AuthError | null }>
   signInWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signUpWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
+  updateUsername: (newUsername: string) => Promise<{ error: Error | null }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+// Helper to extract username from user metadata
+function getUsernameFromUser(user: User | null): string | null {
+  if (!user) return null
+  return user.user_metadata?.username || user.user_metadata?.full_name || null
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [username, setUsername] = useState<string | null>(null)
 
   useEffect(() => {
     // Get initial session
@@ -33,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('Auth: Session retrieved', session?.user?.id)
         setSession(session)
         setUser(session?.user ?? null)
+        setUsername(getUsernameFromUser(session?.user ?? null))
         
         // Check JWT for admin status (Zero DB lookup)
         if (session?.user?.app_metadata?.is_admin) {
@@ -58,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.log('Auth: State change event', _event)
           setSession(session)
           setUser(session?.user ?? null)
+          setUsername(getUsernameFromUser(session?.user ?? null))
           
           if (session?.user?.app_metadata?.is_admin) {
             console.log('Auth: Admin detected via JWT (Update)')
@@ -108,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null)
     setUser(null)
     setIsAdmin(false)
+    setUsername(null)
     
     // 2. Attempt network sign out in background (don't await)
     try {
@@ -121,6 +133,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const updateUsername = async (newUsername: string): Promise<{ error: Error | null }> => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        data: { username: newUsername }
+      })
+      
+      if (error) throw error
+      
+      // Update local state
+      if (data.user) {
+        setUser(data.user)
+        setUsername(newUsername)
+      }
+      
+      return { error: null }
+    } catch (err) {
+      console.error('Auth: Update username error:', err)
+      return { error: err instanceof Error ? err : new Error('Failed to update username') }
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -128,10 +161,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         session,
         isAdmin,
         isLoading,
+        username,
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,
         signOut,
+        updateUsername,
       }}
     >
       {children}
@@ -146,3 +181,4 @@ export function useAuth() {
   }
   return context
 }
+

@@ -475,7 +475,13 @@
     "tabs": {
       "pets": "我的寵物",
       "favorites": "已收藏餐廳"
-    }
+    },
+    "username": "用戶名稱",
+    "usernamePlaceholder": "輸入您的用戶名稱",
+    "setUsername": "設定用戶名稱",
+    "editUsername": "編輯用戶名稱",
+    "usernameRequired": "請輸入用戶名稱",
+    "usernameUpdated": "用戶名稱已更新"
   }
 }
 
