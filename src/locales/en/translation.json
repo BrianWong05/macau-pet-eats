@@ -17,7 +17,10 @@
     "uploading": "Uploading...",
     "clickToUpload": "Click to upload",
     "uploadImageOrPdf": "Upload image or PDF",
-    "uploadError": "Upload failed"
+    "uploadError": "Upload failed",
+    "save": "Save",
+    "delete": "Delete",
+    "view": "View"
   },
   "nav": {
     "home": "Home",
@@ -293,6 +296,7 @@
       "empty": "No reports found",
       "fieldLabel": "Field",
       "suggestedValue": "Suggested Value",
+      "images": "Images",
       "approve": "Approve",
       "reject": "Reject",
       "check": "Check",
@@ -302,6 +306,10 @@
       "rejectError": "Failed to reject report",
       "checkSuccess": "Report marked as reviewed",
       "checkError": "Failed to mark report as reviewed",
+      "edit": "Edit",
+      "editTitle": "Edit Report",
+      "editSuccess": "Report updated",
+      "editError": "Failed to update report",
       "status": {
         "pending": "Pending",
         "approved": "Approved",

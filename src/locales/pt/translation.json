@@ -17,7 +17,10 @@
     "uploading": "A carregar...",
     "clickToUpload": "Clique para carregar",
     "uploadImageOrPdf": "Carregar imagem ou PDF",
-    "uploadError": "Falha no carregamento"
+    "uploadError": "Falha no carregamento",
+    "save": "Guardar",
+    "delete": "Apagar",
+    "view": "Ver"
   },
   "nav": {
     "home": "Início",
@@ -293,6 +296,7 @@
       "empty": "Nenhum relatório encontrado",
       "fieldLabel": "Campo",
       "suggestedValue": "Valor Sugerido",
+      "images": "Imagens",
       "approve": "Aprovar",
       "reject": "Rejeitar",
       "check": "Verificar",
@@ -302,6 +306,10 @@
       "rejectError": "Falha ao rejeitar",
       "checkSuccess": "Relatório marcado como revisto",
       "checkError": "Falha ao marcar como revisto",
+      "edit": "Editar",
+      "editTitle": "Editar Relatório",
+      "editSuccess": "Relatório atualizado",
+      "editError": "Falha ao atualizar relatório",
       "status": {
         "pending": "Pendente",
         "approved": "Aprovado",

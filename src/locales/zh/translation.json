@@ -17,7 +17,10 @@
     "uploading": "上傳中...",
     "clickToUpload": "點擊上傳",
     "uploadImageOrPdf": "上傳圖片或 PDF",
-    "uploadError": "上傳失敗"
+    "uploadError": "上傳失敗",
+    "save": "保存",
+    "delete": "刪除",
+    "view": "查看"
   },
   "nav": {
     "home": "首頁",
@@ -344,6 +347,7 @@
       "empty": "沒有回報記錄",
       "fieldLabel": "欄位",
       "suggestedValue": "建議值",
+      "images": "圖片",
       "approve": "批准",
       "reject": "拒絕",
       "check": "確認",
@@ -353,6 +357,10 @@
       "rejectError": "拒絕失敗",
       "checkSuccess": "回報已確認",
       "checkError": "確認失敗",
+      "edit": "編輯",
+      "editTitle": "編輯回報",
+      "editSuccess": "回報已更新",
+      "editError": "更新失敗",
       "status": {
         "pending": "待處理",
         "approved": "已批准",
