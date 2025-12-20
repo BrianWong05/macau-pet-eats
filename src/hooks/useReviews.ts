@@ -40,7 +40,16 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
         .order('created_at', { ascending: false })
 
       if (fetchError) throw fetchError
-      setReviews((reviewsData as Review[]) || [])
+      
+      const allReviews = (reviewsData as Review[]) || []
+      
+      // Filter reviews: show visible ones OR my own (even if hidden)
+      // Note: Admin page should fetch everything separately, this hook acts for public/user view
+      const visibleReviews = allReviews.filter(review => 
+        !review.is_hidden || (user && review.user_id === user.id)
+      )
+      
+      setReviews(visibleReviews)
 
       // Fetch rating summary
       const { data: ratingData } = await supabase
@@ -54,9 +63,8 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
       const message = err instanceof Error ? err.message : 'Failed to load reviews'
       setError(message)
     } finally {
-      setIsLoading(false)
     }
-  }, [restaurantId])
+  }, [restaurantId, user])
 
   useEffect(() => {
     fetchReviews()

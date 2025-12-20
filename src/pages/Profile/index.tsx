@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { ReviewFormModal } from '@/components/ReviewFormModal'
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star, Edit2 } from 'lucide-react'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star, Edit2, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -332,6 +332,24 @@ export function Profile() {
   const handleEditReview = (review: UserReview) => {
     setEditingReview(review)
     setShowReviewModal(true)
+  }
+
+  const handleDeleteReview = async (reviewId: string) => {
+    if (!confirm(t('common:confirmDelete'))) return
+
+    try {
+      const { error } = await supabase
+        .from('reviews')
+        .delete()
+        .eq('id', reviewId)
+      
+      if (error) throw error
+      
+      setReviews(prev => prev.filter(r => r.id !== reviewId))
+      toast.success(t('common:deleteSuccess'))
+    } catch {
+      toast.error(t('common:error'))
+    }
   }
 
   const handleReviewUpdated = () => {
@@ -796,6 +814,16 @@ export function Profile() {
                         title={t('common:edit')}
                       >
                         <Edit2 size={18} />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleDeleteReview(review.id)
+                        }}
+                        className="p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        title={t('common:delete')}
+                      >
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </Link>

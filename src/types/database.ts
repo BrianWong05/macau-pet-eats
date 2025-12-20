@@ -152,6 +152,7 @@ export interface Review {
   image_url: string | null
   images: string[] | null
   admin_comment: string | null
+  is_hidden?: boolean
   created_at: string
   updated_at: string
   // Joined data (optional, populated when fetching with user info)
