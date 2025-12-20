@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Trash2, Edit2 } from 'lucide-react'
 import { StarRating } from '@/components/StarRating'
 import type { Review } from '@/types/database'
+import { UserAvatar } from '@/components/UserAvatar'
 
 interface ReviewCardProps {
   review: Review
@@ -25,11 +26,7 @@ export function ReviewCard({ review, isOwner = false, onEdit, onDelete }: Review
     <div className="bg-white rounded-xl border border-neutral-200 p-4 space-y-3">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-            <span className="text-primary-600 font-semibold text-sm">
-              {review.users?.name?.charAt(0).toUpperCase() || 'U'}
-            </span>
-          </div>
+          <UserAvatar user={review.users} size="md" />
           <div>
             <p className="font-medium text-neutral-900">
               {review.users?.name || t('restaurant:reviews.anonymous')}

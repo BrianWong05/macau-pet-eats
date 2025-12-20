@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MessageSquare, Star, User, Trash2, Image as ImageIcon, Camera, X, Edit2, AlertTriangle } from 'lucide-react'
+import { MessageSquare, Star, Trash2, Image as ImageIcon, Camera, X, Edit2, AlertTriangle } from 'lucide-react'
 import { useReviews } from '@/hooks/useReviews'
+import { UserAvatar } from '@/components/UserAvatar'
 import { ReviewFormModal } from '@/components/ReviewFormModal'
 import type { Review } from '@/types/database'
 import { useAuth } from '@/contexts/AuthContext'
@@ -262,21 +263,7 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
             <div key={review.id} className="p-4 bg-neutral-50 rounded-xl">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-3">
-                  {review.users?.avatar_url ? (
-                    <img 
-                      src={review.users.avatar_url} 
-                      alt={review.users.name || 'User'} 
-                      className="w-10 h-10 rounded-full object-cover border border-neutral-200"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center text-neutral-500">
-                      {review.users?.name ? (
-                        <span className="font-semibold text-sm">{review.users.name.charAt(0).toUpperCase()}</span>
-                      ) : (
-                        <User className="w-5 h-5" />
-                      )}
-                    </div>
-                  )}
+                  <UserAvatar user={review.users} />
                   <div>
                     <div className="font-medium text-neutral-900 text-sm mb-0.5">
                       {review.users?.name || t('common:user')}
