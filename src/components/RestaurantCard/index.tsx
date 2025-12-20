@@ -9,9 +9,10 @@ import { useCuisineTypes } from '@/contexts/CuisineTypesContext'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
+  onAuthRequired?: () => void
 }
 
-export function RestaurantCard({ restaurant }: RestaurantCardProps) {
+export function RestaurantCard({ restaurant, onAuthRequired }: RestaurantCardProps) {
   const { i18n } = useTranslation()
   const lang = i18n.language as 'zh' | 'en' | 'pt'
   const { getLocalizedName } = useCuisineTypes()
@@ -133,6 +134,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         <FavoriteButton 
           restaurantId={id} 
           size="sm"
+          onAuthRequired={onAuthRequired}
         />
       </div>
     </div>

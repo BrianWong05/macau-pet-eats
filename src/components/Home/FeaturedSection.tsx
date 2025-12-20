@@ -9,9 +9,10 @@ interface FeaturedSectionProps {
   featuredRestaurants: Restaurant[]
   isLoading: boolean
   error: string | null
+  onAuthRequired?: () => void
 }
 
-export function FeaturedSection({ featuredRestaurants, isLoading, error }: FeaturedSectionProps) {
+export function FeaturedSection({ featuredRestaurants, isLoading, error, onAuthRequired }: FeaturedSectionProps) {
   const { t } = useTranslation(['home', 'common'])
 
   return (
@@ -51,7 +52,10 @@ export function FeaturedSection({ featuredRestaurants, isLoading, error }: Featu
                     className="animate-fade-in"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <RestaurantCard restaurant={restaurant} />
+                    <RestaurantCard 
+                      restaurant={restaurant} 
+                      onAuthRequired={onAuthRequired}
+                    />
                   </div>
                 ))}
               </div>

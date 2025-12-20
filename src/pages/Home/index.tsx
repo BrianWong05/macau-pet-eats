@@ -33,6 +33,7 @@ export function Home() {
         featuredRestaurants={featuredRestaurants}
         isLoading={isLoading}
         error={error}
+        onAuthRequired={() => setIsAuthModalOpen(true)}
       />
 
       <CtaSection />
