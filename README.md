@@ -1,97 +1,121 @@
-# 🐾 Macau Pet Eats
+# Macau Pet-Friendly Eats
 
-A modern, mobile-friendly web application to discover and share pet-friendly restaurants in Macau.
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
 
-![Project Banner](https://images.unsplash.com/photo-1544568100-847a948585b9?w=1200&q=80)
+[中文](README_zh.md) | English
 
-## ✨ Features
+A community-driven directory for pet-friendly dining in Macau.
 
-- **🔎 Explore:** Discover pet-friendly restaurants with detailed info on pet policies (patio only, indoors, etc.).
-- **🌐 Multilingual:** Full support for English, Traditional Chinese (中文), and Portuguese (Português).
-- **📝 Reviews:** Users can leave ratings, comments, and upload photos of their experience.
-- **📸 Gallery:** Browse photos of restaurants, food, and furry friends.
-- **✍️ Community Submissions:** Users can submit new pet-friendly spots for review.
-- **🛡️ Admin Panel:** Dedicated dashboard for administrators to manage restaurants, review submissions, and moderate content.
-- **📱 Responsive Design:** Optimized for both desktop and mobile devices with a sticky glassmorphism navigation.
+## About the Project
 
-## 🛠️ Tech Stack
+Macau Pet-Friendly Eats solves the problem of finding suitable dining spots for pet owners in Macau. It provides a comprehensive, community-curated list of restaurants and cafes that welcome pets, detailing their specific pet policies and amenities.
 
-- **Framework:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
-- **Routing:** [React Router](https://reactrouter.com/) (HashRouter)
-- **Internationalization:** [i18next](https://www.i18next.com/)
-- **Backend & Auth:** [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage)
-- **Maps:** Google Maps Embed
+### Key Features
 
-## 🚀 Getting Started
+*   **Interactive Map**: Easily locate pet-friendly spots near you or in specific districts.
+*   **User Auth**: Secure sign-up and login functionality powered by Supabase.
+*   **Favorites**: Save your top dining choices for quick access.
+*   **Pet Profiles**: Create profiles for your furry friends.
+*   **Admin Dashboard**: comprehensive tools for managing restaurant listings and user content.
+*   **Multi-language Support**: Fully localized in English, Chinese, and Portuguese (i18next).
+
+## Screenshots
+
+| Home Page | Map View |
+|:---:|:---:|
+| ![Home Page Placeholder](https://via.placeholder.com/600x400?text=Home+Page) | ![Map View Placeholder](https://via.placeholder.com/600x400?text=Map+View) |
+
+## Tech Stack
+
+### Frontend
+*   **React (Vite)**: Fast, modern UI development.
+*   **TypeScript**: Type-safe code for better maintainability.
+*   **Tailwind CSS**: Utility-first styling for rapid design.
+
+### Backend/DB
+*   **Supabase**:
+    *   **Auth**: Secure user authentication.
+    *   **Postgres**: Robust relational database.
+    *   **Storage**: For storing restaurant images and user uploads.
+    *   **Edge Functions**: Serverless logic (if applicable).
+
+### Internationalization
+*   **i18next**: Implementation with `i18next-http-backend` for lazy loading namespaced translations (`/public/locales`).
+
+### State/Data
+*   **React Hooks**: Custom hooks for local state management and data fetching logic.
+
+## Getting Started
+
+Follow these steps to get a local copy up and running.
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- npm or yarn
-- A Supabase project
+*   **Node.js**: v18.0.0 or higher recommended.
+*   **Supabase CLI**: (Optional) For local database development.
 
 ### Installation
 
-1.  Clone the repository:
-    ```bash
+1.  Clone the repo
+    ```sh
     git clone https://github.com/BrianWong05/macau-pet-eats.git
-    cd macau-pet-eats
     ```
-
-2.  Install dependencies:
-    ```bash
+2.  Install NPM packages
+    ```sh
     npm install
     ```
 
-3.  Set up environment variables:
-    Create a `.env` file in the root directory (or use the existing one if committed):
+### Environment Setup
+
+1.  Create a `.env.local` file in the root directory.
+2.  Add the following variables (you can find these in your Supabase project settings):
+
     ```env
-    VITE_SUPABASE_URL=your_supabase_project_url
+    VITE_SUPABASE_URL=your_supbase_project_url
     VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
     ```
 
-4.  Start the development server:
-    ```bash
-    npm run dev
-    ```
+### Running Locally
 
-## 🚢 Deployment
+Start the development server:
 
-This project is configured for deployment on **GitHub Pages**.
-
-### Deploying Updates
-
-To build and deploy the latest changes to the `gh-pages` branch:
-
-```bash
-npm run deploy
+```sh
+npm run dev
 ```
 
-The site will be live at: `https://BrianWong05.github.io/macau-pet-eats/`
+## Project Structure
 
-### Configuration Notes
+Here is a high-level overview of the project structure:
 
--   **Base Path:** The project is served from a subdirectory (`/macau-pet-eats/`). `vite.config.ts` handles this conditionally (Root `/` for dev, `/macau-pet-eats/` for prod).
--   **Routing:** Uses `HashRouter` to ensure compatibility with GitHub Pages static hosting.
--   **Supabase Redirects:**
-    -   Production: `https://BrianWong05.github.io/macau-pet-eats/**`
-    -   Localhost: `http://localhost:5173/**` (Make sure to add these to your Supabase Auth Redirect URLs).
+```text
+macau-pet-eats/
+├── public/
+│   └── locales/       # i18n translation JSON files
+├── src/
+│   ├── components/    # Reusable UI components
+│   ├── contexts/      # React contexts (Auth, Theme, etc.)
+│   ├── hooks/         # Custom React hooks
+│   ├── pages/         # Page components (routes)
+│   ├── services/      # API and Supabase service calls
+│   └── types/         # TypeScript type definitions
+├── .env.example       # Example environment variables
+└── package.json       # Project dependencies and scripts
+```
 
-## 🗄️ Database Schema
+## Database Setup
 
-The project uses Supabase (PostgreSQL). Key tables include:
+This project uses **Supabase** as the backend.
 
--   `restaurants`: Stores restaurant details (multilingual names/desc, location, pet policy, gallery images).
--   `reviews`: User reviews and photos linked to restaurants.
--   `profiles`: User profiles (synced with Auth) and admin status.
+1.  Create a new project on [Supabase](https://supabase.com).
+2.  execute the schema setup scripts in the SQL Editor to create the necessary tables (`restaurants`, `profiles`, `reviews`, etc.).
+3.  *Note: A `schema.sql` file (if available) can be found in the root or `supabase/` folder to automate this step.*
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-## 📄 License
-
-This project is licensed under the MIT License.
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
