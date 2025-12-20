@@ -336,76 +336,54 @@ export function Profile() {
     <div className="min-h-screen bg-neutral-50">
       <ProfileHeader />
       
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Profile Info */}
-        <div className="mb-8 bg-white rounded-xl border border-neutral-200 p-6">
-          <div className="flex items-center gap-4 mb-4">
+      {/* Profile Hero with Gradient */}
+      <div className="relative mb-6">
+        {/* Gradient Background */}
+        <div className="h-24 sm:h-32 bg-gradient-to-br from-primary-400 via-primary-500 to-amber-400" />
+        
+        {/* Profile Card */}
+        <div className="mx-4 -mt-12 sm:-mt-16 bg-white rounded-2xl shadow-lg border border-neutral-100 p-4 sm:p-6">
+          <div className="flex flex-col items-center text-center sm:flex-row sm:text-left sm:items-start gap-3 sm:gap-4">
             <AvatarUpload />
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <UsernameEditor />
-              <p className="text-neutral-500 text-sm">{user.email}</p>
+              <p className="text-neutral-500 text-sm truncate">{user.email}</p>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setActiveTab('pets')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
-              activeTab === 'pets'
-                ? 'bg-primary-500 text-white'
-                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
-            }`}
-          >
-            <PawPrint size={18} />
-            {t('profile:tabs.pets')}
-          </button>
-          <button
-            onClick={() => setActiveTab('favorites')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
-              activeTab === 'favorites'
-                ? 'bg-primary-500 text-white'
-                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
-            }`}
-          >
-            <Heart size={18} />
-            {t('profile:tabs.favorites')}
-          </button>
-          <button
-            onClick={() => setActiveTab('contributions')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
-              activeTab === 'contributions'
-                ? 'bg-primary-500 text-white'
-                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
-            }`}
-          >
-            <Store size={18} />
-            {t('profile:tabs.contributions')}
-          </button>
-          <button
-            onClick={() => setActiveTab('feedback')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
-              activeTab === 'feedback'
-                ? 'bg-primary-500 text-white'
-                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
-            }`}
-          >
-            <MessageCircle size={18} />
-            {t('profile:tabs.feedback')}
-          </button>
-          <button
-            onClick={() => setActiveTab('reports')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
-              activeTab === 'reports'
-                ? 'bg-primary-500 text-white'
-                : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
-            }`}
-          >
-            <AlertTriangle size={18} />
-            {t('profile:tabs.reports')}
-          </button>
+      {/* Mobile-Optimized Tabs */}
+      <div className="px-4 mb-6">
+        <div className="flex bg-neutral-100 rounded-2xl p-1 overflow-x-auto scrollbar-hide">
+          {[
+            { key: 'pets', icon: PawPrint, label: t('profile:tabs.pets') },
+            { key: 'favorites', icon: Heart, label: t('profile:tabs.favorites') },
+            { key: 'contributions', icon: Store, label: t('profile:tabs.contributions') },
+            { key: 'feedback', icon: MessageCircle, label: t('profile:tabs.feedback') },
+            { key: 'reports', icon: AlertTriangle, label: t('profile:tabs.reports') },
+          ].map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key as TabType)}
+              className={`
+                flex-1 min-w-0 flex flex-col items-center gap-1 px-2 py-2.5 sm:px-4 sm:py-3
+                text-xs sm:text-sm font-medium rounded-xl transition-all
+                ${activeTab === tab.key
+                  ? 'bg-white text-primary-600 shadow-sm'
+                  : 'text-neutral-500 hover:text-neutral-700'
+                }
+              `}
+            >
+              <tab.icon size={18} />
+              <span className="truncate w-full text-center leading-tight">{tab.label}</span>
+            </button>
+          ))}
         </div>
+      </div>
+
+      {/* Content Area */}
+      <div className="px-4">
 
         {/* Content */}
         {activeTab === 'pets' && (
