@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ReviewFormModal } from '@/components/ReviewFormModal'
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star, Edit2, Trash2 } from 'lucide-react'
+import { PawPrint, Heart, Plus, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star, Edit2, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase'
 import { getUserPets, deletePet, createPet, updatePet, PET_TYPES, PET_SIZES } from '@/services/userPets'
 import { PetProfileCard } from '@/components/PetProfileCard'
 import { RestaurantCard } from '@/components/RestaurantCard'
-import { AuthModal } from '@/components/AuthModal'
+
 import { ProfileHeader } from '@/components/Profile/ProfileHeader'
 import type { UserPet, PetSize, Restaurant, AppFeedback, RestaurantReport } from '@/types/database'
 
@@ -172,7 +172,14 @@ function AvatarUpload() {
 
 export function Profile() {
   const { t } = useTranslation(['profile', 'common', 'submit', 'feedback', 'auth'])
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      navigate('/')
+    }
+  }, [user, isLoading, navigate])
   const [activeTab, setActiveTab] = useState<TabType>('pets')
   const { favorites, isLoading: favoritesLoading } = useFavorites()
   
@@ -181,7 +188,6 @@ export function Profile() {
   const [petsLoading, setPetsLoading] = useState(true)
   const [showPetModal, setShowPetModal] = useState(false)
   const [editingPet, setEditingPet] = useState<UserPet | null>(null)
-  const [showAuthModal, setShowAuthModal] = useState(false)
 
   // Contributions state
   const [contributions, setContributions] = useState<Restaurant[]>([])
@@ -392,30 +398,15 @@ export function Profile() {
     setShowPetModal(true)
   }
 
-  // If not logged in, show login prompt
-  if (!user) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
-        <div className="text-center space-y-4">
-          <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto">
-            <LogIn size={40} className="text-primary-500" />
-          </div>
-          <h1 className="text-2xl font-bold text-neutral-900">{t('profile:loginRequired')}</h1>
-          <button
-            onClick={() => setShowAuthModal(true)}
-            className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-xl transition-colors"
-          >
-            {t('auth:loginButton')}
-          </button>
-        </div>
-        
-        <AuthModal 
-          isOpen={showAuthModal} 
-          onClose={() => setShowAuthModal(false)} 
-        />
+        <div className="text-neutral-500">{t('common:loading')}</div>
       </div>
     )
   }
+
+  if (!user) return null
 
   return (
     <div className="min-h-screen bg-neutral-50">
