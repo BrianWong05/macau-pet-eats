@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MessageSquare, Star, User, Trash2, Image as ImageIcon, Camera, X } from 'lucide-react'
 import { useReviews } from '@/hooks/useReviews'
@@ -23,8 +23,8 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [reviewError, setReviewError] = useState<string | null>(null)
   
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFiles, setImageFiles] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
 
   const handleWriteReview = () => {
     if (!user) {
@@ -35,33 +35,47 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) { // 2MB limit
-        setReviewError(t('submit:form.uploadHint') || 'Max 2MB')
+    const files = e.target.files
+    if (files) {
+      const newFiles = Array.from(files)
+      
+      // Check size (2MB limit per file)
+      const oversized = newFiles.some(f => f.size > 2 * 1024 * 1024)
+      if (oversized) {
+        setReviewError(t('submit:form.uploadHint') || 'Max 2MB per file')
         return
       }
-      setImageFile(file)
       
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+      setImageFiles(prev => [...prev, ...newFiles])
+      
+      // Generate previews
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file))
+      setImagePreviews(prev => [...prev, ...newPreviews])
     }
   }
 
-  const removeImage = () => {
-    setImageFile(null)
-    setImagePreview(null)
+  const removeImage = (index: number) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index))
+    setImagePreviews(prev => {
+      const url = prev[index]
+      URL.revokeObjectURL(url)
+      return prev.filter((_, i) => i !== index)
+    })
   }
+
+  // Cleanup previews
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach(url => URL.revokeObjectURL(url))
+    }
+  }, [imagePreviews])
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setReviewError(null)
 
-    const { error } = await submitReview(rating, comment, imageFile)
+    const { error } = await submitReview(rating, comment, imageFiles)
     
     if (error) {
       setReviewError(error)
@@ -69,8 +83,8 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
       setShowReviewForm(false)
       setComment('')
       setRating(5)
-      setImageFile(null)
-      setImagePreview(null)
+      setImageFiles([])
+      setImagePreviews([])
     }
     setIsSubmitting(false)
   }
@@ -140,47 +154,54 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
               {t('restaurant:reviews.addPhoto')}
             </label>
             
-            {!imagePreview ? (
-              <div className="flex gap-2">
-                <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
-                  <ImageIcon size={18} />
-                  {t('restaurant:reviews.uploadPhoto')}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
-                <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
-                  <Camera size={18} />
-                  {t('restaurant:reviews.takePhoto')}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-            ) : (
-              <div className="relative inline-block">
-                <img 
-                  src={imagePreview} 
-                  alt="Preview" 
-                  className="h-32 w-auto rounded-lg object-cover border border-neutral-200"
-                />
-                <button
-                  type="button"
-                  onClick={removeImage}
-                  className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md text-neutral-500 hover:text-red-500 transition-colors"
-                  aria-label={t('restaurant:reviews.removePhoto')}
-                >
-                  <X size={16} />
-                </button>
+            {/* Image Previews */}
+            {imagePreviews.length > 0 && (
+              <div className="flex gap-2 flex-wrap mt-2">
+                {imagePreviews.map((preview, idx) => (
+                  <div key={idx} className="relative inline-block">
+                    <img 
+                      src={preview} 
+                      alt={`Preview ${idx + 1}`} 
+                      className="h-24 w-24 rounded-lg object-cover border border-neutral-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(idx)}
+                      className="absolute -top-2 -right-2 p-1 bg-white rounded-full shadow-md text-neutral-500 hover:text-red-500 transition-colors"
+                      aria-label="Remove photo"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
+            
+            <div className="flex gap-2 mt-2">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
+                <ImageIcon size={18} />
+                {t('restaurant:reviews.uploadPhoto')}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-300 rounded-xl text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors">
+                <Camera size={18} />
+                {t('restaurant:reviews.takePhoto')}
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  multiple
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
             <p className="mt-1 text-xs text-neutral-400">
               {t('restaurant:reviews.photoHint')}
             </p>
@@ -268,7 +289,19 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
                 )}
               </div>
               <p className="text-neutral-700">{review.comment}</p>
-              {review.image_url && (
+              {/* Review Images */}
+              {(review.images && review.images.length > 0) ? (
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                  {review.images.map((img, idx) => (
+                    <img 
+                      key={idx}
+                      src={img} 
+                      alt={`Review attachment ${idx + 1}`} 
+                      className="h-32 w-32 rounded-lg object-cover border border-neutral-200 flex-shrink-0"
+                    />
+                  ))}
+                </div>
+              ) : review.image_url && (
                 <div className="mt-3">
                   <img 
                     src={review.image_url} 

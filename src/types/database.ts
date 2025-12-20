@@ -150,6 +150,7 @@ export interface Review {
   rating: 1 | 2 | 3 | 4 | 5
   comment: string | null
   image_url: string | null
+  images: string[] | null
   created_at: string
   updated_at: string
   // Joined data (optional, populated when fetching with user info)

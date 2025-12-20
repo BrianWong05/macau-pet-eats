@@ -82,6 +82,7 @@
     "takePhoto": "Take Photo",
     "uploadPhoto": "Upload Photo",
     "removePhoto": "Remove Photo",
+    "changePhoto": "Change Photo",
     "photoHint": "Optional: Add a photo of your experience"
   }
 }

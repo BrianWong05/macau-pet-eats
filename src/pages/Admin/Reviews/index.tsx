@@ -120,7 +120,7 @@ export function AdminReviews() {
     const { error } = await supabase
       .from('reviews')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ is_hidden: !currentlyHidden } as any)
+      .update({ is_hidden: !currentlyHidden } as never)
       .eq('id', id)
 
     if (!error) {

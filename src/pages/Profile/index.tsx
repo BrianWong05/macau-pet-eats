@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star } from 'lucide-react'
+import { ReviewFormModal } from '@/components/ReviewFormModal'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star, Edit2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -203,10 +203,13 @@ export function Profile() {
     comment: string | null
     created_at: string
     image_url: string | null
+    images: string[] | null
     restaurants: { name: string; name_zh: string | null } | null
   }
   const [reviews, setReviews] = useState<UserReview[]>([])
   const [reviewsLoading, setReviewsLoading] = useState(true)
+  const [editingReview, setEditingReview] = useState<UserReview | null>(null)
+  const [showReviewModal, setShowReviewModal] = useState(false)
 
   // Fetch pets
   useEffect(() => {
@@ -313,7 +316,7 @@ export function Profile() {
       setReviewsLoading(true)
       const { data, error } = await supabase
         .from('reviews')
-        .select('id, restaurant_id, rating, comment, image_url, created_at, restaurants(name, name_zh)')
+        .select('id, restaurant_id, rating, comment, image_url, images, created_at, restaurants(name, name_zh)')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
       
@@ -325,6 +328,30 @@ export function Profile() {
     
     fetchUserReviews()
   }, [user])
+
+  const handleEditReview = (review: UserReview) => {
+    setEditingReview(review)
+    setShowReviewModal(true)
+  }
+
+  const handleReviewUpdated = () => {
+    // Refresh reviews
+    const fetchUserReviews = async () => {
+      if (!user) return
+      setReviewsLoading(true)
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('id, restaurant_id, rating, comment, image_url, images, created_at, restaurants(name, name_zh)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      
+      if (!error && data) {
+        setReviews(data as UserReview[])
+      }
+      setReviewsLoading(false)
+    }
+    fetchUserReviews()
+  }
 
   // Handle pet deletion
   const handleDeletePet = async (petId: string) => {
@@ -737,7 +764,18 @@ export function Profile() {
                         {review.comment && (
                           <p className="text-sm text-neutral-600 line-clamp-2">{review.comment}</p>
                         )}
-                        {review.image_url && (
+                        {(review.images && review.images.length > 0) ? (
+                          <div className="mt-3 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                            {review.images.map((img, idx) => (
+                              <img 
+                                key={idx}
+                                src={img} 
+                                alt="Review photo" 
+                                className="h-20 w-20 object-cover rounded-lg border border-neutral-200 flex-shrink-0"
+                              />
+                            ))}
+                          </div>
+                        ) : review.image_url && (
                           <div className="mt-3">
                             <img 
                               src={review.image_url} 
@@ -747,12 +785,34 @@ export function Profile() {
                           </div>
                         )}
                       </div>
+                      
+                      {/* Actions */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          handleEditReview(review)
+                        }}
+                        className="p-2 text-neutral-400 hover:text-primary-500 hover:bg-primary-50 rounded-full transition-colors"
+                        title={t('common:edit')}
+                      >
+                        <Edit2 size={18} />
+                      </button>
                     </div>
                   </Link>
                 ))}
               </div>
             )}
           </div>
+        )}
+
+        {/* Review Edit Modal */}
+        {showReviewModal && editingReview && (
+          <ReviewFormModal
+            isOpen={showReviewModal}
+            onClose={() => setShowReviewModal(false)}
+            onSuccess={handleReviewUpdated}
+            review={editingReview}
+          />
         )}
 
         {/* Pet Modal */}

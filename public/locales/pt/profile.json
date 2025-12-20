@@ -75,6 +75,13 @@
     "loginToReview": "Inicie sessão para avaliar",
     "added": "Avaliação adicionada",
     "updated": "Avaliação atualizada",
-    "deleted": "Avaliação apagada"
+    "deleted": "Avaliação apagada",
+    "yourRating": "A sua classificação",
+    "addPhoto": "Adicionar Foto",
+    "takePhoto": "Tirar Foto",
+    "uploadPhoto": "Carregar Foto",
+    "removePhoto": "Remover Foto",
+    "changePhoto": "Alterar Foto",
+    "photoHint": "Opcional: Adicione uma foto da sua experiência"
   }
 }

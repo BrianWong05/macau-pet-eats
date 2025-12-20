@@ -14,8 +14,8 @@ interface UseReviewsReturn {
   error: string | null
   hasUserReviewed: boolean
   userReview: Review | null
-  submitReview: (rating: number, comment: string, imageFile?: File | null) => Promise<{ error: string | null }>
-  updateReview: (reviewId: string, rating: number, comment: string) => Promise<{ error: string | null }>
+  submitReview: (rating: number, comment: string, imageFiles?: File[] | null) => Promise<{ error: string | null }>
+  updateReview: (reviewId: string, rating: number, comment: string, imageFiles?: File[] | null, removedImages?: string[]) => Promise<{ error: string | null }>
   deleteReview: (reviewId: string) => Promise<{ error: string | null }>
   refetch: () => Promise<void>
 }
@@ -66,7 +66,7 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
   const userReview = user ? reviews.find(r => r.user_id === user.id) || null : null
   const hasUserReviewed = !!userReview
 
-  const submitReview = async (reviewRating: number, comment: string, imageFile?: File | null) => {
+  const submitReview = async (reviewRating: number, comment: string, imageFiles?: File[] | null) => {
     if (!user) {
       return { error: 'You must be logged in to submit a review' }
     }
@@ -76,24 +76,25 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
     }
 
     try {
-      let imageUrl = null
+      const uploadedImages: string[] = []
 
-      if (imageFile) {
-        const fileExt = imageFile.name.split('.').pop()
-        const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
-        const filePath = `${user.id}/${fileName}`
+      if (imageFiles && imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const fileExt = file.name.split('.').pop()
+          const fileName = `${user.id}/${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+          
+          const { error: uploadError } = await supabase.storage
+            .from('review-images')
+            .upload(fileName, file)
 
-        const { error: uploadError } = await supabase.storage
-          .from('review-images')
-          .upload(filePath, imageFile)
+          if (uploadError) throw uploadError
 
-        if (uploadError) throw uploadError
+          const { data: { publicUrl } } = supabase.storage
+            .from('review-images')
+            .getPublicUrl(fileName)
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('review-images')
-          .getPublicUrl(filePath)
-
-        imageUrl = publicUrl
+          uploadedImages.push(publicUrl)
+        }
       }
 
       const reviewData = {
@@ -101,7 +102,8 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
         user_id: user.id,
         rating: reviewRating,
         comment: comment || null,
-        image_url: imageUrl
+        images: uploadedImages,
+        image_url: uploadedImages.length > 0 ? uploadedImages[0] : null
       }
       
       const { error: insertError } = await supabase
@@ -118,7 +120,7 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
     }
   }
 
-  const updateReview = async (reviewId: string, reviewRating: number, comment: string) => {
+  const updateReview = async (reviewId: string, reviewRating: number, comment: string, imageFiles?: File[] | null, removedImages?: string[]) => {
     if (!user) {
       return { error: 'You must be logged in to update a review' }
     }
@@ -128,11 +130,56 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
     }
 
     try {
+      // Fetch current review
+      const { data: currentReviewData, error: fetchError } = await supabase
+        .from('reviews')
+        .select('images, image_url')
+        .eq('id', reviewId)
+        .eq('user_id', user.id)
+        .single()
+      
+      if (fetchError) throw fetchError
+      
+      const currentReview = currentReviewData as { images: string[] | null, image_url: string | null }
+
+      let currentImages: string[] = currentReview.images || []
+      // Migration fallback
+      if (currentImages.length === 0 && currentReview.image_url) {
+        currentImages = [currentReview.image_url]
+      }
+
+      // Remove deleted
+      if (removedImages && removedImages.length > 0) {
+        currentImages = currentImages.filter(img => !removedImages.includes(img))
+      }
+
+      // Upload new
+      if (imageFiles && imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const fileExt = file.name.split('.').pop()
+          const fileName = `${user.id}/${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+          
+          const { error: uploadError } = await supabase.storage
+            .from('review-images')
+            .upload(fileName, file)
+            
+          if (uploadError) throw uploadError
+          
+          const { data: { publicUrl } } = supabase.storage
+            .from('review-images')
+            .getPublicUrl(fileName)
+            
+          currentImages.push(publicUrl)
+        }
+      }
+
       const { error: updateError } = await supabase
         .from('reviews')
         .update({
           rating: reviewRating,
-          comment: comment || null
+          comment: comment || null,
+          images: currentImages,
+          image_url: currentImages.length > 0 ? currentImages[0] : null
         } as never)
         .eq('id', reviewId)
         .eq('user_id', user.id)
