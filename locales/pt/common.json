@@ -35,6 +35,7 @@
     "loadingRestaurants": "Falha ao carregar restaurantes",
     "missingSupabase": "Variáveis de ambiente Supabase em falta. Por favor defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no ficheiro .env."
   },
+  "loginRequired": "Por favor, faça login para continuar",
   "language": {
     "zh": "繁體中文",
     "en": "English",

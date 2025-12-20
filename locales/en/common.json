@@ -35,6 +35,7 @@
     "loadingRestaurants": "Failed to load restaurants",
     "missingSupabase": "Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
   },
+  "loginRequired": "Please log in to continue",
   "language": {
     "zh": "繁體中文",
     "en": "English",

@@ -35,6 +35,7 @@
     "loadingRestaurants": "載入餐廳資料失敗",
     "missingSupabase": "缺少 Supabase 環境變數。請在 .env 檔案中設定 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY。"
   },
+  "loginRequired": "請先登入以繼續",
   "language": {
     "zh": "繁體中文",
     "en": "English",
