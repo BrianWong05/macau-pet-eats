@@ -5,7 +5,8 @@
     "favorites": "Saved Places",
     "contributions": "My Contributions",
     "feedback": "My Feedback",
-    "reports": "My Reports"
+    "reports": "My Reports",
+    "reviews": "My Reviews"
   },
   "loginRequired": "Please log in to view your profile",
   "username": "Username",
@@ -81,6 +82,7 @@
     "takePhoto": "Take Photo",
     "uploadPhoto": "Upload Photo",
     "removePhoto": "Remove Photo",
+    "changePhoto": "Change Photo",
     "photoHint": "Optional: Add a photo of your experience"
   }
 }

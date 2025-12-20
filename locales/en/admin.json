@@ -135,5 +135,33 @@
       "reviewed": "Reviewed",
       "resolved": "Resolved"
     }
+  },
+  "reviews": {
+    "title": "User Reviews",
+    "subtitle": "Moderate user-submitted reviews",
+    "searchPlaceholder": "Search by comment, restaurant, or reviewer...",
+    "allRatings": "All Ratings",
+    "allStatus": "All Status",
+    "visibleOnly": "Visible Only",
+    "hiddenOnly": "Hidden Only",
+    "total": "Total",
+    "filtered": "Filtered",
+    "restaurant": "Restaurant",
+    "reviewer": "Reviewer",
+    "rating": "Rating",
+    "comment": "Comment",
+    "date": "Date",
+    "actions": "Actions",
+    "noReviews": "No reviews found",
+    "hide": "Hide review",
+    "unhide": "Show review",
+    "hidden": "Review hidden",
+    "unhidden": "Review restored",
+    "deleted": "Review deleted",
+    "deleteConfirmTitle": "Delete Review?",
+    "deleteConfirmMessage": "This action cannot be undone. The review will be permanently removed.",
+    "hideConfirmTitle": "Hide Review",
+    "hideConfirmMessage": "Please provide a reason for hiding this review (optional):",
+    "confirmHide": "Hide Review"
   }
 }

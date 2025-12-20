@@ -6,7 +6,8 @@
     "favorites": "Locais Guardados",
     "contributions": "As Minhas Contribuições",
     "feedback": "O Meu Feedback",
-    "reports": "Os Meus Relatórios"
+    "reports": "Os Meus Relatórios",
+    "reviews": "As Minhas Avaliações"
   },
   "username": "Nome de Utilizador",
   "usernamePlaceholder": "Introduza o seu nome de utilizador",
@@ -74,6 +75,13 @@
     "loginToReview": "Inicie sessão para avaliar",
     "added": "Avaliação adicionada",
     "updated": "Avaliação atualizada",
-    "deleted": "Avaliação apagada"
+    "deleted": "Avaliação apagada",
+    "yourRating": "A sua classificação",
+    "addPhoto": "Adicionar Foto",
+    "takePhoto": "Tirar Foto",
+    "uploadPhoto": "Carregar Foto",
+    "removePhoto": "Remover Foto",
+    "changePhoto": "Alterar Foto",
+    "photoHint": "Opcional: Adicione uma foto da sua experiência"
   }
 }

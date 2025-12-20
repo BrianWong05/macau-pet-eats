@@ -124,5 +124,33 @@
       "reviewed": "Revisto",
       "resolved": "Resolvido"
     }
+  },
+  "reviews": {
+    "title": "Avaliações de Utilizadores",
+    "subtitle": "Moderar avaliações enviadas pelos utilizadores",
+    "searchPlaceholder": "Pesquisar por comentário, restaurante ou avaliador...",
+    "allRatings": "Todas as Classificações",
+    "allStatus": "Todos os Estados",
+    "visibleOnly": "Apenas Visíveis",
+    "hiddenOnly": "Apenas Ocultas",
+    "total": "Total",
+    "filtered": "Filtrado",
+    "restaurant": "Restaurante",
+    "reviewer": "Avaliador",
+    "rating": "Classificação",
+    "comment": "Comentário",
+    "date": "Data",
+    "actions": "Ações",
+    "noReviews": "Nenhuma avaliação encontrada",
+    "hide": "Ocultar avaliação",
+    "unhide": "Mostrar avaliação",
+    "hidden": "Avaliação ocultada",
+    "unhidden": "Avaliação restaurada",
+    "deleted": "Avaliação eliminada",
+    "deleteConfirmTitle": "Eliminar Avaliação?",
+    "deleteConfirmMessage": "Esta ação não pode ser desfeita. A avaliação será permanentemente removida.",
+    "hideConfirmTitle": "Ocultar Avaliação",
+    "hideConfirmMessage": "Por favor, forneça um motivo para ocultar esta avaliação (opcional):",
+    "confirmHide": "Ocultar"
   }
 }

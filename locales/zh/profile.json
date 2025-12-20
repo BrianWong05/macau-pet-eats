@@ -6,7 +6,8 @@
     "favorites": "已收藏餐廳",
     "contributions": "我的投稿",
     "feedback": "我的意見",
-    "reports": "我的回報"
+    "reports": "我的回報",
+    "reviews": "我的評論"
   },
   "username": "用戶名稱",
   "usernamePlaceholder": "輸入您的用戶名稱",
@@ -74,6 +75,13 @@
     "loginToReview": "登入以撰寫評價",
     "added": "評價已新增",
     "updated": "評價已更新",
-    "deleted": "評價已刪除"
+    "deleted": "評價已刪除",
+    "yourRating": "您的評分",
+    "addPhoto": "新增照片",
+    "takePhoto": "拍照",
+    "uploadPhoto": "上傳照片",
+    "removePhoto": "移除照片",
+    "changePhoto": "更換照片",
+    "photoHint": "選填：分享您的體驗照片"
   }
 }

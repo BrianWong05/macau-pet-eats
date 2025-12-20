@@ -21,6 +21,9 @@
   "delete": "刪除",
   "view": "查看",
   "edit": "編輯",
+  "hidden": "隱藏",
+  "user": "用戶",
+  "confirmDelete": "確定要刪除這則評論嗎？",
   "adminComment": "管理員回覆",
   "nav": {
     "home": "首頁",

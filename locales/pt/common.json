@@ -21,6 +21,9 @@
   "delete": "Apagar",
   "view": "Ver",
   "edit": "Editar",
+  "hidden": "Oculto",
+  "user": "Utilizador",
+  "confirmDelete": "Tem a certeza que pretende apagar esta avaliação?",
   "adminComment": "Resposta do Admin",
   "nav": {
     "home": "Início",
