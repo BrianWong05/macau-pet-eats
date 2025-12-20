@@ -30,7 +30,7 @@ i18n
     
     backend: {
       // Load from public/locales/{lng}/{namespace}.json
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
     },
     
     interpolation: {
