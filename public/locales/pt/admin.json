@@ -148,6 +148,9 @@
     "unhidden": "Avaliação restaurada",
     "deleted": "Avaliação eliminada",
     "deleteConfirmTitle": "Eliminar Avaliação?",
-    "deleteConfirmMessage": "Esta ação não pode ser desfeita. A avaliação será permanentemente removida."
+    "deleteConfirmMessage": "Esta ação não pode ser desfeita. A avaliação será permanentemente removida.",
+    "hideConfirmTitle": "Ocultar Avaliação",
+    "hideConfirmMessage": "Por favor, forneça um motivo para ocultar esta avaliação (opcional):",
+    "confirmHide": "Ocultar"
   }
 }

@@ -151,6 +151,7 @@ export interface Review {
   comment: string | null
   image_url: string | null
   images: string[] | null
+  admin_comment: string | null
   created_at: string
   updated_at: string
   // Joined data (optional, populated when fetching with user info)

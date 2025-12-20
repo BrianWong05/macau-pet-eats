@@ -14,6 +14,7 @@ interface Review {
   comment: string | null
   image_url: string | null
   images: string[] | null
+  admin_comment: string | null
   is_hidden: boolean
   created_at: string
   restaurants: {
@@ -58,6 +59,10 @@ export function AdminReviews() {
   // Edit modal
   const [showEditModal, setShowEditModal] = useState(false)
   const [editingReview, setEditingReview] = useState<Review | null>(null)
+
+  // Hide Review Modal (for comment)
+  const [hideConfirmId, setHideConfirmId] = useState<string | null>(null)
+  const [adminComment, setAdminComment] = useState('')
 
   const fetchReviews = async () => {
     setIsLoading(true)
@@ -122,16 +127,34 @@ export function AdminReviews() {
   }, [filteredReviews, currentPage, itemsPerPage])
 
   // Toggle hide/show review
-  const handleToggleHidden = async (id: string, currentlyHidden: boolean) => {
+  const handleToggleHiddenRequest = (id: string, currentlyHidden: boolean) => {
+    if (!currentlyHidden) {
+      // If we are hiding it, show modal to ask for comment
+      setHideConfirmId(id)
+      setAdminComment('')
+    } else {
+      // If unhiding, just do it (maybe clear comment?)
+      executeToggleHidden(id, true, null)
+    }
+  }
+
+  const executeToggleHidden = async (id: string, currentlyHidden: boolean, comment: string | null) => {
+    const updateData: any = { is_hidden: !currentlyHidden }
+    if (comment !== null) {
+      updateData.admin_comment = comment
+    }
+
     const { error } = await supabase
       .from('reviews')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .update({ is_hidden: !currentlyHidden } as never)
+      .update(updateData as never)
       .eq('id', id)
 
     if (!error) {
       toast.success(currentlyHidden ? t('admin:reviews.unhidden') : t('admin:reviews.hidden'))
       fetchReviews()
+      setHideConfirmId(null)
+      setAdminComment('')
     } else {
       toast.error(t('common:error'))
     }
@@ -307,7 +330,7 @@ export function AdminReviews() {
 
                         {/* Toggle Hide */}
                         <button
-                          onClick={() => handleToggleHidden(review.id, review.is_hidden)}
+                          onClick={() => handleToggleHiddenRequest(review.id, review.is_hidden)}
                           className={`p-2 rounded-lg transition-colors ${
                             review.is_hidden
                               ? 'text-green-600 hover:bg-green-50'
@@ -372,6 +395,43 @@ export function AdminReviews() {
           </div>
         </div>
       )}
+      {/* Hide Confirmation/Comment Modal */}
+      {hideConfirmId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4">
+            <h3 className="text-lg font-semibold text-neutral-900">
+              {t('admin:reviews.hideConfirmTitle') || 'Hide Review'}
+            </h3>
+            <p className="text-neutral-600 text-sm">
+              {t('admin:reviews.hideConfirmMessage') || 'Please provide a reason for hiding this review (optional):'}
+            </p>
+            <textarea
+              value={adminComment}
+              onChange={(e) => setAdminComment(e.target.value)}
+              placeholder="Reason for hiding..."
+              className="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm h-24 resize-none"
+            />
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => {
+                  setHideConfirmId(null)
+                  setAdminComment('')
+                }}
+                className="px-4 py-2 text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors"
+              >
+                {t('common:cancel')}
+              </button>
+              <button
+                onClick={() => executeToggleHidden(hideConfirmId, false, adminComment)}
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors"
+              >
+                {t('admin:reviews.confirmHide') || 'Hide'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Edit Modal */}
       {showEditModal && editingReview && (
         <ReviewFormModal

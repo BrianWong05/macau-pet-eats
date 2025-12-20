@@ -159,6 +159,9 @@
     "unhidden": "Review restored",
     "deleted": "Review deleted",
     "deleteConfirmTitle": "Delete Review?",
-    "deleteConfirmMessage": "This action cannot be undone. The review will be permanently removed."
+    "deleteConfirmMessage": "This action cannot be undone. The review will be permanently removed.",
+    "hideConfirmTitle": "Hide Review",
+    "hideConfirmMessage": "Please provide a reason for hiding this review (optional):",
+    "confirmHide": "Hide Review"
   }
 }
