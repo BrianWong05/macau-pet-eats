@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { AuthModal } from '@/components/AuthModal'
 import { useRestaurants, type LocationArea } from '@/hooks/useRestaurants'
 import type { PetPolicy } from '@/types/database'
 import { SearchHeader } from '@/components/Search/SearchHeader'
@@ -12,6 +13,7 @@ export function Search() {
   // Get initial query from URL
   const initialQuery = searchParams.get('q') || ''
   
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [debouncedQuery, setDebouncedQuery] = useState(initialQuery)
   const [petPolicyFilter, setPetPolicyFilter] = useState<PetPolicy | null>(null)
@@ -98,6 +100,12 @@ export function Search() {
         handleClearSearch={handleClearSearch}
         clearFilters={clearFilters}
         hasActiveFilters={hasActiveFilters}
+        onAuthRequired={() => setIsAuthModalOpen(true)}
+      />
+
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
       />
     </div>
   )

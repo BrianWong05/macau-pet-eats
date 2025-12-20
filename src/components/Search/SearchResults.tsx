@@ -15,6 +15,7 @@ interface SearchResultsProps {
   handleClearSearch: () => void
   clearFilters: () => void
   hasActiveFilters: boolean | null | string
+  onAuthRequired?: () => void
 }
 
 export function SearchResults({
@@ -23,7 +24,8 @@ export function SearchResults({
   searchQuery,
   handleClearSearch,
   clearFilters,
-  hasActiveFilters
+  hasActiveFilters,
+  onAuthRequired
 }: SearchResultsProps) {
   const { t } = useTranslation(['search', 'common'])
   const [currentPage, setCurrentPage] = useState(1)
@@ -94,7 +96,10 @@ export function SearchResults({
                 className="animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <RestaurantCard restaurant={restaurant} />
+                <RestaurantCard 
+                  restaurant={restaurant} 
+                  onAuthRequired={onAuthRequired}
+                />
               </div>
             ))}
           </div>
