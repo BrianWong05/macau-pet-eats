@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Star, Trash2, EyeOff, Eye, Search, X } from 'lucide-react'
+import { Star, Trash2, EyeOff, Eye, Search, X, Edit2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { Pagination } from '@/components/Pagination'
+import { ReviewFormModal } from '@/components/ReviewFormModal'
 
 interface Review {
   id: string
@@ -12,6 +13,7 @@ interface Review {
   rating: number
   comment: string | null
   image_url: string | null
+  images: string[] | null
   is_hidden: boolean
   created_at: string
   restaurants: {
@@ -52,6 +54,10 @@ export function AdminReviews() {
 
   // Delete confirmation modal
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
+  
+  // Edit modal
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingReview, setEditingReview] = useState<Review | null>(null)
 
   const fetchReviews = async () => {
     setIsLoading(true)
@@ -146,6 +152,12 @@ export function AdminReviews() {
       console.error('Delete error:', error)
       toast.error(t('common:error'))
     }
+  }
+
+  // Handle edit
+  const handleEdit = (review: Review) => {
+    setEditingReview(review)
+    setShowEditModal(true)
   }
 
   const getRestaurantName = (review: Review) => {
@@ -284,6 +296,15 @@ export function AdminReviews() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-2">
+                        {/* Edit */}
+                        <button
+                          onClick={() => handleEdit(review)}
+                          className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                          title={t('common:edit')}
+                        >
+                          <Edit2 size={18} />
+                        </button>
+
                         {/* Toggle Hide */}
                         <button
                           onClick={() => handleToggleHidden(review.id, review.is_hidden)}
@@ -350,6 +371,18 @@ export function AdminReviews() {
             </div>
           </div>
         </div>
+      )}
+      {/* Edit Modal */}
+      {showEditModal && editingReview && (
+        <ReviewFormModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          onSuccess={() => {
+            fetchReviews()
+            setShowEditModal(false)
+          }}
+          review={editingReview}
+        />
       )}
     </div>
   )
