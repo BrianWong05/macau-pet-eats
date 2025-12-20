@@ -27,12 +27,12 @@ export function ReviewCard({ review, isOwner = false, onEdit, onDelete }: Review
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
             <span className="text-primary-600 font-semibold text-sm">
-              {review.user_email?.charAt(0).toUpperCase() || 'U'}
+              {review.users?.name?.charAt(0).toUpperCase() || 'U'}
             </span>
           </div>
           <div>
             <p className="font-medium text-neutral-900">
-              {review.user_email || t('restaurant:reviews.anonymous')}
+              {review.users?.name || t('restaurant:reviews.anonymous')}
             </p>
             <p className="text-xs text-neutral-500">{formatDate(review.created_at)}</p>
           </div>

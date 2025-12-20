@@ -262,10 +262,25 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
             <div key={review.id} className="p-4 bg-neutral-50 rounded-xl">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-neutral-500" />
-                  </div>
+                  {review.users?.avatar_url ? (
+                    <img 
+                      src={review.users.avatar_url} 
+                      alt={review.users.name || 'User'} 
+                      className="w-10 h-10 rounded-full object-cover border border-neutral-200"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center text-neutral-500">
+                      {review.users?.name ? (
+                        <span className="font-semibold text-sm">{review.users.name.charAt(0).toUpperCase()}</span>
+                      ) : (
+                        <User className="w-5 h-5" />
+                      )}
+                    </div>
+                  )}
                   <div>
+                    <div className="font-medium text-neutral-900 text-sm mb-0.5">
+                      {review.users?.name || t('common:user')}
+                    </div>
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star

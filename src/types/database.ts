@@ -137,6 +137,8 @@ export function getLocalizedText(
 export interface Profile {
   id: string
   email: string
+  name: string | null
+  avatar_url: string | null
   is_admin: boolean
   created_at: string
   updated_at: string
@@ -155,9 +157,11 @@ export interface Review {
   is_hidden?: boolean
   created_at: string
   updated_at: string
-  // Joined data (optional, populated when fetching with user info)
-  user_email?: string
-  user_avatar?: string
+  // Joined data
+  users?: {
+    name: string
+    avatar_url: string | null
+  }
 }
 
 // Favorite entity

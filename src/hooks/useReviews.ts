@@ -35,7 +35,7 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
       // Fetch reviews
       const { data: reviewsData, error: fetchError } = await supabase
         .from('reviews')
-        .select('*')
+        .select('*, users:profiles(name, avatar_url)')
         .eq('restaurant_id', restaurantId)
         .order('created_at', { ascending: false })
 
