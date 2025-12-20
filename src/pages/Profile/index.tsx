@@ -205,6 +205,8 @@ export function Profile() {
     image_url: string | null
     images: string[] | null
     restaurants: { name: string; name_zh: string | null } | null
+    is_hidden?: boolean
+    admin_comment?: string | null
   }
   const [reviews, setReviews] = useState<UserReview[]>([])
   const [reviewsLoading, setReviewsLoading] = useState(true)
@@ -316,7 +318,7 @@ export function Profile() {
       setReviewsLoading(true)
       const { data, error } = await supabase
         .from('reviews')
-        .select('id, restaurant_id, rating, comment, image_url, images, created_at, restaurants(name, name_zh)')
+        .select('id, restaurant_id, rating, comment, image_url, images, created_at, is_hidden, admin_comment, restaurants(name, name_zh)')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
       
@@ -359,7 +361,7 @@ export function Profile() {
       setReviewsLoading(true)
       const { data, error } = await supabase
         .from('reviews')
-        .select('id, restaurant_id, rating, comment, image_url, images, created_at, restaurants(name, name_zh)')
+        .select('id, restaurant_id, rating, comment, image_url, images, created_at, is_hidden, admin_comment, restaurants(name, name_zh)')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
       
@@ -764,6 +766,11 @@ export function Profile() {
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-neutral-900 mb-1">
                           {review.restaurants?.name_zh || review.restaurants?.name || t('common:unknown')}
+                          {review.is_hidden && (
+                            <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded-full">
+                              {t('common:hidden')}
+                            </span>
+                          )}
                         </p>
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex">
@@ -800,6 +807,17 @@ export function Profile() {
                               alt="Review photo" 
                               className="h-20 w-20 object-cover rounded-lg border border-neutral-200"
                             />
+                          </div>
+                        )}
+                        
+                        {/* Admin Comment for Hidden Reviews */}
+                        {review.is_hidden && review.admin_comment && (
+                          <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                             <div className="flex items-center gap-2 mb-1">
+                                <AlertTriangle size={14} className="text-red-500" />
+                                <p className="text-xs font-medium text-red-700">{t('common:adminComment')}</p>
+                             </div>
+                             <p className="text-sm text-red-800">{review.admin_comment}</p>
                           </div>
                         )}
                       </div>
