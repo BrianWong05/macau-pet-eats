@@ -161,6 +161,7 @@ export interface Review {
   users?: {
     name: string
     avatar_url: string | null
+    email?: string | null
   }
 }
 

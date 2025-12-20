@@ -22,6 +22,11 @@ interface Review {
     name: string
     name_zh: string | null
   } | null
+  users?: {
+    name: string
+    avatar_url: string | null
+    email?: string | null
+  }
 }
 
 // Star rating component
@@ -71,7 +76,8 @@ export function AdminReviews() {
       .from('reviews')
       .select(`
         *,
-        restaurants(id, name, name_zh)
+        restaurants(id, name, name_zh),
+        users:profiles(name, email, avatar_url)
       `)
       .order('created_at', { ascending: false })
 
@@ -190,10 +196,7 @@ export function AdminReviews() {
       : review.restaurants.name
   }
 
-  const getReviewerName = (review: Review) => {
-    // Show truncated user_id since we don't have a profiles join
-    return review.user_id ? review.user_id.slice(0, 8) + '...' : '-'
-  }
+
 
   return (
     <div className="space-y-6">
@@ -302,9 +305,21 @@ export function AdminReviews() {
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-sm text-neutral-600 line-clamp-1">
-                        {getReviewerName(review)}
-                      </span>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-neutral-900 line-clamp-1">
+                          {review.users?.name || t('common:user')}
+                        </span>
+                        {review.users?.email && (
+                          <span className="text-xs text-neutral-500 line-clamp-1">
+                            {review.users.email}
+                          </span>
+                        )}
+                        {!review.users?.name && !review.users?.email && (
+                          <span className="text-xs text-neutral-400">
+                             {review.user_id.slice(0, 8)}...
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <StarRating rating={review.rating} />
