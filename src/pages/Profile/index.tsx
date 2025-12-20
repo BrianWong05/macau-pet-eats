@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle } from 'lucide-react'
+import { PawPrint, Heart, Plus, LogIn, Pencil, Check, X, Camera, Store, MessageCircle, AlertTriangle, Star } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -14,7 +14,7 @@ import { AuthModal } from '@/components/AuthModal'
 import { ProfileHeader } from '@/components/Profile/ProfileHeader'
 import type { UserPet, PetSize, Restaurant, AppFeedback, RestaurantReport } from '@/types/database'
 
-type TabType = 'pets' | 'favorites' | 'contributions' | 'feedback' | 'reports'
+type TabType = 'pets' | 'favorites' | 'contributions' | 'feedback' | 'reports' | 'reviews'
 
 // Inline UsernameEditor component
 function UsernameEditor() {
@@ -195,6 +195,19 @@ export function Profile() {
   const [reports, setReports] = useState<RestaurantReport[]>([])
   const [reportsLoading, setReportsLoading] = useState(true)
 
+  // Reviews state
+  interface UserReview {
+    id: string
+    restaurant_id: string
+    rating: number
+    comment: string | null
+    created_at: string
+    image_url: string | null
+    restaurants: { name: string; name_zh: string | null } | null
+  }
+  const [reviews, setReviews] = useState<UserReview[]>([])
+  const [reviewsLoading, setReviewsLoading] = useState(true)
+
   // Fetch pets
   useEffect(() => {
     const fetchPets = async () => {
@@ -288,6 +301,31 @@ export function Profile() {
     fetchReports()
   }, [user])
 
+  // Fetch user's reviews
+  useEffect(() => {
+    const fetchUserReviews = async () => {
+      if (!user) {
+        setReviews([])
+        setReviewsLoading(false)
+        return
+      }
+      
+      setReviewsLoading(true)
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('id, restaurant_id, rating, comment, image_url, created_at, restaurants(name, name_zh)')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+      
+      if (!error && data) {
+        setReviews(data as UserReview[])
+      }
+      setReviewsLoading(false)
+    }
+    
+    fetchUserReviews()
+  }, [user])
+
   // Handle pet deletion
   const handleDeletePet = async (petId: string) => {
     if (!confirm(t('profile:pets.deleteConfirm'))) return
@@ -362,12 +400,13 @@ export function Profile() {
             { key: 'contributions', icon: Store, label: t('profile:tabs.contributions') },
             { key: 'feedback', icon: MessageCircle, label: t('profile:tabs.feedback') },
             { key: 'reports', icon: AlertTriangle, label: t('profile:tabs.reports') },
+            { key: 'reviews', icon: Star, label: t('profile:tabs.reviews') },
           ].map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as TabType)}
               className={`
-                flex-1 min-w-0 flex flex-col items-center gap-1 px-2 py-2.5 sm:px-4 sm:py-3
+                flex-1 min-w-fit flex flex-col items-center gap-1 px-3 py-2.5 sm:px-4 sm:py-3
                 text-xs sm:text-sm font-medium rounded-xl transition-all
                 ${activeTab === tab.key
                   ? 'bg-white text-primary-600 shadow-sm'
@@ -647,6 +686,69 @@ export function Profile() {
                       </div>
                     )}
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Reviews Tab Content */}
+        {activeTab === 'reviews' && (
+          <div className="space-y-6">
+            {reviewsLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-24 bg-neutral-200 rounded-xl animate-pulse" />
+                ))}
+              </div>
+            ) : reviews.length === 0 ? (
+              <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
+                <Star size={48} className="mx-auto text-neutral-300 mb-4" />
+                <p className="text-neutral-600 font-medium">{t('profile:reviews.noReviews')}</p>
+                <p className="text-neutral-400 text-sm mt-1">{t('profile:reviews.noReviewsHint')}</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {reviews.map(review => (
+                  <Link
+                    key={review.id}
+                    to={`/restaurant/${review.restaurant_id}`}
+                    className="block bg-white rounded-xl border border-neutral-200 p-4 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-neutral-900 mb-1">
+                          {review.restaurants?.name_zh || review.restaurants?.name || t('common:unknown')}
+                        </p>
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map(star => (
+                              <Star
+                                key={star}
+                                size={14}
+                                className={star <= review.rating ? 'text-amber-400 fill-amber-400' : 'text-neutral-300'}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-xs text-neutral-400">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        {review.comment && (
+                          <p className="text-sm text-neutral-600 line-clamp-2">{review.comment}</p>
+                        )}
+                        {review.image_url && (
+                          <div className="mt-3">
+                            <img 
+                              src={review.image_url} 
+                              alt="Review photo" 
+                              className="h-20 w-20 object-cover rounded-lg border border-neutral-200"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             )}
