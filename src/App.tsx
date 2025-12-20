@@ -24,6 +24,7 @@ const AdminReports = lazy(() => import('@/pages/Admin/Reports').then(module => (
 const AdminCuisineTypes = lazy(() => import('@/pages/Admin/CuisineTypes').then(module => ({ default: module.AdminCuisineTypes })))
 const AdminPetPolicies = lazy(() => import('@/pages/Admin/PetPolicies').then(module => ({ default: module.AdminPetPolicies })))
 const AdminFeedback = lazy(() => import('@/pages/Admin/Feedback').then(module => ({ default: module.AdminFeedback })))
+const AdminReviews = lazy(() => import('@/pages/Admin/Reviews').then(module => ({ default: module.AdminReviews })))
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
                     <Route path="pet-policies" element={<AdminPetPolicies />} />
                     <Route path="reports" element={<AdminReports />} />
                     <Route path="feedback" element={<AdminFeedback />} />
+                    <Route path="reviews" element={<AdminReviews />} />
                   </Route>
                 </Route>
 

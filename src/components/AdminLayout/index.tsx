@@ -8,7 +8,8 @@ import {
   Flag,
   Utensils,
   MessageSquare,
-  PawPrint
+  PawPrint,
+  Star
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
@@ -27,6 +28,7 @@ export function AdminLayout() {
     { path: '/admin/pet-policies', icon: PawPrint, label: t('admin:petPolicies.title') || 'Pet Policies' },
     { path: '/admin/reports', icon: Flag, label: t('admin:reports.title') },
     { path: '/admin/feedback', icon: MessageSquare, label: t('admin:feedback.title') || 'Feedback' },
+    { path: '/admin/reviews', icon: Star, label: t('admin:reviews.title') || 'Reviews' },
   ]
 
   return (

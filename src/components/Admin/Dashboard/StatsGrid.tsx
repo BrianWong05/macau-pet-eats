@@ -56,14 +56,14 @@ export function StatsGrid({ stats, isLoading }: StatsGridProps) {
       value: stats.totalReviews,
       icon: Users,
       color: 'bg-purple-500',
-      path: null
+      path: '/admin/reviews'
     }
   ]
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[1, 2, 3, 4].map((i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 lg:gap-6">
+        {[1, 2, 3, 4, 5].map((i) => (
           <div key={i} className="h-32 bg-white rounded-2xl shadow-sm animate-pulse" />
         ))}
       </div>
@@ -71,7 +71,7 @@ export function StatsGrid({ stats, isLoading }: StatsGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 lg:gap-6">
       {statCards.map((stat) => (
         <div 
           key={stat.label} 

@@ -161,5 +161,30 @@
       "reviewed": "已查看",
       "resolved": "已解決"
     }
+  },
+  "reviews": {
+    "title": "用戶評論",
+    "subtitle": "管理用戶提交的評論",
+    "searchPlaceholder": "搜索評論內容、餐廳或評論者...",
+    "allRatings": "所有評分",
+    "allStatus": "全部狀態",
+    "visibleOnly": "僅顯示可見",
+    "hiddenOnly": "僅顯示隱藏",
+    "total": "總計",
+    "filtered": "篩選結果",
+    "restaurant": "餐廳",
+    "reviewer": "評論者",
+    "rating": "評分",
+    "comment": "評論",
+    "date": "日期",
+    "actions": "操作",
+    "noReviews": "沒有找到評論",
+    "hide": "隱藏評論",
+    "unhide": "顯示評論",
+    "hidden": "評論已隱藏",
+    "unhidden": "評論已恢復顯示",
+    "deleted": "評論已刪除",
+    "deleteConfirmTitle": "刪除評論？",
+    "deleteConfirmMessage": "此操作無法撤銷。評論將被永久刪除。"
   }
 }
