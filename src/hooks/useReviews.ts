@@ -63,8 +63,9 @@ export function useReviews({ restaurantId }: UseReviewsOptions): UseReviewsRetur
       const message = err instanceof Error ? err.message : 'Failed to load reviews'
       setError(message)
     } finally {
+      setIsLoading(false)
     }
-  }, [restaurantId, user])
+  }, [restaurantId, user?.id])
 
   useEffect(() => {
     fetchReviews()
