@@ -313,6 +313,12 @@ export function AdminReviews() {
                       <p className="text-sm text-neutral-600 line-clamp-2" title={review.comment || ''}>
                         {review.comment || <span className="text-neutral-400 italic">-</span>}
                       </p>
+                      {review.is_hidden && review.admin_comment && (
+                        <div className="mt-2 p-2 bg-red-50 border border-red-100 rounded-lg text-xs">
+                          <span className="font-medium text-red-700 block mb-0.5">{t('common:adminComment')}:</span>
+                          <span className="text-red-600">{review.admin_comment}</span>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-sm text-neutral-500 whitespace-nowrap">
                       {new Date(review.created_at).toLocaleDateString()}
