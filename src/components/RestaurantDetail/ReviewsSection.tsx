@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MessageSquare, Star, User, Trash2, Image as ImageIcon, Camera, X } from 'lucide-react'
+import { MessageSquare, Star, User, Trash2, Image as ImageIcon, Camera, X, Edit2 } from 'lucide-react'
 import { useReviews } from '@/hooks/useReviews'
+import { ReviewFormModal } from '@/components/ReviewFormModal'
+import type { Review } from '@/types/database'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface ReviewsSectionProps {
@@ -13,7 +15,7 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
   const { t } = useTranslation(['restaurant', 'common', 'auth', 'profile'])
   const { user } = useAuth()
   
-  const { reviews, isLoading: reviewsLoading, submitReview, deleteReview } = useReviews({ 
+  const { reviews, isLoading: reviewsLoading, submitReview, deleteReview, refetch } = useReviews({ 
     restaurantId: restaurantId || '' 
   })
   
@@ -25,6 +27,10 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
   
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imagePreviews, setImagePreviews] = useState<string[]>([])
+
+  // Edit State
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingReview, setEditingReview] = useState<Review | null>(null)
 
   const handleWriteReview = () => {
     if (!user) {
@@ -275,17 +281,29 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
                   </div>
                 </div>
                 {review.user_id === user?.id && (
-                  <button
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => {
+                        setEditingReview(review)
+                        setShowEditModal(true)
+                      }}
+                      className="p-1 text-primary-500 hover:bg-primary-50 rounded-full transition-colors"
+                      title={t('common:edit')}
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button
                     onClick={() => {
                       if (confirm(t('common:confirmDelete'))) {
                         handleDeleteReview(review.id)
                       }
                     }}
-                    className="p-1 text-neutral-400 hover:text-red-500 transition-colors rounded-full hover:bg-neutral-100"
-                    title={t('common:delete')}
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                      className="p-1 text-neutral-400 hover:text-red-500 transition-colors rounded-full hover:bg-neutral-100"
+                      title={t('common:delete')}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 )}
               </div>
               <p className="text-neutral-700">{review.comment}</p>
@@ -313,6 +331,19 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
             </div>
           ))}
         </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && editingReview && (
+        <ReviewFormModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          onSuccess={() => {
+            refetch()
+            setShowEditModal(false)
+          }}
+          review={editingReview}
+        />
       )}
     </div>
   )
