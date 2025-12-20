@@ -12,7 +12,7 @@ interface FeaturedSectionProps {
 }
 
 export function FeaturedSection({ featuredRestaurants, isLoading, error }: FeaturedSectionProps) {
-  const { t } = useTranslation(['home', 'common', 'errors'])
+  const { t } = useTranslation(['home', 'common'])
 
   return (
     <section className="py-16 lg:py-24 bg-white">
@@ -31,7 +31,7 @@ export function FeaturedSection({ featuredRestaurants, isLoading, error }: Featu
         {error && (
           <div className="text-center py-12">
             <div className="inline-flex items-center gap-3 px-6 py-4 bg-red-50 text-red-700 rounded-xl">
-              <span className="font-medium">{t('errors:loadingRestaurants')}:</span>
+              <span className="font-medium">{t('common:errors.loadingRestaurants')}:</span>
               <span>{error}</span>
             </div>
           </div>
