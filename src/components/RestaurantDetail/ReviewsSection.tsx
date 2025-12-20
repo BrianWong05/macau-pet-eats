@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MessageSquare, Star, User, Trash2, Image as ImageIcon, Camera, X, Edit2 } from 'lucide-react'
+import { MessageSquare, Star, User, Trash2, Image as ImageIcon, Camera, X, Edit2, AlertTriangle } from 'lucide-react'
 import { useReviews } from '@/hooks/useReviews'
 import { ReviewFormModal } from '@/components/ReviewFormModal'
 import type { Review } from '@/types/database'
@@ -275,9 +275,14 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
                         />
                       ))}
                     </div>
-                    <p className="text-xs text-neutral-400">
+                    <div className="text-xs text-neutral-400 flex items-center gap-2">
                       {new Date(review.created_at).toLocaleDateString(navigator.language)}
-                    </p>
+                      {review.is_hidden && (
+                        <span className="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] rounded-full">
+                          {t('common:hidden')}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 {review.user_id === user?.id && (
@@ -326,6 +331,17 @@ export function ReviewsSection({ restaurantId, onAuthRequired }: ReviewsSectionP
                     alt="Review attachment" 
                     className="max-h-48 rounded-lg object-cover border border-neutral-200"
                   />
+                </div>
+              )}
+
+              {/* Admin Comment for Hidden Reviews */}
+              {review.is_hidden && review.admin_comment && (
+                <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                  <div className="flex items-center gap-2 mb-1">
+                    <AlertTriangle size={14} className="text-red-500" />
+                    <p className="text-xs font-medium text-red-700">{t('common:adminComment')}</p>
+                  </div>
+                  <p className="text-sm text-red-800">{review.admin_comment}</p>
                 </div>
               )}
             </div>
